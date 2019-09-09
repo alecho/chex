@@ -7,13 +7,9 @@ defmodule Chex.Application do
 
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Chex.Worker.start_link(arg)
-      # {Chex.Worker, arg}
+      {DynamicSupervisor, strategy: :one_for_one, name: Chex.DynamicGameServerSupervisor}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Chex.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children, strategy: :one_for_one)
   end
 end
