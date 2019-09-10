@@ -8,8 +8,8 @@ defmodule Chex.Server do
   ## Callbacks
 
   @impl true
-  def init(count) do
-    {:ok, count}
+  def init(_args) do
+    {:ok, %Chex.Game{}}
   end
 
   @impl true
