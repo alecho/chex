@@ -23,12 +23,14 @@ defmodule Chex.Parser.FEN do
     split(fen)
   end
 
+  @spec decode_active_color(String.t()) :: atom
   def decode_active_color("w"), do: :white
 
   def decode_active_color("b"), do: :black
 
   def decode_castling("-"), do: []
 
+  @spec decode_castling(String.t()) :: [String.t()]
   def decode_castling(string) do
     string
     |> split("", trim: true)
@@ -39,6 +41,7 @@ defmodule Chex.Parser.FEN do
     |> Enum.sort()
   end
 
+  @spec decode_en_passant(String.t()) :: Chex.Square.t()
   def decode_en_passant("-"), do: nil
 
   def decode_en_passant(san) when byte_size(san) == 2 do
@@ -46,6 +49,7 @@ defmodule Chex.Parser.FEN do
     decode_en_passant(file, rank)
   end
 
+  @spec decode_en_passant(String.t(), String.t()) :: Chex.Square.t()
   def decode_en_passant(file, rank)
       when file in ["a", "b", "c", "d", "e", "f", "g", "h"] and
              rank in ["1", "2", "3", "4", "5", "6", "7", "8"] do
