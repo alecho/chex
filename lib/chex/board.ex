@@ -1,4 +1,4 @@
-defmodule Chex.Game.Board do
+defmodule Chex.Board do
   import Map, only: [get_and_update!: 3]
   import Enum, only: [reduce: 3]
 

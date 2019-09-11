@@ -1,5 +1,5 @@
 defmodule Chex.Game do
-  defstruct board: Chex.Game.Board.new(),
+  defstruct board: Chex.Board.new(),
             active_color: :white,
             castling: [:K, :Q, :k, :q],
             en_passant: nil,
