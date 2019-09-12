@@ -20,4 +20,9 @@ defmodule Chex.Board do
       {current_piece, new_piece}
     end)
   end
+
+  @spec get(%Chex.Board{}, Chex.Square.t()) :: term | nil
+  def get(%__MODULE__{} = board, square) do
+    board |> Map.get(square)
+  end
 end
