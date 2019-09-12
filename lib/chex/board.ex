@@ -1,5 +1,5 @@
 defmodule Chex.Board do
-  import Map, only: [get_and_update!: 3]
+  import Map, only: [get_and_update: 3]
   import Enum, only: [reduce: 3]
 
   defstruct []
@@ -14,9 +14,9 @@ defmodule Chex.Board do
     |> reduce(%__MODULE__{}, fn key, map -> Map.put(map, key, nil) end)
   end
 
-  def place_at!(%__MODULE__{} = board, square, new_piece) when is_list(square) do
+  def place_at(%__MODULE__{} = board, square, new_piece) do
     board
-    |> get_and_update!(square, fn current_piece ->
+    |> get_and_update(square, fn current_piece ->
       {current_piece, new_piece}
     end)
   end
@@ -25,4 +25,6 @@ defmodule Chex.Board do
   def get(%__MODULE__{} = board, square) do
     board |> Map.get(square)
   end
+
+  def files(), do: @files
 end
