@@ -17,7 +17,14 @@ defmodule Chex do
       true
 
   """
-  def new_game do
+  def new_game(fen) when is_binary(fen) do
+    start_child(
+      @server_mod,
+      {Chex.Server, [fen: fen]}
+    )
+  end
+
+  def new_game() do
     start_child(
       @server_mod,
       Chex.Server
