@@ -21,4 +21,23 @@ defmodule Chex.Server do
   def handle_call(:ping, _from, state) do
     {:reply, :pong, state}
   end
+
+  @impl true
+  @spec handle_cast({:best_move, String.t()}, Chex.Game.t()) ::
+          {:noreply, Chex.Game.t()}
+  def handle_cast({:best_move, move}, game) do
+    {from, to} = String.split_at(move, 2)
+    from = Chex.Square.from_string(from)
+    to = Chex.Square.from_string(to)
+    IO.inspect(from)
+    IO.inspect(to)
+
+    game =
+      game
+      |> Chex.Game.move(from, to)
+
+    # If move successfull, tell the engine
+
+    {:noreply, game}
+  end
 end
