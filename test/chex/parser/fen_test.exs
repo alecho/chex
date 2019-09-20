@@ -138,4 +138,14 @@ defmodule Chex.Parser.FENTest do
              fullmove_clock: 2
            } = Chex.Parser.FEN.parse(@after_Nf3)
   end
+
+  test "parses newgame" do
+    game = Chex.Game.new()
+    assert Chex.Parser.FEN.serialize(game) == @starting_pos
+  end
+
+  test "parses after first move" do
+    game = Chex.Game.new(@after_e4)
+    assert Chex.Parser.FEN.serialize(game) == @after_e4
+  end
 end

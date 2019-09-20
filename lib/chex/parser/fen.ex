@@ -20,6 +20,32 @@ defmodule Chex.Parser.FEN do
     }
   end
 
+  def serialize(%Chex.Game{} = game) do
+    bd =
+      game
+      |> Map.get(:board)
+      |> serialize_board()
+
+    ac =
+      game
+      |> Map.get(:active_color)
+      |> serialize_active_color()
+
+    ct =
+      game
+      |> Map.get(:castling)
+      |> serialize_castling()
+
+    ep =
+      game
+      |> Map.get(:en_passant)
+      |> serialize_en_passant()
+
+    hm = Map.get(game, :halfmove_clock)
+    fm = Map.get(game, :fullmove_clock)
+    "#{bd} #{ac} #{ct} #{ep} #{hm} #{fm}"
+  end
+
   defp fen_to_map(fen) do
     split(fen)
   end
@@ -38,6 +64,35 @@ defmodule Chex.Parser.FEN do
     |> Enum.reduce(%Chex.Board{}, fn {square, piece}, board ->
       Map.put(board, square, piece)
     end)
+  end
+
+  @spec serialize_board(%Chex.Board{}) :: String.t()
+  def serialize_board(board) do
+    8..1
+    |> Enum.map(fn r ->
+      Chex.Board.files()
+      |> Enum.map(fn f ->
+        board |> Map.get({f, r})
+      end)
+    end)
+    |> Enum.map(fn rank ->
+      rank
+      |> Enum.chunk_by(&is_nil(&1))
+      |> Enum.map(fn chunk ->
+        chunk
+        |> Enum.at(0)
+        |> case do
+          nil ->
+            Enum.count(chunk)
+            |> Integer.to_string()
+
+          _ ->
+            chunk
+            |> Enum.map(&Chex.Piece.to_string(&1))
+        end
+      end)
+    end)
+    |> Enum.join("/")
   end
 
   def decode_rank(chars, pieces, _file_index, _rank) when chars == [], do: pieces
@@ -66,6 +121,11 @@ defmodule Chex.Parser.FEN do
 
   def decode_active_color("b"), do: :black
 
+  @spec serialize_active_color(atom) :: String.t()
+  def serialize_active_color(:white), do: "w"
+
+  def serialize_active_color(:black), do: "b"
+
   @spec decode_castling(String.t()) :: [String.t()]
   def decode_castling("-"), do: []
 
@@ -77,6 +137,14 @@ defmodule Chex.Parser.FEN do
       [String.to_existing_atom(piece) | list]
     end)
     |> Enum.sort()
+  end
+
+  @spec serialize_castling(list) :: String.t()
+  def serialize_castling([]), do: "-"
+
+  def serialize_castling(list) do
+    list
+    |> Enum.join()
   end
 
   @spec decode_en_passant(String.t()) :: Chex.Square.t()
@@ -92,6 +160,13 @@ defmodule Chex.Parser.FEN do
       when file in ["a", "b", "c", "d", "e", "f", "g", "h"] and
              rank in ["1", "2", "3", "4", "5", "6", "7", "8"] do
     {String.to_existing_atom(file), String.to_integer(rank)}
+  end
+
+  @spec serialize_en_passant(Chex.Square.t()) :: String.t()
+  def serialize_en_passant(nil), do: "-"
+
+  def serialize_en_passant({file, rank}) do
+    "#{file}#{rank}"
   end
 
   def decode_halfmove_clock(string), do: String.to_integer(string)
