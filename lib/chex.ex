@@ -31,6 +31,14 @@ defmodule Chex do
     )
   end
 
+  def move(pid, move) when is_pid(pid) and byte_size(move) == 4 do
+    GenServer.call(pid, {:move, move})
+  end
+
+  def engine_move(pid) when is_pid(pid) do
+    GenServer.call(pid, :engine_move)
+  end
+
   @doc """
   End a game process.
 
