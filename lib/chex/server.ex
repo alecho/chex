@@ -9,12 +9,18 @@ defmodule Chex.Server do
 
   @impl true
   def init(fen: fen) do
-    {:ok, Chex.Game.new(fen)}
+    state = Chex.Game.new(fen)
+    {:ok, engine} = Chex.Engine.start_link(self())
+    state = state |> Map.put(:engine, engine)
+    {:ok, state}
   end
 
   @impl true
   def init(_args) do
-    {:ok, Chex.Game.new()}
+    state = Chex.Game.new()
+    {:ok, engine} = Chex.Engine.start_link(self())
+    state = state |> Map.put(:engine, engine)
+    {:ok, state}
   end
 
   @impl true
@@ -23,18 +29,47 @@ defmodule Chex.Server do
   end
 
   @impl true
+  def handle_call({:move, move}, _from, state) do
+    {:ok, state} = Chex.Game.move(state, move)
+    {:reply, state, state}
+  end
+
+  @impl true
+  def handle_call(:engine_move, _from, state) do
+    move =
+      state
+      |> Map.get(:engine)
+      |> GenServer.call({:move, Map.get(state, :fen)}, 60_000)
+
+    {:ok, state} = Chex.Game.move(state, move)
+    {:reply, state, state}
+  end
+
+  @impl true
+  def handle_call(:fen, _from, state) do
+    fen = Chex.Game.to_fen(state)
+    {:reply, fen, state}
+  end
+
+  def handle_cast({:run, cmd}, state) do
+    state
+    |> Map.get(:engine)
+    |> GenServer.cast({:send, cmd <> "\n"})
+
+    {:noreply, state}
+  end
+
+  @impl true
   @spec handle_cast({:best_move, String.t()}, Chex.Game.t()) ::
-          {:noreply, Chex.Game.t()}
+          {:noreply, Chex.Game.t() | {:error, any}}
   def handle_cast({:best_move, move}, game) do
     {from, to} = String.split_at(move, 2)
     from = Chex.Square.from_string(from)
     to = Chex.Square.from_string(to)
-    IO.inspect(from)
-    IO.inspect(to)
 
-    game =
+    {:ok, game} =
       game
-      |> Chex.Game.move(from, to)
+      |> Chex.Game.move({from, to})
 
     # If move successfull, tell the engine
 
