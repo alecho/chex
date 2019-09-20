@@ -9,9 +9,12 @@ defmodule Chex.Game do
             en_passant: nil,
             moves: [],
             halfmove_clock: 0,
-            fullmove_clock: 0
+            fullmove_clock: 0,
+            fen: '',
+            captures: []
 
   @type t() :: %__MODULE__{}
+  @type move() :: {Chex.Square.t(), Chex.Square.t()}
 
   @starting_pos "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
@@ -31,31 +34,148 @@ defmodule Chex.Game do
   @spec new(String.t()) :: Chex.Game.t()
   def new(fen \\ @starting_pos) do
     Chex.Parser.FEN.parse(fen)
+    |> update_fen()
   end
 
-  @spec move(Chex.Game.t(), Chex.Square.t(), Chex.Square.t()) :: Chex.Game.t()
-  def move(game, from, to) do
-    {piece, board} =
-      game
-      |> Map.get(:board)
-      |> Map.get_and_update(from, fn current ->
-        {current, nil}
-      end)
+  @spec move(Chex.Game.t(), Chex.Game.move() | String.t()) :: Chex.Game.t() | {:error, atom}
+  def move(game, move) when byte_size(move) == 4 do
+    {from, to} = String.split_at(move, 2)
+    move(game, {Chex.Square.from_string(from), Chex.Square.from_string(to)})
+  end
 
-    {_piece, board} =
-      board
-      |> Map.get_and_update(to, fn current ->
-        {current, piece}
+  def move(game, {from, to} = move) do
+    with true <- move_valid?(game, move),
+         {:ok, {piece, game}} <- pickup_piece(game, from),
+         {:ok, {capture, game}} <- place_piece(game, to, piece) do
+      game =
+        game
+        |> add_move(move)
+        |> capture_piece(capture)
+        |> switch_active_color()
+        |> update_halfmove_clock(piece, capture)
+        |> update_fullmove_clock(piece)
+        |> update_fen()
+
+      {:ok, game}
+    end
+  end
+
+  @spec add_move(Chex.Game.t(), Chex.Game.move()) :: Chex.Game.t()
+  defp add_move(%Chex.Game{moves: moves} = game, move) do
+    game
+    |> Map.put(:moves, [move | moves])
+  end
+
+  @spec update_fullmove_clock(Chex.Game.t(), Chex.Piece.t()) :: Chex.Game.t()
+  defp update_fullmove_clock(game, {_name, :black}) do
+    {_old, game} =
+      game
+      |> Map.get_and_update(:fullmove_clock, fn clock ->
+        {clock, clock + 1}
       end)
 
     game
-    |> Map.put(:board, board)
   end
 
-  # defp move_valid?(game, from, to)
+  defp update_fullmove_clock(game, _piece), do: game
+
+  @spec update_halfmove_clock(Chex.Game.t(), Chex.Piece.t(), Chex.Piece.t() | nil) ::
+          Chex.Game.t()
+  defp update_halfmove_clock(game, {piece_name, _color}, capture)
+       when piece_name == :pawn or not is_nil(capture) do
+    {_old, game} =
+      game
+      |> Map.get_and_update(:halfmove_clock, fn clock ->
+        {clock, clock + 1}
+      end)
+
+    game
+  end
+
+  defp update_halfmove_clock(game, _piece, _capture), do: game
+
+  @spec to_fen(Chex.Game.t()) :: String.t()
+  def to_fen(%Chex.Game{} = game) do
+    Chex.Parser.FEN.serialize(game)
+  end
+
+  @spec move_valid?(Chex.Game.t(), {Chex.Square.t(), Chex.Square.t()}) ::
+          boolean() | {:error, reason :: atom}
+  defp move_valid?(%Chex.Game{} = game, {from, _to}) do
+    with {:ok, _piece} <- piece_at(game, from), do: true
+  end
+
+  defp pickup_piece(game, square) do
+    game
+    |> Map.get(:board)
+    |> Map.get_and_update(square, fn piece ->
+      {piece, nil}
+    end)
+    |> case do
+      {nil, _board} ->
+        {:error, :no_piece_at_square}
+
+      {piece, board} ->
+        game =
+          game
+          |> Map.put(:board, board)
+
+        {:ok, {piece, game}}
+    end
+  end
+
+  defp place_piece(game, square, piece) do
+    {capture, board} =
+      game
+      |> Map.get(:board)
+      |> Map.get_and_update(square, fn capture ->
+        {capture, piece}
+      end)
+
+    game =
+      game
+      |> Map.put(:board, board)
+
+    {:ok, {capture, game}}
+  end
+
   # defp prepend_move(game, from, to)
-  # defp move_piece(game, from, to)
-  # defp maybe_add_piece_to_captures
-  # defp update_fen
+  # defp move_piece(game, from, to) do
+  # end
+
+  @spec update_fen(Chex.Game.t()) :: Chex.Game.t()
+  defp update_fen(%Chex.Game{} = game) do
+    game
+    |> Map.put(:fen, to_fen(game))
+  end
+
   # defp switch_active_color
+  @spec switch_active_color(Chex.Game.t()) :: Chex.Game.t()
+  defp switch_active_color(%Chex.Game{active_color: :white} = game) do
+    game |> Map.put(:active_color, :black)
+  end
+
+  defp switch_active_color(%Chex.Game{active_color: :black} = game) do
+    game |> Map.put(:active_color, :white)
+  end
+
+  defp piece_at(game, square) do
+    game
+    |> Map.get(:board)
+    |> Map.get(square)
+    |> case do
+      nil ->
+        {:error, :no_piece_at_square}
+
+      piece ->
+        {:ok, piece}
+    end
+  end
+
+  @spec capture_piece(Chex.Game.t(), Chex.Piece.t() | nil) :: Chex.Game.t()
+  defp capture_piece(game, nil), do: game
+
+  defp capture_piece(%Chex.Game{captures: captures} = game, piece) do
+    Map.put(game, :captures, [piece | captures])
+  end
 end
