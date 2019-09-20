@@ -19,32 +19,34 @@ defmodule Chex.Engine do
   def handle_continue(:start_engine, state) do
     port = Port.open({:spawn, "stockfish"}, [:binary])
     Port.command(port, "uci\n")
-    Port.command(port, "isready\n")
     state = Map.put(state, :port, port)
+
+    {:noreply, state}
+  end
+
+  def handle_info({port, {:data, "id name " <> _rem}}, state) do
+    IO.puts("UCI ok recieved")
+    state = state |> Map.put(:uci, true)
+    Port.command(port, "isready\n")
+
+    {:noreply, state}
+  end
+
+  def handle_info({_port, {:data, "readyok" <> _rem}}, state) do
+    IO.puts("ready ok recieved")
+    state = state |> Map.put(:ready, true)
+
     {:noreply, state}
   end
 
   def handle_info({_port, {:data, msg}}, state) do
-    state =
-      cond do
-        msg |> String.contains?("uciok") ->
-          state |> Map.put(:uci, true)
+    if String.contains?(msg, "bestmove") do
+      r = ~r/bestmove (?<move>[abcdefgh][1-8][abcdefgh][1-8])/
+      %{"move" => move} = Regex.named_captures(r, msg)
 
-        msg |> String.contains?("readyok") ->
-          state |> Map.put(:ready, true)
-
-        msg |> String.contains?("bestmove") ->
-          r = ~r/bestmove (?<move>[abcdefgh][1-8][abcdefgh][1-8])/
-          %{"move" => move} = Regex.named_captures(r, msg)
-
-          Map.get(state, :respond_to)
-          |> GenServer.cast({:best_move, move})
-
-          state
-
-        true ->
-          state
-      end
+      Map.get(state, :respond_to)
+      |> GenServer.reply(move)
+    end
 
     {:noreply, state}
   end
@@ -60,18 +62,17 @@ defmodule Chex.Engine do
     {:noreply, state}
   end
 
-  def handle_call({:send, command}, from, state) do
-    state
-    |> Map.get(:port)
-    |> Port.command(command <> "\n")
+  def handle_call({:move, fen}, from, state) do
+    port = state |> Map.get(:port)
 
-    state
-    |> Map.put(:status, :thinking)
-    |> Map.put(:best_move, nil)
-    |> Map.put(:from, from)
+    state =
+      state
+      |> Map.put(:status, :thinking)
+      |> Map.put(:respond_to, from)
 
-    IO.inspect(state)
-    {:reply, :thinking, state}
+    Port.command(port, "position fen #{fen}\ngo\n")
+
+    {:noreply, state}
   end
 
   def terminate(_reason, state) do
