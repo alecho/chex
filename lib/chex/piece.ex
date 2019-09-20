@@ -36,4 +36,21 @@ defmodule Chex.Piece do
         :black
     end
   end
+
+  def to_string({name, color}) do
+    %{
+      king: "k",
+      queen: "q",
+      bishop: "b",
+      knight: "n",
+      rook: "r",
+      pawn: "p"
+    }
+    |> Map.get(name)
+    |> case_for_color(color)
+  end
+
+  @spec case_for_color(String.t(), atom) :: String.t()
+  def case_for_color(char, :white), do: String.upcase(char)
+  def case_for_color(char, _black), do: char
 end
