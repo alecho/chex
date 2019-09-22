@@ -52,6 +52,7 @@ defmodule Chex.Game do
         |> add_move(move)
         |> capture_piece(capture)
         |> switch_active_color()
+        |> update_castling(piece)
         |> update_halfmove_clock(piece, capture)
         |> update_fullmove_clock(piece)
         |> update_fen()
@@ -78,6 +79,47 @@ defmodule Chex.Game do
   end
 
   defp update_fullmove_clock(game, _piece), do: game
+
+  @spec update_castling(Chex.Game.t(), Chex.Piece.t()) :: Chex.Game.t()
+  defp update_castling(game, {:king, :black}) do
+    delete_castling_rights(game, [:k, :q])
+  end
+
+  defp update_castling(game, {:king, :white}) do
+    delete_castling_rights(game, [:K, :Q])
+  end
+
+  defp update_castling(game, {:rook, color}) do
+    [{{from_file, _rank}, _to} | _prev_moves] = game |> Map.get(:moves)
+
+    name =
+      case from_file do
+        :a ->
+          :queen
+
+        :h ->
+          :king
+      end
+
+    right =
+      {name, color}
+      |> Chex.Piece.to_string()
+      |> String.to_existing_atom()
+
+    delete_castling_rights(game, [right])
+  end
+
+  defp update_castling(game, _piece), do: game
+
+  defp delete_castling_rights(game, rights) when is_list(rights) do
+    {_old, game} =
+      game
+      |> Map.get_and_update(:castling, fn current_rights ->
+        {current_rights, current_rights -- rights}
+      end)
+
+    game
+  end
 
   @spec update_halfmove_clock(Chex.Game.t(), Chex.Piece.t(), Chex.Piece.t() | nil) ::
           Chex.Game.t()
