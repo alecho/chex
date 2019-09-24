@@ -53,6 +53,7 @@ defmodule Chex.Game do
         |> capture_piece(capture)
         |> switch_active_color()
         |> update_castling(piece)
+        |> update_en_passant(piece)
         |> update_halfmove_clock(piece, capture)
         |> update_fullmove_clock(piece)
         |> update_fen()
@@ -119,6 +120,25 @@ defmodule Chex.Game do
       end)
 
     game
+  end
+
+  @spec update_en_passant(Chex.Game.t(), Chex.Piece.t()) :: Chex.Game.t()
+  defp update_en_passant(
+         %Chex.Game{moves: [{{file, 2}, {file, 4}} | _prev_moves]} = game,
+         {:pawn, :white}
+       ) do
+    Map.put(game, :en_passant, {file, 3})
+  end
+
+  defp update_en_passant(
+         %Chex.Game{moves: [{{file, 7}, {file, 5}} | _prev_moves]} = game,
+         {:pawn, :black}
+       ) do
+    Map.put(game, :en_passant, {file, 6})
+  end
+
+  defp update_en_passant(game, _move) do
+    Map.put(game, :en_passant, nil)
   end
 
   @spec update_halfmove_clock(Chex.Game.t(), Chex.Piece.t(), Chex.Piece.t() | nil) ::
