@@ -51,6 +51,7 @@ defmodule Chex.Game do
         game
         |> add_move(move)
         |> capture_piece(capture)
+        # |> promote_pawn()
         |> switch_active_color()
         |> update_castling(piece)
         |> update_en_passant(piece)
