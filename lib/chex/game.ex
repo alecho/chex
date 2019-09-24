@@ -90,20 +90,18 @@ defmodule Chex.Game do
     delete_castling_rights(game, [:K, :Q])
   end
 
-  defp update_castling(game, {:rook, color}) do
-    [{{from_file, _rank}, _to} | _prev_moves] = game |> Map.get(:moves)
-
-    name =
-      case from_file do
-        :a ->
-          :queen
-
-        :h ->
-          :king
-      end
-
+  defp update_castling(%{moves: [{{:a, _r}, _to} | _tl]} = game, {:rook, color}) do
     right =
-      {name, color}
+      {:queen, color}
+      |> Chex.Piece.to_string()
+      |> String.to_existing_atom()
+
+    delete_castling_rights(game, [right])
+  end
+
+  defp update_castling(%{moves: [{{:h, _r}, _to} | _tl]} = game, {:rook, color}) do
+    right =
+      {:king, color}
       |> Chex.Piece.to_string()
       |> String.to_existing_atom()
 
