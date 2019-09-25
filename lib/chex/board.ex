@@ -27,4 +27,6 @@ defmodule Chex.Board do
   end
 
   def files(), do: @files
+
+  def file_index(file), do: Enum.find_index(@files, fn x -> x == file end)
 end
