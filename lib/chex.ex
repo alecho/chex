@@ -39,6 +39,10 @@ defmodule Chex do
     GenServer.call(pid, :engine_move)
   end
 
+  def state(pid) when is_pid(pid) do
+    GenServer.call(pid, :state)
+  end
+
   @doc """
   End a game process.
 

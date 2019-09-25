@@ -24,8 +24,8 @@ defmodule Chex.Server do
   end
 
   @impl true
-  def handle_call(:ping, _from, state) do
-    {:reply, :pong, state}
+  def handle_call(:state, _from, state) do
+    {:reply, state, state}
   end
 
   @impl true
