@@ -1,7 +1,10 @@
 defmodule Chex.Server do
+  require Logger
   use GenServer
 
   def start_link(state) do
+    Logger.debug("Chex.Server#start_link called with:")
+    Logger.debug(state)
     GenServer.start_link(__MODULE__, state)
   end
 

@@ -1,4 +1,5 @@
 defmodule Chex.Engine do
+  require Logger
   use GenServer
 
   def start_link(respond_to) do
@@ -24,17 +25,24 @@ defmodule Chex.Engine do
     {:noreply, state}
   end
 
+  def handle_info({:DOWN, _ref, :port, _object, reason}, state) do
+    Logger.debug("Engine crashed because: #{reason}")
+
+    {:noreply, state}
+  end
+
   def handle_info({port, {:data, "id name " <> _rem}}, state) do
-    IO.puts("UCI ok recieved")
+    Logger.debug("Engine UCI ok")
     state = state |> Map.put(:uci, true)
     Port.command(port, "isready\n")
 
     {:noreply, state}
   end
 
-  def handle_info({_port, {:data, "readyok" <> _rem}}, state) do
-    IO.puts("ready ok recieved")
+  def handle_info({port, {:data, "readyok" <> _rem}}, state) do
+    Logger.debug("Engine is ready")
     state = state |> Map.put(:ready, true)
+    Port.command(port, "setoption name Minimum Thinking Time value 500\n")
 
     {:noreply, state}
   end
@@ -50,6 +58,8 @@ defmodule Chex.Engine do
 
     {:noreply, state}
   end
+
+  def handle_info(_msg, state), do: {:noreply, state}
 
   def handle_cast({:send, command}, state) do
     state
