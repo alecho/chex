@@ -7,6 +7,8 @@ defmodule Chex.MixProject do
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
       deps: deps()
     ]
   end
@@ -16,6 +18,18 @@ defmodule Chex.MixProject do
     [
       extra_applications: [:logger],
       mod: {Chex.Application, []}
+    ]
+  end
+
+  defp description() do
+    "A chess library and OTP application."
+  end
+
+  defp package() do
+    [
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/alecho/chex"},
+      homepage_url: "https://github.com/alecho/chex"
     ]
   end
 
