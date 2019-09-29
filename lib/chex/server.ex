@@ -30,8 +30,13 @@ defmodule Chex.Server do
 
   @impl true
   def handle_call({:move, move}, _from, state) do
-    {:ok, state} = Chex.Game.move(state, move)
-    {:reply, state, state}
+    case Chex.Game.move(state, move) do
+      {:ok, state} ->
+        {:reply, state, state}
+
+      response ->
+        {:reply, response, state}
+    end
   end
 
   @impl true
@@ -39,7 +44,7 @@ defmodule Chex.Server do
     move =
       state
       |> Map.get(:engine)
-      |> GenServer.call({:move, Map.get(state, :fen)}, 60_000)
+      |> GenServer.call({:move, Map.get(state, :fen)}, 15_000)
 
     {:ok, state} = Chex.Game.move(state, move)
     {:reply, state, state}
@@ -70,8 +75,6 @@ defmodule Chex.Server do
     {:ok, game} =
       game
       |> Chex.Game.move({from, to})
-
-    # If move successfull, tell the engine
 
     {:noreply, game}
   end
