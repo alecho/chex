@@ -72,6 +72,14 @@ defmodule Chex.Engine do
     {:noreply, state}
   end
 
+  def handle_cast({:set_option, {option, value}}, state) do
+    state
+    |> Map.get(:port)
+    |> Port.command("setoption name #{option} value #{value}\n")
+
+    {:noreply, state}
+  end
+
   def handle_call({:move, fen}, from, state) do
     port = state |> Map.get(:port)
 
