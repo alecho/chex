@@ -2,6 +2,8 @@ defmodule Chex.Board do
   import Map, only: [get_and_update: 3]
   import Enum, only: [reduce: 3]
 
+  alias Chex.Square
+
   defstruct []
 
   @files [:a, :b, :c, :d, :e, :f, :g, :h]
@@ -21,7 +23,7 @@ defmodule Chex.Board do
     end)
   end
 
-  @spec get(%Chex.Board{}, Chex.Square.t()) :: term | nil
+  @spec get(%Chex.Board{}, Square.t()) :: term | nil
   def get(%__MODULE__{} = board, square) do
     board |> Map.get(square)
   end
