@@ -18,7 +18,11 @@ defmodule Chex.Engine do
   end
 
   def handle_continue(:start_engine, state) do
-    port = Port.open({:spawn, "stockfish"}, [:binary])
+    port =
+      Port.open({:spawn, Application.get_env(:chex, :engine_path, "/usr/local/bin/stockfish")}, [
+        :binary
+      ])
+
     Port.command(port, "uci\n")
     state = Map.put(state, :port, port)
 
