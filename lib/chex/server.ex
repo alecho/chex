@@ -8,6 +8,10 @@ defmodule Chex.Server do
     GenServer.start_link(__MODULE__, state)
   end
 
+  def subscribe(pid) do
+    GenServer.call(pid, :subscribe)
+  end
+
   ## Callbacks
 
   @impl true
@@ -57,6 +61,29 @@ defmodule Chex.Server do
   def handle_call(:fen, _from, state) do
     fen = Chex.Game.to_fen(state)
     {:reply, fen, state}
+  end
+
+  @impl true
+  def handle_call(:subscribe, {pid, _ref}, state) do
+    # Process.link(pid)
+
+    {:reply, :ok, Map.put(state, :move_listener, pid)}
+  end
+
+  @impl true
+  def handle_cast(:engine_move, state) do
+    move =
+      state
+      |> Map.get(:engine)
+      |> GenServer.call({:move, Map.get(state, :fen)}, 15_000)
+
+    {:ok, state} = Chex.Game.move(state, move)
+
+    state
+    |> Map.get(:move_listener)
+    |> send(state)
+
+    {:noreply, state}
   end
 
   def handle_cast({:run, cmd}, state) do
