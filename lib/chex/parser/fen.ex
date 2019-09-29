@@ -62,7 +62,7 @@ defmodule Chex.Parser.FEN do
     end)
     |> List.flatten()
     |> Enum.reduce(%Chex.Board{}, fn {square, piece}, board ->
-      Map.put(board, square, piece)
+      Map.put(board, square, Tuple.append(piece, square))
     end)
   end
 

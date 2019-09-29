@@ -37,6 +37,8 @@ defmodule Chex.Piece do
     end
   end
 
+  def to_string({name, color, _id}), do: Chex.Piece.to_string({name, color})
+
   def to_string({name, color}) do
     %{
       king: "k",
