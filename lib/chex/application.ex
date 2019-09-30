@@ -7,7 +7,8 @@ defmodule Chex.Application do
 
   def start(_type, _args) do
     children = [
-      {DynamicSupervisor, strategy: :one_for_one, name: Chex.DynamicGameServerSupervisor}
+      {DynamicSupervisor,
+       strategy: :one_for_one, restart: :temporary, name: Chex.DynamicGameServerSupervisor}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one)
