@@ -1,4 +1,4 @@
-# Chex
+# Chex [![Build Status](https://travis-ci.com/alecho/chex.svg?branch=master)](https://travis-ci.com/alecho/chex)
 
 Chess in Elixir.
 
