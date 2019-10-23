@@ -41,13 +41,7 @@ defmodule Chex.Piece do
       str
       |> String.upcase(:ascii)
 
-    case str == str_up do
-      true ->
-        :white
-
-      false ->
-        :black
-    end
+    if str == str_up, do: :white, else: :black
   end
 
   def to_string({name, color, _id}), do: Chex.Piece.to_string({name, color})
