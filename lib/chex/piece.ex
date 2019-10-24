@@ -17,6 +17,16 @@ defmodule Chex.Piece do
   """
   @type t :: {name(), color()}
 
+  @callback possible_moves(color :: color(), square :: Square.t(), game :: Game.t()) :: [
+              Square.t()
+            ]
+
+  @spec possible_moves(t(), Square.t(), Game.t()) :: [Square.t()]
+  def possible_moves({name, color}, square, game) do
+    module = to_module(name)
+    module.possible_moves(color, square, game)
+  end
+
   @spec from_string(String.t()) :: Chex.Piece.t()
   def from_string(str) do
     {piece_from_string(str), color_from_string(str)}
@@ -57,6 +67,16 @@ defmodule Chex.Piece do
     }
     |> Map.get(name)
     |> case_for_color(color)
+  end
+
+  @spec to_module(name :: name()) :: module()
+  def to_module(name) do
+    name =
+      name
+      |> Kernel.to_string()
+      |> String.capitalize()
+
+    String.to_atom("Elixir.Chex.Piece." <> name)
   end
 
   @spec case_for_color(String.t(), atom) :: String.t()
