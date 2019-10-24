@@ -1,8 +1,21 @@
 defmodule Chex.Piece do
+  alias Chex.Game
+  alias Chex.Square
+
   @typedoc """
-  A name, color atom pair.
+  A name atom.
   """
-  @type t :: {name :: atom, color :: atom}
+  @type name :: :king | :queen | :bishop | :knight | :rook | :pawn
+
+  @typedoc """
+  A color atom.
+  """
+  @type color :: :white | :black
+
+  @typedoc """
+  A name(), color() pair.
+  """
+  @type t :: {name(), color()}
 
   @spec from_string(String.t()) :: Chex.Piece.t()
   def from_string(str) do
