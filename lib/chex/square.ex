@@ -18,4 +18,8 @@ defmodule Chex.Square do
     [fs, rs] = String.codepoints(str)
     {String.to_existing_atom(fs), String.to_integer(rs)}
   end
+
+  def valid?({f, r}) do
+    Enum.member?(Chex.Board.files(), f) && Enum.member?(1..8, r)
+  end
 end

@@ -1,5 +1,6 @@
 defmodule Chex.SquareTest do
   use ExUnit.Case
+  import AssertValue
   doctest Chex.Square
 
   test "correctly determines color" do
@@ -77,5 +78,88 @@ defmodule Chex.SquareTest do
              {{:h, 7}, :light},
              {{:h, 8}, :dark}
            ]
+  end
+
+  test "valid?" do
+    bad_squares = [nil: 2, i: 1, a: -1, A: 1, h: 9, b: 0]
+    good_squares = for f <- [:a, :b, :c, :d, :e, :f, :g, :h], r <- 1..8, do: {f, r}
+    squares = good_squares ++ bad_squares
+
+    results = Enum.map(squares, &Chex.Square.valid?(&1))
+
+    assert_value(
+      results == [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    )
   end
 end
