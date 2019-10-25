@@ -21,4 +21,18 @@ defmodule Chex.Piece.KingTest do
 
     assert Enum.sort(moves) == Enum.sort(expected_moves)
   end
+
+  test "king in corner" do
+    game = Chex.Game.new("4k3/8/8/8/8/8/8/K7 w - - 0 1")
+
+    moves = Chex.Piece.King.possible_moves(:white, {:a, 1}, game)
+
+    expected_moves = [
+      {:a, 2},
+      {:b, 2},
+      {:b, 1}
+    ]
+
+    assert Enum.sort(moves) == Enum.sort(expected_moves)
+  end
 end
