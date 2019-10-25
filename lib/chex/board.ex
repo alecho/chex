@@ -31,4 +31,17 @@ defmodule Chex.Board do
   def files(), do: @files
 
   def file_index(file), do: Enum.find_index(@files, fn x -> x == file end)
+
+  def file_offset(file, 0), do: file
+
+  def file_offset(file, offset) do
+    offset_index =
+      file
+      |> file_index
+
+    index = offset_index + offset
+
+    # Prevent wrap-around. Ex: (:a, -2) => :h
+    if index >= 0, do: Enum.at(@files, index)
+  end
 end
