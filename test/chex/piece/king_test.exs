@@ -24,13 +24,33 @@ defmodule Chex.Piece.KingTest do
 
   test "king in corner" do
     game = Chex.Game.new("4k3/8/8/8/8/8/8/K7 w - - 0 1")
-
     moves = Chex.Piece.King.possible_moves(:white, {:a, 1}, game)
 
     expected_moves = [
       {:a, 2},
       {:b, 2},
       {:b, 1}
+    ]
+
+    assert Enum.sort(moves) == Enum.sort(expected_moves)
+  end
+
+  test "king surrounded by pawns" do
+    game = Chex.Game.new("4k3/8/8/2PPP3/2PKP3/2PPP3/8/8 w - - 0 1")
+    moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
+
+    assert moves == []
+  end
+
+  test "king blocked diagonally" do
+    game = Chex.Game.new("4k3/8/8/2P1P3/3K4/2P1P3/8/8 w - - 0 1")
+    moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
+
+    expected_moves = [
+      {:d, 5},
+      {:c, 4},
+      {:e, 4},
+      {:d, 3}
     ]
 
     assert Enum.sort(moves) == Enum.sort(expected_moves)
