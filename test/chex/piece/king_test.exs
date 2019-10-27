@@ -55,4 +55,17 @@ defmodule Chex.Piece.KingTest do
 
     assert Enum.sort(moves) == Enum.sort(expected_moves)
   end
+
+  test "king must capture to move" do
+    game = Chex.Game.new("4k3/8/8/2PPP3/2PKP3/2ppp3/8/8 w - - 0 1")
+    moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
+
+    expected_moves = [
+      {:c, 3},
+      {:d, 3},
+      {:e, 3}
+    ]
+
+    assert Enum.sort(moves) == Enum.sort(expected_moves)
+  end
 end
