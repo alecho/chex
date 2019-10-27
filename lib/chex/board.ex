@@ -44,4 +44,14 @@ defmodule Chex.Board do
     # Prevent wrap-around. Ex: (:a, -2) => :h
     if index >= 0, do: Enum.at(@files, index)
   end
+
+  def occupied_by_color?(board, color, square) do
+    case get(board, square) do
+      {_name, occupied_color, _sq} ->
+        color == occupied_color
+
+      nil ->
+        false
+    end
+  end
 end

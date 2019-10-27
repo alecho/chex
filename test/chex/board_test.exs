@@ -13,4 +13,15 @@ defmodule Chex.BoardTest do
 
     assert_value(results == [nil, nil, :a, :e, nil, :c, :d, :h, :c, :g, :h, nil])
   end
+
+  test "occupied_by_color" do
+    results =
+      for color <- [:white, :black], piece_color <- [:white, :black] do
+        Chex.Board.new()
+        |> Map.put({:a, 1}, {:pawn, piece_color, {:a, 1}})
+        |> Chex.Board.occupied_by_color?(color, {:a, 1})
+      end
+
+    assert_value(results == [true, false, false, true])
+  end
 end
