@@ -8,5 +8,6 @@ defmodule Chex.Piece.King do
     end
     |> List.delete(square)
     |> Enum.filter(&Square.valid?(&1))
+    |> Enum.reject(&Board.occupied_by_color?(game.board, color, &1))
   end
 end
