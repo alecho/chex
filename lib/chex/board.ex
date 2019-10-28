@@ -46,7 +46,7 @@ defmodule Chex.Board do
   end
 
   def occupied_by_color?(board, color, square) do
-    case get(board, square) do
+    case Map.get(board, square) do
       {_name, occupied_color, _sq} ->
         color == occupied_color
 
