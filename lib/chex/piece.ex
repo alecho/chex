@@ -17,14 +17,19 @@ defmodule Chex.Piece do
   """
   @type t :: {name(), color()}
 
-  @callback possible_moves(color :: color(), square :: Square.t(), game :: Game.t()) :: [
-              Square.t()
-            ]
+  @callback possible_moves(color(), Square.t(), Game.t()) :: [Square.t()]
+  @callback attacking_squares(color(), Square.t(), en_passant :: Square.t()) :: [Square.t()]
 
   @spec possible_moves(t(), Square.t(), Game.t()) :: [Square.t()]
   def possible_moves({name, color}, square, game) do
     module = to_module(name)
     module.possible_moves(color, square, game)
+  end
+
+  @spec attacking_squares(t(), Square.t(), en_passant :: Square.t()) :: [Square.t()]
+  def attacking_squares({name, color}, square, ep \\ nil) do
+    module = to_module(name)
+    module.attacking_squares(color, square, ep)
   end
 
   @spec from_string(String.t()) :: Chex.Piece.t()
