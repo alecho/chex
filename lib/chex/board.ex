@@ -55,12 +55,16 @@ defmodule Chex.Board do
     end
   end
 
-  def all_attacking_sqaures(board, color, ep \\ nil) do
+  def occupied?(board, square) do
+    !is_nil(Map.get(board, square))
+  end
+
+  def all_attacking_sqaures(board, color, game) do
     board
     |> all_occupied_by_color(color)
     |> Enum.map(fn square ->
       {name, occupied_color, sq} = Map.get(board, square)
-      Chex.Piece.attacking_squares({name, color}, sq, ep)
+      Chex.Piece.attacking_squares({name, color}, sq, game)
     end)
     |> List.flatten()
     |> Enum.uniq()

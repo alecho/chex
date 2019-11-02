@@ -26,10 +26,10 @@ defmodule Chex.Piece do
     module.possible_moves(color, square, game)
   end
 
-  @spec attacking_squares(t(), Square.t(), en_passant :: Square.t()) :: [Square.t()]
-  def attacking_squares({name, color}, square, ep \\ nil) do
+  @spec attacking_squares(t(), Square.t(), Game.t()) :: [Square.t()]
+  def attacking_squares({name, color}, square, game) do
     module = to_module(name)
-    module.attacking_squares(color, square, ep)
+    module.attacking_squares(color, square, game)
   end
 
   @spec from_string(String.t()) :: Chex.Piece.t()

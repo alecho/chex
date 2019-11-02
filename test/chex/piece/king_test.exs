@@ -82,4 +82,42 @@ defmodule Chex.Piece.KingTest do
 
     assert Enum.sort(moves) == Enum.sort(expected_moves)
   end
+
+  test "king blocked by pawn" do
+    game = Chex.Game.new("4k3/8/3p4/8/3K4/8/8/8 w - - 0 1")
+    moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
+
+    expected_moves = [
+      {:d, 5},
+      {:c, 4},
+      {:e, 4},
+      {:c, 3},
+      {:d, 3},
+      {:e, 3}
+    ]
+
+    assert Enum.sort(moves) == Enum.sort(expected_moves)
+  end
+
+  test "king blocked by pawn with backup" do
+    game = Chex.Game.new("4k3/8/2p5/3p4/3K4/8/8/8 w - - 0 1")
+    moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
+
+    expected_moves = [
+      {:c, 5},
+      {:e, 5},
+      {:c, 3},
+      {:d, 3},
+      {:e, 3}
+    ]
+
+    assert Enum.sort(moves) == Enum.sort(expected_moves)
+  end
+
+  test "mate by pawns" do
+    game = Chex.Game.new("4k3/8/2pp4/3pp3/1ppKpp2/8/8/8 w - - 0 1")
+    moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
+
+    assert moves == []
+  end
 end
