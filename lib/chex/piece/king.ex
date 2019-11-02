@@ -12,10 +12,10 @@ defmodule Chex.Piece.King do
       |> Enum.reject(&Board.occupied_by_color?(game.board, color, &1))
 
     opponent_color = if color == :white, do: :black, else: :white
-    moves -- Board.all_attacking_sqaures(game.board, opponent_color, game.en_passant)
+    moves -- Board.all_attacking_sqaures(game.board, opponent_color, game)
   end
 
-  def attacking_squares(color, square = {file, rank}, ep) do
+  def attacking_squares(_color, square = {file, rank}, _game) do
     for r <- [-1, 0, 1], f <- [-1, 0, 1] do
       {Board.file_offset(file, f), rank + r}
     end
