@@ -163,8 +163,7 @@ defmodule Chex.Game do
   end
 
   defp pickup_piece(game, square) do
-    game
-    |> Map.get(:board)
+    game.board
     |> Map.get_and_update(square, fn piece ->
       {piece, nil}
     end)
@@ -183,8 +182,7 @@ defmodule Chex.Game do
 
   defp place_piece(game, square, piece) do
     {capture, board} =
-      game
-      |> Map.get(:board)
+      game.board
       |> Map.get_and_update(square, fn capture ->
         {capture, piece}
       end)
@@ -212,10 +210,7 @@ defmodule Chex.Game do
   end
 
   defp piece_at(game, square) do
-    game
-    |> Map.get(:board)
-    |> Map.get(square)
-    |> case do
+    case Map.get(game.board, square) do
       nil ->
         {:error, :no_piece_at_square}
 
