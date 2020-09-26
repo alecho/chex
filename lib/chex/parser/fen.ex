@@ -12,35 +12,36 @@ defmodule Chex.Parser.FEN do
   import String, only: [split: 1, split: 2, split: 3]
 
   def parse(fen) when is_binary(fen) do
-    fen_parts = fen |> fen_to_map
+    [bd, ac, ct, ep, hm, fm] = split(fen)
 
     {:ok,
      %Game{
-       board: decode_board(fen_parts |> at(0)),
-       active_color: decode_active_color(fen_parts |> at(1)),
-       castling: decode_castling(fen_parts |> at(2)),
-       en_passant: decode_en_passant(fen_parts |> at(3)),
-       halfmove_clock: decode_halfmove_clock(fen_parts |> at(4)),
-       fullmove_clock: decode_fullmove_clock(fen_parts |> at(5))
+       board: decode_board(bd),
+       active_color: decode_active_color(ac),
+       castling: decode_castling(ct),
+       en_passant: decode_en_passant(ep),
+       halfmove_clock: decode_halfmove_clock(hm),
+       fullmove_clock: decode_fullmove_clock(fm)
      }}
   end
 
-  def serialize(%Game{} = game) do
-    bd = serialize_board(game.board)
-    ac = serialize_active_color(game.active_color)
-    ct = serialize_castling(game.castling)
-    ep = serialize_en_passant(game.en_passant)
-    hm = game.halfmove_clock
-    fm = game.fullmove_clock
+  def serialize(%Game{
+        board: bd,
+        active_color: ac,
+        castling: ct,
+        en_passant: ep,
+        halfmove_clock: hm,
+        fullmove_clock: fm
+      }) do
+    bd = serialize_board(bd)
+    ac = serialize_active_color(ac)
+    ct = serialize_castling(ct)
+    ep = serialize_en_passant(ep)
 
     {:ok, "#{bd} #{ac} #{ct} #{ep} #{hm} #{fm}"}
   end
 
   def extension(), do: nil
-
-  defp fen_to_map(fen) do
-    split(fen)
-  end
 
   @spec decode_board(String.t()) :: %Board{}
   def decode_board(str) do
