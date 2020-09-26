@@ -30,11 +30,8 @@ defmodule Chex.Game do
   %Chex.Game{}
 
   """
-  @spec new(String.t()) :: Chex.Game.t()
-  def new(fen \\ @starting_pos) do
-    Chex.Parser.FEN.parse(fen)
-    |> update_fen()
-  end
+  @spec new(String.t()) :: {:ok, Chex.Game.t()} | {:error, atom()}
+  def new(fen \\ @starting_pos), do: Chex.Parser.FEN.parse(fen)
 
   @spec move(Chex.Game.t(), {Chex.Square.t(), Chex.Square.t()} | String.t()) ::
           {:ok, Chex.Game.t()} | {:error, :no_piece_at_square}
@@ -157,7 +154,8 @@ defmodule Chex.Game do
 
   @spec to_fen(Chex.Game.t()) :: String.t()
   def to_fen(%Chex.Game{} = game) do
-    Chex.Parser.FEN.serialize(game)
+    {:ok, fen} = Chex.Parser.FEN.serialize(game)
+    fen
   end
 
   @spec move_valid?(Chex.Game.t(), {Chex.Square.t(), Chex.Square.t()}) ::

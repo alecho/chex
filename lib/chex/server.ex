@@ -16,7 +16,7 @@ defmodule Chex.Server do
 
   @impl true
   def init(fen: fen) do
-    state = Chex.Game.new(fen)
+    {:ok, state} = Chex.Game.new(fen)
     {:ok, engine} = Chex.Engine.start_link(self())
     state = state |> Map.put(:engine, engine)
     {:ok, state}
@@ -24,7 +24,7 @@ defmodule Chex.Server do
 
   @impl true
   def init(_args) do
-    state = Chex.Game.new()
+    {:ok, state} = Chex.Game.new()
     {:ok, engine} = Chex.Engine.start_link(self())
     state = state |> Map.put(:engine, engine)
     {:ok, state}

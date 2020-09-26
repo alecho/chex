@@ -3,7 +3,7 @@ defmodule Chex.Piece.KingTest do
   doctest Chex.Piece.King
 
   test "all moves valid" do
-    game = Chex.Game.new("4k3/8/8/8/3K4/8/8/8 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/8/8/3K4/8/8/8 w - - 0 1")
 
     moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
 
@@ -22,7 +22,7 @@ defmodule Chex.Piece.KingTest do
   end
 
   test "king in corner" do
-    game = Chex.Game.new("4k3/8/8/8/8/8/8/K7 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/8/8/8/8/8/K7 w - - 0 1")
     moves = Chex.Piece.King.possible_moves(:white, {:a, 1}, game)
 
     expected_moves = [
@@ -35,14 +35,14 @@ defmodule Chex.Piece.KingTest do
   end
 
   test "king surrounded by pawns" do
-    game = Chex.Game.new("4k3/8/8/2PPP3/2PKP3/2PPP3/8/8 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/8/2PPP3/2PKP3/2PPP3/8/8 w - - 0 1")
     moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
 
     assert moves == []
   end
 
   test "king blocked diagonally" do
-    game = Chex.Game.new("4k3/8/8/2P1P3/3K4/2P1P3/8/8 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/8/2P1P3/3K4/2P1P3/8/8 w - - 0 1")
     moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
 
     expected_moves = [
@@ -56,7 +56,7 @@ defmodule Chex.Piece.KingTest do
   end
 
   test "king must capture to move" do
-    game = Chex.Game.new("4k3/8/8/2PPP3/2PKP3/2ppp3/8/8 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/8/2PPP3/2PKP3/2ppp3/8/8 w - - 0 1")
     moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
 
     expected_moves = [
@@ -69,7 +69,7 @@ defmodule Chex.Piece.KingTest do
   end
 
   test "king blocked by king" do
-    game = Chex.Game.new("8/8/3k4/8/3K4/8/8/8 w - - 0 1")
+    {:ok, game} = Chex.Game.new("8/8/3k4/8/3K4/8/8/8 w - - 0 1")
     moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
 
     expected_moves = [
@@ -84,7 +84,7 @@ defmodule Chex.Piece.KingTest do
   end
 
   test "king blocked by pawn" do
-    game = Chex.Game.new("4k3/8/3p4/8/3K4/8/8/8 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/3p4/8/3K4/8/8/8 w - - 0 1")
     moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
 
     expected_moves = [
@@ -100,7 +100,7 @@ defmodule Chex.Piece.KingTest do
   end
 
   test "king blocked by pawn with backup" do
-    game = Chex.Game.new("4k3/8/2p5/3p4/3K4/8/8/8 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/2p5/3p4/3K4/8/8/8 w - - 0 1")
     moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
 
     expected_moves = [
@@ -115,7 +115,7 @@ defmodule Chex.Piece.KingTest do
   end
 
   test "mate by pawns" do
-    game = Chex.Game.new("4k3/8/2pp4/3pp3/1ppKpp2/8/8/8 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/2pp4/3pp3/1ppKpp2/8/8/8 w - - 0 1")
     moves = Chex.Piece.King.possible_moves(:white, {:d, 4}, game)
 
     assert moves == []

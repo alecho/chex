@@ -8,13 +8,13 @@ defmodule Chex.Parser.FENTest do
   @after_Nf3 "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
 
   test "returns a Game struct" do
-    assert %Chex.Game{} = Chex.Parser.FEN.parse(@starting_pos)
+    assert {:ok, %Chex.Game{}} = Chex.Parser.FEN.parse(@starting_pos)
   end
 
   test "parses starting positions" do
-    board = Chex.Parser.FEN.parse(@starting_pos) |> Map.get(:board)
+    {:ok, game} = Chex.Parser.FEN.parse(@starting_pos)
 
-    assert board == %{
+    assert game.board == %{
              :__struct__ => Chex.Board,
              {:c, 2} => {:pawn, :white, {:c, 2}},
              {:g, 1} => {:knight, :white, {:g, 1}},
@@ -52,9 +52,9 @@ defmodule Chex.Parser.FENTest do
   end
 
   test "parses empty sqaure positions" do
-    board = Chex.Parser.FEN.parse(@after_Nf3) |> Map.get(:board)
+    {:ok, game} = Chex.Parser.FEN.parse(@after_Nf3)
 
-    assert board == %{
+    assert game.board == %{
              :__struct__ => Chex.Board,
              {:c, 2} => {:pawn, :white, {:c, 2}},
              {:f, 1} => {:bishop, :white, {:f, 1}},
@@ -92,60 +92,68 @@ defmodule Chex.Parser.FENTest do
   end
 
   test "parses white active" do
-    assert %Chex.Game{
-             active_color: :white
-           } = Chex.Parser.FEN.parse(@starting_pos)
+    assert {:ok,
+            %Chex.Game{
+              active_color: :white
+            }} = Chex.Parser.FEN.parse(@starting_pos)
   end
 
   test "parses black active color" do
-    assert %Chex.Game{
-             active_color: :black
-           } = Chex.Parser.FEN.parse(@after_e4)
+    assert {:ok,
+            %Chex.Game{
+              active_color: :black
+            }} = Chex.Parser.FEN.parse(@after_e4)
   end
 
   test "parses present castling at starting position" do
-    assert %Chex.Game{
-             castling: [:K, :Q, :k, :q]
-           } = Chex.Parser.FEN.parse(@starting_pos)
+    assert {:ok,
+            %Chex.Game{
+              castling: [:K, :Q, :k, :q]
+            }} = Chex.Parser.FEN.parse(@starting_pos)
   end
 
   test "parses absent castling availability" do
-    assert %Chex.Game{
-             castling: []
-           } = Chex.Parser.FEN.parse("r2k3r/8/8/8/8/8/8/R3K2R b - - 12 75")
+    assert {:ok,
+            %Chex.Game{
+              castling: []
+            }} = Chex.Parser.FEN.parse("r2k3r/8/8/8/8/8/8/R3K2R b - - 12 75")
   end
 
   test "parses absent en passant" do
-    assert %Chex.Game{
-             en_passant: nil
-           } = Chex.Parser.FEN.parse(@starting_pos)
+    assert {:ok,
+            %Chex.Game{
+              en_passant: nil
+            }} = Chex.Parser.FEN.parse(@starting_pos)
   end
 
   test "parses present en passant" do
-    assert %Chex.Game{
-             en_passant: {:e, 3}
-           } = Chex.Parser.FEN.parse(@after_e4)
+    assert {:ok,
+            %Chex.Game{
+              en_passant: {:e, 3}
+            }} = Chex.Parser.FEN.parse(@after_e4)
   end
 
   test "parses halfmove_clock" do
-    assert %Chex.Game{
-             halfmove_clock: 1
-           } = Chex.Parser.FEN.parse(@after_Nf3)
+    assert {:ok,
+            %Chex.Game{
+              halfmove_clock: 1
+            }} = Chex.Parser.FEN.parse(@after_Nf3)
   end
 
   test "parses fullmove_clock" do
-    assert %Chex.Game{
-             fullmove_clock: 2
-           } = Chex.Parser.FEN.parse(@after_Nf3)
+    assert {:ok,
+            %Chex.Game{
+              fullmove_clock: 2
+            }} = Chex.Parser.FEN.parse(@after_Nf3)
   end
 
   test "parses newgame" do
-    game = Chex.Game.new()
-    assert Chex.Parser.FEN.serialize(game) == @starting_pos
+    {:ok, game} = Chex.Game.new()
+    assert Chex.Parser.FEN.serialize(game) == {:ok, @starting_pos}
   end
 
   test "parses after first move" do
-    game = Chex.Game.new(@after_e4)
-    assert Chex.Parser.FEN.serialize(game) == @after_e4
+    {:ok, game} = Chex.Game.new(@after_e4)
+    assert Chex.Parser.FEN.serialize(game) == {:ok, @after_e4}
   end
 end

@@ -3,7 +3,7 @@ defmodule Chex.Piece.PawnTest do
   doctest Chex.Piece.Pawn
 
   test "white pawn first move" do
-    game = Chex.Game.new()
+    {:ok, game} = Chex.Game.new()
     moves = Chex.Piece.Pawn.possible_moves(:white, {:e, 2}, game)
     expected_moves = [{:e, 3}, {:e, 4}]
 
@@ -11,7 +11,7 @@ defmodule Chex.Piece.PawnTest do
   end
 
   test "black pawn first move" do
-    game = Chex.Game.new()
+    {:ok, game} = Chex.Game.new()
     moves = Chex.Piece.Pawn.possible_moves(:black, {:d, 7}, game)
     expected_moves = [{:d, 6}, {:d, 5}]
 
@@ -19,7 +19,7 @@ defmodule Chex.Piece.PawnTest do
   end
 
   test "white pawn normal move" do
-    game = Chex.Game.new("4k3/8/8/8/3P4/8/8/4K3 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/8/8/3P4/8/8/4K3 w - - 0 1")
     moves = Chex.Piece.Pawn.possible_moves(:white, {:d, 4}, game)
     expected_moves = [{:d, 5}]
 
@@ -27,7 +27,7 @@ defmodule Chex.Piece.PawnTest do
   end
 
   test "black pawn normal move" do
-    game = Chex.Game.new("4k3/8/8/3p4/8/8/8/4K3 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/8/3p4/8/8/8/4K3 w - - 0 1")
     moves = Chex.Piece.Pawn.possible_moves(:black, {:d, 5}, game)
     expected_moves = [{:d, 4}]
 
@@ -35,7 +35,7 @@ defmodule Chex.Piece.PawnTest do
   end
 
   test "white pawn attacking squares move" do
-    game = Chex.Game.new("4k3/8/8/2p1p3/3P4/8/8/4K3 w - - 0 1")
+    {:ok, game} = Chex.Game.new("4k3/8/8/2p1p3/3P4/8/8/4K3 w - - 0 1")
     moves = Chex.Piece.Pawn.possible_moves(:white, {:d, 4}, game)
     expected_moves = [{:c, 5}, {:d, 5}, {:e, 5}]
 
