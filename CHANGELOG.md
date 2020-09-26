@@ -16,3 +16,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `:fen` from `%Chex.Game{}`. You can now serialize a game with modules that
   implement the Chex.Parser behaviour like `Chex.Parser.FEN.serialize(game)`.
+- OTP application functionality. Users should implement their own state
+  management as they see fit for their use case.

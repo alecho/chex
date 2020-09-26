@@ -16,13 +16,12 @@ defmodule Chex.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
-      mod: {Chex.Application, []}
+      extra_applications: [:logger]
     ]
   end
 
   defp description() do
-    "A chess library and OTP application."
+    "A chess library."
   end
 
   defp package() do
@@ -36,7 +35,7 @@ defmodule Chex.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:assert_value, "~> 0.9.3"},
+      {:assert_value, "~> 0.9.3", only: [:dev, :test]},
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
