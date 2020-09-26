@@ -10,7 +10,6 @@ defmodule Chex.Game do
             moves: [],
             halfmove_clock: 0,
             fullmove_clock: 0,
-            fen: '',
             captures: []
 
   @type t() :: %__MODULE__{}
@@ -54,7 +53,6 @@ defmodule Chex.Game do
         |> update_en_passant(piece)
         |> update_halfmove_clock(piece, capture)
         |> update_fullmove_clock(piece)
-        |> update_fen()
 
       {:ok, game}
     end
@@ -202,13 +200,8 @@ defmodule Chex.Game do
   # defp move_piece(game, from, to) do
   # end
 
-  @spec update_fen(Chex.Game.t()) :: Chex.Game.t()
-  defp update_fen(%Chex.Game{} = game) do
-    game
-    |> Map.put(:fen, to_fen(game))
-  end
-
   # defp switch_active_color
+
   @spec switch_active_color(Chex.Game.t()) :: Chex.Game.t()
   defp switch_active_color(%Chex.Game{active_color: :white} = game) do
     game |> Map.put(:active_color, :black)
