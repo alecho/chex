@@ -11,7 +11,7 @@ defmodule Chex.Game do
             en_passant: nil,
             moves: [],
             halfmove_clock: 0,
-            fullmove_clock: 0,
+            fullmove_clock: 1,
             captures: []
 
   @type t() :: %__MODULE__{}
