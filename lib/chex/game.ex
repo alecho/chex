@@ -54,7 +54,7 @@ defmodule Chex.Game do
         |> update_castling(piece)
         |> update_en_passant(piece)
         |> update_halfmove_clock(piece, capture)
-        |> update_fullmove_clock(piece)
+        |> maybe_increment_fullmove_clock(piece)
 
       {:ok, game}
     end
@@ -66,8 +66,8 @@ defmodule Chex.Game do
     |> Map.put(:moves, [move | moves])
   end
 
-  @spec update_fullmove_clock(Game.t(), Piece.t()) :: Game.t()
-  defp update_fullmove_clock(game, {_name, :black}) do
+  @spec maybe_increment_fullmove_clock(Game.t(), Piece.t()) :: Game.t()
+  defp maybe_increment_fullmove_clock(game, {_name, :black}) do
     {_old, game} =
       game
       |> Map.get_and_update(:fullmove_clock, fn clock ->
@@ -77,7 +77,7 @@ defmodule Chex.Game do
     game
   end
 
-  defp update_fullmove_clock(game, _piece), do: game
+  defp maybe_increment_fullmove_clock(game, _piece), do: game
 
   @spec update_castling(Game.t(), Piece.t()) :: Game.t()
   defp update_castling(game, {:king, :black}) do
