@@ -3,7 +3,9 @@ defmodule Chex.Parser.FEN do
   Forsyth–Edwards Notation parser.
   """
 
-  @behaviour Chex.Parser
+  alias Chex.{Board, Game, Parser, Piece, Square}
+
+  @behaviour Parser
 
   # import Map, only: [put: 3]
   import Enum, only: [at: 2]
@@ -13,7 +15,7 @@ defmodule Chex.Parser.FEN do
     fen_parts = fen |> fen_to_map
 
     {:ok,
-     %Chex.Game{
+     %Game{
        board: decode_board(fen_parts |> at(0)),
        active_color: decode_active_color(fen_parts |> at(1)),
        castling: decode_castling(fen_parts |> at(2)),
@@ -23,7 +25,7 @@ defmodule Chex.Parser.FEN do
      }}
   end
 
-  def serialize(%Chex.Game{} = game) do
+  def serialize(%Game{} = game) do
     bd = serialize_board(game.board)
     ac = serialize_active_color(game.active_color)
     ct = serialize_castling(game.castling)
@@ -40,7 +42,7 @@ defmodule Chex.Parser.FEN do
     split(fen)
   end
 
-  @spec decode_board(String.t()) :: %Chex.Board{}
+  @spec decode_board(String.t()) :: %Board{}
   def decode_board(str) do
     str
     |> split("/")
@@ -51,16 +53,16 @@ defmodule Chex.Parser.FEN do
       |> decode_rank([], 0, 8 - i)
     end)
     |> List.flatten()
-    |> Enum.reduce(%Chex.Board{}, fn {square, piece}, board ->
+    |> Enum.reduce(%Board{}, fn {square, piece}, board ->
       Map.put(board, square, Tuple.append(piece, square))
     end)
   end
 
-  @spec serialize_board(%Chex.Board{}) :: String.t()
+  @spec serialize_board(%Board{}) :: String.t()
   def serialize_board(board) do
     8..1
     |> Enum.map(fn r ->
-      Chex.Board.files()
+      Board.files()
       |> Enum.map(fn f ->
         board |> Map.get({f, r})
       end)
@@ -78,7 +80,7 @@ defmodule Chex.Parser.FEN do
 
           _ ->
             chunk
-            |> Enum.map(&Chex.Piece.to_string(&1))
+            |> Enum.map(&Piece.to_string(&1))
         end
       end)
     end)
@@ -92,10 +94,10 @@ defmodule Chex.Parser.FEN do
 
     case Integer.parse(char) do
       :error ->
-        file = at(Chex.Board.files(), file_index)
+        file = at(Board.files(), file_index)
 
         pieces = [
-          {{file, rank}, Chex.Piece.from_string(char)}
+          {{file, rank}, Piece.from_string(char)}
           | pieces
         ]
 
@@ -137,7 +139,7 @@ defmodule Chex.Parser.FEN do
     |> Enum.join()
   end
 
-  @spec decode_en_passant(String.t()) :: Chex.Square.t()
+  @spec decode_en_passant(String.t()) :: Square.t()
   def decode_en_passant("-"), do: nil
 
   def decode_en_passant(san) when byte_size(san) == 2 do
@@ -145,14 +147,14 @@ defmodule Chex.Parser.FEN do
     decode_en_passant(file, rank)
   end
 
-  @spec decode_en_passant(String.t(), String.t()) :: Chex.Square.t()
+  @spec decode_en_passant(String.t(), String.t()) :: Square.t()
   def decode_en_passant(file, rank)
       when file in ["a", "b", "c", "d", "e", "f", "g", "h"] and
              rank in ["1", "2", "3", "4", "5", "6", "7", "8"] do
     {String.to_existing_atom(file), String.to_integer(rank)}
   end
 
-  @spec serialize_en_passant(Chex.Square.t()) :: String.t()
+  @spec serialize_en_passant(Square.t()) :: String.t()
   def serialize_en_passant(nil), do: "-"
 
   def serialize_en_passant({file, rank}) do
