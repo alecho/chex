@@ -63,7 +63,7 @@ defmodule Chex.Board do
     board
     |> all_occupied_by_color(color)
     |> Enum.map(fn square ->
-      {name, occupied_color, sq} = Map.get(board, square)
+      {name, _occupied_color, sq} = Map.get(board, square)
       Chex.Piece.attacking_squares({name, color}, sq, game)
     end)
     |> List.flatten()
