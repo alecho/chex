@@ -79,19 +79,12 @@ defmodule Chex.Game do
 
   @spec add_move(Game.t(), {Square.t(), Square.t()}) :: Game.t()
   defp add_move(%Game{moves: moves} = game, move) do
-    game
-    |> Map.put(:moves, [move | moves])
+    %{game | moves: [move | moves]}
   end
 
   @spec maybe_increment_fullmove_clock(Game.t(), Piece.t()) :: Game.t()
   defp maybe_increment_fullmove_clock(game, {_name, :black}) do
-    {_old, game} =
-      game
-      |> Map.get_and_update(:fullmove_clock, fn clock ->
-        {clock, clock + 1}
-      end)
-
-    game
+    %{game | fullmove_clock: game.fullmove_clock + 1}
   end
 
   defp maybe_increment_fullmove_clock(game, _piece), do: game

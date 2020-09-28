@@ -135,5 +135,18 @@ defmodule Chex.GameTest do
       {:ok, game} = Game.move(game, "c6d4")
       assert game.halfmove_clock == 0
     end
+
+    test "updates :fullmove_clock" do
+      {:ok, game} = Game.new()
+      assert game.fullmove_clock == 1
+      {:ok, game} = Game.move(game, "g1f3")
+      assert game.fullmove_clock == 1
+      {:ok, game} = Game.move(game, "g8f6")
+      assert game.fullmove_clock == 2
+      {:ok, game} = Game.move(game, "b1c3")
+      assert game.fullmove_clock == 2
+      {:ok, game} = Game.move(game, "b8c6")
+      assert game.fullmove_clock == 3
+    end
   end
 end
