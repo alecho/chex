@@ -45,7 +45,7 @@ defmodule Chex.Piece do
   ## Examples
 
   iex> Chex.Piece.trim({:pawn, :white, {:e, 2}})
-  {:pawn, :white}
+  {pawn: :white}
 
   """
   @spec trim({name(), color(), Square.t()}) :: Piece.t()

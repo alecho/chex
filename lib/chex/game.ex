@@ -26,16 +26,30 @@ defmodule Chex.Game do
   ## Examples
 
   iex> Chex.Game.new()
-  %Chex.Game{}
+  {:ok, %Chex.Game{}}
   iex> Chex.Game.new("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1")
-  %Chex.Game{}
+  {:ok, %Chex.Game{}}
 
   """
   @spec new(String.t()) :: {:ok, Game.t()} | {:error, atom()}
   def new(fen \\ @starting_pos), do: Chex.Parser.FEN.parse(fen)
 
+  @doc """
+  Makes a move within the chess game.
+
+  Returns a %Game{} modified by the move.
+
+  ## Examples
+
+  iex> {:ok, game} = Chex.Game.new()
+  iex> Chex.Game.move(game, "e4e5")
+  {error: :no_piece_at_square}
+  iex> Chex.Game.move(game, "e2e4")
+  {:ok, %Chex.Game{}}
+
+  """
   @spec move(Game.t(), {Square.t(), Square.t()} | String.t()) ::
-          {:ok, Game.t()} | {:error, :no_piece_at_square}
+          {:ok, Game.t()} | {:error, atom()}
   def move(game, move) when byte_size(move) == 4 do
     {from, to} = String.split_at(move, 2)
     move(game, {Square.from_string(from), Square.from_string(to)})
@@ -126,19 +140,19 @@ defmodule Chex.Game do
          %Game{moves: [{{file, 2}, {file, 4}} | _prev_moves]} = game,
          {:pawn, :white}
        ) do
-    Map.put(game, :en_passant, {file, 3})
+    %{game | en_passant: {file, 3}}
   end
 
   defp update_en_passant(
          %Game{moves: [{{file, 7}, {file, 5}} | _prev_moves]} = game,
          {:pawn, :black}
        ) do
-    Map.put(game, :en_passant, {file, 6})
+    %{game | en_passant: {file, 6}}
   end
 
-  defp update_en_passant(game, _move) do
-    Map.put(game, :en_passant, nil)
-  end
+  defp update_en_passant(%Game{en_passant: nil} = game, _move), do: game
+
+  defp update_en_passant(game, _move), do: %{game | en_passant: nil}
 
   @spec update_halfmove_clock(Game.t(), Piece.t(), Piece.t() | nil) ::
           Game.t()
@@ -163,8 +177,13 @@ defmodule Chex.Game do
 
   @spec move_valid?(Game.t(), {Square.t(), Square.t()}) ::
           boolean() | {:error, reason :: atom}
-  defp move_valid?(%Game{} = game, {from, _to}) do
-    with {:ok, _piece} <- piece_at(game, from), do: true
+  defp move_valid?(%Game{} = game, {from, to} = move) do
+    with {:ok, {_name, color, _start}} <- piece_at(game, from),
+         true <- active_color?(game, color),
+         # true <- check_absolute_pin?(game, from),
+         true <- destination_clear?(game, to),
+         true <- path_clear?(game, move),
+         do: true
   end
 
   defp pickup_piece(game, square) do
@@ -177,26 +196,22 @@ defmodule Chex.Game do
         {:error, :no_piece_at_square}
 
       {piece, board} ->
-        game =
-          game
-          |> Map.put(:board, board)
-
-        {:ok, {piece, game}}
+        {:ok, {piece, %{game | board: board}}}
     end
   end
 
-  defp place_piece(game, square, piece) do
-    {capture, board} =
-      game.board
-      |> Map.get_and_update(square, fn capture ->
-        {capture, piece}
-      end)
+  defp place_piece(game, square, {_name, color, _start} = piece) do
+    game.board
+    |> Map.get_and_update(square, fn capture ->
+      {capture, piece}
+    end)
+    |> case do
+      {{_name, ^color, _start}, _board} ->
+        {:error, :occupied_by_own_color}
 
-    game =
-      game
-      |> Map.put(:board, board)
-
-    {:ok, {capture, game}}
+      {capture, board} ->
+        {:ok, {capture, %{game | board: board}}}
+    end
   end
 
   # defp prepend_move(game, from, to)
@@ -223,6 +238,13 @@ defmodule Chex.Game do
         {:ok, piece}
     end
   end
+
+  defp active_color?(%Game{active_color: color}, color), do: true
+  defp active_color?(_game, _color), do: {:error, :out_of_turn}
+
+  defp path_clear?(_game, _move), do: true
+
+  defp destination_clear?(_game, _to), do: true
 
   @spec capture_piece(Game.t(), Piece.t() | nil) :: Game.t()
   defp capture_piece(game, nil), do: game
