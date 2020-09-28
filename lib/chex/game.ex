@@ -154,20 +154,14 @@ defmodule Chex.Game do
 
   defp update_en_passant(game, _move), do: %{game | en_passant: nil}
 
-  @spec update_halfmove_clock(Game.t(), Piece.t(), Piece.t() | nil) ::
-          Game.t()
-  defp update_halfmove_clock(game, {piece_name, _color}, capture)
-       when piece_name == :pawn or not is_nil(capture) do
-    {_old, game} =
-      game
-      |> Map.get_and_update(:halfmove_clock, fn clock ->
-        {clock, clock + 1}
-      end)
+  @spec update_halfmove_clock(Game.t(), Piece.t(), Piece.t() | nil) :: Game.t()
+  defp update_halfmove_clock(game, {_, _}, {_, _}), do: %{game | halfmove_clock: 0}
 
-    game
+  defp update_halfmove_clock(game, {:pawn, _color}, _), do: %{game | halfmove_clock: 0}
+
+  defp update_halfmove_clock(game, _piece, _capture) do
+    %{game | halfmove_clock: game.halfmove_clock + 1}
   end
-
-  defp update_halfmove_clock(game, _piece, _capture), do: game
 
   @spec to_fen(Game.t()) :: String.t()
   def to_fen(%Game{} = game) do

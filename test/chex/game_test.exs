@@ -104,5 +104,36 @@ defmodule Chex.GameTest do
       {:ok, game} = Game.move(game, "g8f6")
       assert game.en_passant == nil
     end
+
+    test "updates :halfmove_clock" do
+      {:ok, game} = Game.new()
+      {:ok, game} = Game.move(game, "g1f3")
+      assert game.halfmove_clock == 1
+      {:ok, game} = Game.move(game, "g8f6")
+      assert game.halfmove_clock == 2
+      {:ok, game} = Game.move(game, "b1c3")
+      assert game.halfmove_clock == 3
+      {:ok, game} = Game.move(game, "b8c6")
+      assert game.halfmove_clock == 4
+    end
+
+    test "resets :halfmove_clock on pawn move" do
+      {:ok, game} = Game.new()
+      {:ok, game} = Game.move(game, "g1f3")
+      {:ok, game} = Game.move(game, "g8f6")
+      assert game.halfmove_clock == 2
+      {:ok, game} = Game.move(game, "e2e4")
+      assert game.halfmove_clock == 0
+    end
+
+    test "resets :halfmove_clock on capture" do
+      {:ok, game} = Game.new()
+      {:ok, game} = Game.move(game, "g1f3")
+      {:ok, game} = Game.move(game, "b8c6")
+      {:ok, game} = Game.move(game, "f3d4")
+      assert game.halfmove_clock == 3
+      {:ok, game} = Game.move(game, "c6d4")
+      assert game.halfmove_clock == 0
+    end
   end
 end
