@@ -79,6 +79,15 @@ defmodule Chex.GameTest do
       assert {:error, :occupied_by_own_color} = Game.move(game, "g1e2")
     end
 
+    test "updates :active_color" do
+      {:ok, game} = Game.new()
+      assert game.active_color == :white
+      {:ok, game} = Game.move(game, "e2e4")
+      assert game.active_color == :black
+      {:ok, game} = Game.move(game, "e7e5")
+      assert game.active_color == :white
+    end
+
     test "appends the move to :moves" do
       {:ok, game} = Game.new()
       {:ok, game} = Game.move(game, "e2e4")
