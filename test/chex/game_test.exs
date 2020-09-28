@@ -157,5 +157,14 @@ defmodule Chex.GameTest do
       {:ok, game} = Game.move(game, "b8c6")
       assert game.fullmove_clock == 3
     end
+
+    test "adds captured piece to captures" do
+      {:ok, game} = Game.new()
+      {:ok, game} = Game.move(game, "g1f3")
+      {:ok, game} = Game.move(game, "b8c6")
+      {:ok, game} = Game.move(game, "f3d4")
+      {:ok, game} = Game.move(game, "c6d4")
+      assert game.captures == [{:knight, :white}]
+    end
   end
 end

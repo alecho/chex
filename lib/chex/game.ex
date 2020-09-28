@@ -201,12 +201,6 @@ defmodule Chex.Game do
     end
   end
 
-  # defp prepend_move(game, from, to)
-  # defp move_piece(game, from, to) do
-  # end
-
-  # defp switch_active_color
-
   @spec switch_active_color(Game.t()) :: Game.t()
   defp switch_active_color(%Game{active_color: :white} = game) do
     game |> Map.put(:active_color, :black)
@@ -237,6 +231,6 @@ defmodule Chex.Game do
   defp capture_piece(game, nil), do: game
 
   defp capture_piece(%Game{captures: captures} = game, piece) do
-    Map.put(game, :captures, [piece | captures])
+    %{game | captures: [piece | captures]}
   end
 end
