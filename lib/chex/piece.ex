@@ -1,6 +1,5 @@
 defmodule Chex.Piece do
-  alias Chex.Game
-  alias Chex.Square
+  alias Chex.{Game, Piece, Square}
 
   @typedoc """
   A name atom.
@@ -32,10 +31,25 @@ defmodule Chex.Piece do
     module.attacking_squares(color, square, game)
   end
 
-  @spec from_string(String.t()) :: Chex.Piece.t()
+  @spec from_string(String.t()) :: Piece.t()
   def from_string(str) do
     {piece_from_string(str), color_from_string(str)}
   end
+
+  @doc """
+  Removes the trailing starting square from a three element tuple.
+
+  Returns a Piece.t(). This is useful as the piece data stored in the
+  game.board contains the piece's starting square as a means of identification.
+
+  ## Examples
+
+  iex> Chex.Piece.trim({:pawn, :white, {:e, 2}})
+  {:pawn, :white}
+
+  """
+  @spec trim({name(), color(), Square.t()}) :: Piece.t()
+  def trim({name, color, _start}), do: {name, color}
 
   @spec piece_from_string(String.t()) :: atom
   defp piece_from_string(str) when byte_size(str) == 1 do

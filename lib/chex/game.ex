@@ -45,6 +45,9 @@ defmodule Chex.Game do
     with true <- move_valid?(game, move),
          {:ok, {piece, game}} <- pickup_piece(game, from),
          {:ok, {capture, game}} <- place_piece(game, to, piece) do
+      piece = Piece.trim(piece)
+      capture = if capture != nil, do: Piece.trim(capture)
+
       game =
         game
         |> add_move(move)
