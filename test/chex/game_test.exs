@@ -166,5 +166,37 @@ defmodule Chex.GameTest do
       {:ok, game} = Game.move(game, "c6d4")
       assert game.captures == [{:knight, :white}]
     end
+
+    test "removes castling rights when castling" do
+      {:ok, game} = Game.new("rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4")
+      {:ok, game} = Game.move(game, "e1g1")
+      assert game.castling == [:k, :q]
+      {:ok, game} = Game.move(game, "e8g8")
+      assert game.castling == []
+    end
+
+    test "removes castling rights when king moves" do
+      {:ok, game} = Game.new("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2")
+      {:ok, game} = Game.move(game, "e1e2")
+      assert game.castling == [:k, :q]
+      {:ok, game} = Game.move(game, "e8e7")
+      assert game.castling == []
+    end
+
+    test "removes kingside castling rights when kingside rook moves" do
+      {:ok, game} = Game.new("rnbqkbnr/ppppppp1/8/7p/7P/8/PPPPPPP1/RNBQKBNR w KQkq h6 0 2")
+      {:ok, game} = Game.move(game, "h1h3")
+      assert game.castling == [:Q, :k, :q]
+      {:ok, game} = Game.move(game, "h8h6")
+      assert game.castling == [:Q, :q]
+    end
+
+    test "removes queenside castling rights when queenside rook moves" do
+      {:ok, game} = Game.new("rnbqkbnr/1ppppppp/8/p7/P7/8/1PPPPPPP/RNBQKBNR w KQkq a6 0 2")
+      {:ok, game} = Game.move(game, "a1a3")
+      assert game.castling == [:K, :k, :q]
+      {:ok, game} = Game.move(game, "a8a6")
+      assert game.castling == [:K, :k]
+    end
   end
 end
