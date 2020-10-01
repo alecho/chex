@@ -1,5 +1,5 @@
 defmodule Chex.PieceTest do
-  use ExUnit.Case
+  use ExUnit.Case, asyc: true
   import AssertValue
   doctest Chex.Piece
 
@@ -7,9 +7,7 @@ defmodule Chex.PieceTest do
     results =
       "kqbnrpKQBNRP"
       |> String.codepoints()
-      |> Enum.map(fn str ->
-        Chex.Piece.from_string(str)
-      end)
+      |> Enum.map(&Chex.Piece.from_string(&1))
 
     assert_value(
       results == [

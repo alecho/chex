@@ -11,11 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `Piece.trim/1` to remove starting square from a three element tuple containing
   a piece name, color, and starting square.
+- `Queen`, `Bishop`, `Knight`, and `Rook` modules.
 
 ### Changed
 
 - `Parser.FEN.parse/1` and `Parser.FEN.serialize/1` now return a tuple with
   `{:ok, result}` or `{:error, reason}`.
+- `Chex.Piece.Movement.walk` now considers the game state and only returns
+  truly valid moves.
 
 ### Removed
 
