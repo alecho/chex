@@ -59,6 +59,30 @@ defmodule Chex.Board do
     !is_nil(Map.get(board, square))
   end
 
+  @doc """
+  Get the square of the first matching piece.
+  """
+  @spec find_piece(%Chex.Board{}, Piece.t()) :: Square.t() | nil
+  def find_piece(board, piece) do
+    board
+    |> Map.from_struct()
+    |> Enum.reduce_while(nil, fn {square, {n, c, _}}, acc ->
+      if {n, c} == piece, do: {:halt, square}, else: {:cont, acc}
+    end)
+  end
+
+  @doc """
+  Find locations of the specified piece on the board.
+  """
+  @spec find_pieces(%Chex.Board{}, Piece.t()) :: [Square.t()] | []
+  def find_pieces(board, piece) do
+    board
+    |> Map.from_struct()
+    |> Enum.reduce([], fn {square, {n, c, _}}, acc ->
+      if {n, c} == piece, do: [square | acc], else: acc
+    end)
+  end
+
   def all_attacking_sqaures(board, color, game) do
     board
     |> all_occupied_by_color(color)
