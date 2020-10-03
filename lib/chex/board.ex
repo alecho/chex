@@ -94,6 +94,14 @@ defmodule Chex.Board do
     |> Enum.uniq()
   end
 
+  def all_possible_squares(game, color) do
+    game.board
+    |> all_occupied_by_color(color)
+    |> Enum.map(&Chex.Piece.possible_moves(game, &1))
+    |> List.flatten()
+    |> Enum.uniq()
+  end
+
   def all_occupied_by_color(board, color) do
     board
     |> Map.from_struct()
