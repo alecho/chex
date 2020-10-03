@@ -2,7 +2,6 @@ defmodule Chex.Game do
   @moduledoc """
   Functions for playing a chess game.
   """
-
   alias Chex.{Board, Game, Piece, Square}
 
   defstruct board: Board.new(),
@@ -76,6 +75,9 @@ defmodule Chex.Game do
       {:ok, game}
     end
   end
+
+  defdelegate in_check?(board, color), to: Game.Checking
+  defdelegate checkmate?(board), to: Game.Checking
 
   @spec add_move(Game.t(), {Square.t(), Square.t()}) :: Game.t()
   defp add_move(%Game{moves: moves} = game, move) do
