@@ -4,11 +4,11 @@ defmodule Chex.Piece.Bishop do
   import Chex.Piece.Movement
 
   @impl true
-  def possible_moves(_color, square, game) do
-    walk(game, square, :ne) ++
-      walk(game, square, :se) ++
-      walk(game, square, :sw) ++
-      walk(game, square, :nw)
+  def possible_moves(color, square, game) do
+    walk(game, square, color, :ne) ++
+      walk(game, square, color, :se) ++
+      walk(game, square, color, :sw) ++
+      walk(game, square, color, :nw)
   end
 
   @impl true

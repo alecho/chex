@@ -19,10 +19,10 @@ defmodule Chex.Piece do
   @callback possible_moves(color(), Square.t(), Game.t()) :: [Square.t()]
   @callback attacking_squares(color(), Square.t(), en_passant :: Square.t()) :: [Square.t()]
 
-  @spec possible_moves(t(), Square.t(), Game.t()) :: [Square.t()]
-  def possible_moves({name, color}, square, game) do
-    module = to_module(name)
-    module.possible_moves(color, square, game)
+  @spec possible_moves(Game.t(), Square.t()) :: [Square.t()]
+  def possible_moves(game, square) do
+    {name, color, _id} = Map.get(game.board, square)
+    to_module(name).possible_moves(color, square, game)
   end
 
   @spec attacking_squares(t(), Square.t(), Game.t()) :: [Square.t()]

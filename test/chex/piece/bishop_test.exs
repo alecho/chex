@@ -5,9 +5,14 @@ defmodule Chex.Piece.BishopTest do
   @empty_board "8/8/8/8/4B3/8/8/8 w - - 0 1"
 
   describe "Bishop.possible_moves/3" do
-    test "starting position moves" do
+    test "white starting position moves" do
       {:ok, game} = Chex.Game.new()
       assert Chex.Piece.Bishop.possible_moves(:white, {:c, 1}, game) == []
+    end
+
+    test "black starting position moves" do
+      {:ok, game} = Chex.Game.new()
+      assert Chex.Piece.Bishop.possible_moves(:black, {:c, 8}, game) == []
     end
 
     test "only piece in middle of board" do
