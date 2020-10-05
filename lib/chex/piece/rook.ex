@@ -4,11 +4,11 @@ defmodule Chex.Piece.Rook do
   import Chex.Piece.Movement
 
   @impl true
-  def possible_moves(_color, square, game) do
-    walk(game, square, :n) ++
-      walk(game, square, :s) ++
-      walk(game, square, :e) ++
-      walk(game, square, :w)
+  def possible_moves(color, square, game) do
+    walk(game, square, color, :n) ++
+      walk(game, square, color, :s) ++
+      walk(game, square, color, :e) ++
+      walk(game, square, color, :w)
   end
 
   @impl true

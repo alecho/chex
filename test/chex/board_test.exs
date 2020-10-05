@@ -1,5 +1,5 @@
 defmodule Chex.BoardTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   import AssertValue
   doctest Chex.Board
 

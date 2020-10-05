@@ -66,10 +66,12 @@ defmodule Chex.Board do
   def find_piece(board, piece) do
     board
     |> Map.from_struct()
-    |> Enum.reduce_while(nil, fn {square, {n, c, _}}, acc ->
-      if {n, c} == piece, do: {:halt, square}, else: {:cont, acc}
-    end)
+    |> Enum.reduce_while(nil, &finder(piece, &1, &2))
   end
+
+  defp finder({name, color}, {square, {name, color, _}}, _acc), do: {:halt, square}
+
+  defp finder(_piece, {_square, _value}, acc), do: {:cont, acc}
 
   @doc """
   Find locations of the specified piece on the board.
@@ -87,8 +89,8 @@ defmodule Chex.Board do
     board
     |> all_occupied_by_color(color)
     |> Enum.map(fn square ->
-      {name, _occupied_color, sq} = Map.get(board, square)
-      Chex.Piece.attacking_squares({name, color}, sq, game)
+      {name, _occupied_color, _sq} = Map.get(board, square)
+      Chex.Piece.attacking_squares({name, color}, square, game)
     end)
     |> List.flatten()
     |> Enum.uniq()

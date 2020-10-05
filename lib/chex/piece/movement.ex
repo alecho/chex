@@ -7,18 +7,22 @@ defmodule Chex.Piece.Movement do
   @type direction :: :n | :s | :e | :w | :ne | :se | :nw | :sw
 
   def walk(game, square, dir) do
-    walk(game, [], square, dir, 7)
+    walk(game, [], square, game.active_color, dir, 7)
   end
 
-  def walk(game, squares, square, dir, limit \\ 7)
+  def walk(game, square, color, dir) do
+    walk(game, [], square, color, dir, 7)
+  end
 
-  def walk(_game, squares, _square, _dir, 0), do: squares
+  def walk(game, squares, square, color, dir, limit \\ 7)
 
-  def walk(game, squares, square, dir, limit) do
+  def walk(_game, squares, _square, _color, _dir, 0), do: squares
+
+  def walk(game, squares, square, color, dir, limit) do
     new_sq = next_square(square, dir)
-    {squares, limit} = prepare_arguments(game, squares, new_sq, limit)
+    {squares, limit} = prepare_arguments(game, squares, color, new_sq, limit)
 
-    walk(game, squares, new_sq, dir, limit)
+    walk(game, squares, new_sq, color, dir, limit)
   end
 
   defp next_square({file, rank}, dir) do
@@ -27,10 +31,10 @@ defmodule Chex.Piece.Movement do
     if Square.valid?(sq), do: sq, else: nil
   end
 
-  defp prepare_arguments(_game, squares, nil, _limit), do: {squares, 0}
+  defp prepare_arguments(_game, squares, _color, nil, _limit), do: {squares, 0}
 
-  defp prepare_arguments(game, squares, new_sq, limit) do
-    occupied_by_enemy = !Board.occupied_by_color?(game.board, game.active_color, new_sq)
+  defp prepare_arguments(game, squares, color, new_sq, limit) do
+    occupied_by_enemy = !Board.occupied_by_color?(game.board, color, new_sq)
     squares = maybe_add_square(squares, new_sq, occupied_by_enemy)
     occupied = Board.occupied?(game.board, new_sq)
     limit = occupied_limit(limit, occupied)
