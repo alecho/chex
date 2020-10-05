@@ -11,7 +11,8 @@ defmodule Chex.Game do
             moves: [],
             halfmove_clock: 0,
             fullmove_clock: 1,
-            captures: []
+            captures: [],
+            check: nil
 
   @type t() :: %__MODULE__{}
 
@@ -67,6 +68,7 @@ defmodule Chex.Game do
         |> capture_piece(capture)
         # |> promote_pawn()
         |> switch_active_color()
+        |> update_check()
         |> update_castling(piece)
         |> update_en_passant(piece)
         |> update_halfmove_clock(piece, capture)
@@ -90,6 +92,11 @@ defmodule Chex.Game do
   end
 
   defp maybe_increment_fullmove_clock(game, _piece), do: game
+
+  defp update_check(game) do
+    check = if in_check?(game, game.active_color), do: game.active_color, else: nil
+    %{game | check: check}
+  end
 
   @spec update_castling(Game.t(), Piece.t()) :: Game.t()
   defp update_castling(game, {:king, :black}) do

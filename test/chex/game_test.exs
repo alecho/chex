@@ -198,6 +198,19 @@ defmodule Chex.GameTest do
       {:ok, game} = Game.move(game, "a8a6")
       assert game.castling == [:K, :k]
     end
+
+    test "adds the color in check when a check occurs" do
+      {:ok, game} = Game.new("4k3/8/8/8/8/8/8/4KQ2 w - - 0 1")
+      {:ok, game} = Game.move(game, "f1e2")
+      assert game.check == :black
+    end
+
+    test "sets check to nil when moving out of check" do
+      {:ok, game} = Game.new("4k3/8/8/8/8/8/8/4KQ2 w - - 0 1")
+      {:ok, game} = Game.move(game, "f1e2")
+      {:ok, game} = Game.move(game, "e8d8")
+      assert game.check == nil
+    end
   end
 
   describe "in_check?/2" do
