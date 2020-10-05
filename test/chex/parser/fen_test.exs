@@ -5,7 +5,7 @@ defmodule Chex.Parser.FENTest do
   @starting_pos "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
   @after_e4 "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
   # @after_c5 "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"
-  @after_Nf3 "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  @after_nf3 "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
 
   test "returns a Game struct" do
     assert {:ok, %Chex.Game{}} = Chex.Parser.FEN.parse(@starting_pos)
@@ -52,7 +52,7 @@ defmodule Chex.Parser.FENTest do
   end
 
   test "parses empty sqaure positions" do
-    {:ok, game} = Chex.Parser.FEN.parse(@after_Nf3)
+    {:ok, game} = Chex.Parser.FEN.parse(@after_nf3)
 
     assert game.board == %{
              :__struct__ => Chex.Board,
@@ -137,14 +137,14 @@ defmodule Chex.Parser.FENTest do
     assert {:ok,
             %Chex.Game{
               halfmove_clock: 1
-            }} = Chex.Parser.FEN.parse(@after_Nf3)
+            }} = Chex.Parser.FEN.parse(@after_nf3)
   end
 
   test "parses fullmove_clock" do
     assert {:ok,
             %Chex.Game{
               fullmove_clock: 2
-            }} = Chex.Parser.FEN.parse(@after_Nf3)
+            }} = Chex.Parser.FEN.parse(@after_nf3)
   end
 
   test "parses newgame" do
