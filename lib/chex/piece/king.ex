@@ -1,4 +1,7 @@
 defmodule Chex.Piece.King do
+  @moduledoc """
+  Describes King moves.
+  """
   alias Chex.{Board, Square}
   @behaviour Chex.Piece
 

@@ -1,4 +1,7 @@
 defmodule Chex.Board do
+  @moduledoc """
+  Chess board functions.
+  """
   import Map, only: [get_and_update: 3]
   import Enum, only: [reduce: 3]
 

@@ -1,4 +1,7 @@
 defmodule Chex.Piece.Bishop do
+  @moduledoc """
+  Describes Bishop moves.
+  """
   @behaviour Chex.Piece
 
   import Chex.Piece.Movement

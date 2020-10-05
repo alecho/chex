@@ -1,4 +1,7 @@
 defmodule Chex.Square do
+  @moduledoc """
+  Work with a specific square on the board.
+  """
   require Integer
 
   @typedoc """
