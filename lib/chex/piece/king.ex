@@ -2,7 +2,7 @@ defmodule Chex.Piece.King do
   alias Chex.{Board, Square}
   @behaviour Chex.Piece
 
-  def possible_moves(color, square = {file, rank}, game) do
+  def possible_moves(color, {file, rank} = square, game) do
     moves =
       for r <- [-1, 0, 1], f <- [-1, 0, 1] do
         {Board.file_offset(file, f), rank + r}
@@ -15,7 +15,7 @@ defmodule Chex.Piece.King do
     moves -- Board.all_attacking_sqaures(game.board, opponent_color, game)
   end
 
-  def attacking_squares(_color, square = {file, rank}, _game) do
+  def attacking_squares(_color, {file, rank} = square, _game) do
     for r <- [-1, 0, 1], f <- [-1, 0, 1] do
       {Board.file_offset(file, f), rank + r}
     end
