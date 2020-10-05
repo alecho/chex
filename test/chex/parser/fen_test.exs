@@ -156,4 +156,32 @@ defmodule Chex.Parser.FENTest do
     {:ok, game} = Chex.Game.new(@after_e4)
     assert Chex.Parser.FEN.serialize(game) == {:ok, @after_e4}
   end
+
+  test "serializes complicated board" do
+    board = %{
+      :__struct__ => Chex.Board,
+      {:a, 3} => {:pawn, :white, {:a, 3}},
+      {:a, 5} => {:pawn, :black, {:a, 5}},
+      {:a, 8} => {:rook, :black, {:a, 8}},
+      {:b, 3} => {:knight, :black, {:b, 3}},
+      {:b, 5} => {:pawn, :black, {:b, 5}},
+      {:c, 7} => {:rook, :white, {:c, 7}},
+      {:d, 5} => {:pawn, :white, {:d, 5}},
+      {:e, 2} => {:king, :white, {:e, 2}},
+      {:e, 3} => {:bishop, :white, {:e, 3}},
+      {:e, 5} => {:pawn, :black, {:e, 5}},
+      {:f, 2} => {:pawn, :white, {:f, 2}},
+      {:f, 5} => {:pawn, :black, {:f, 5}},
+      {:g, 3} => {:pawn, :white, {:g, 3}},
+      {:g, 6} => {:rook, :white, {:g, 6}},
+      {:h, 3} => {:rook, :black, {:h, 3}},
+      {:h, 8} => {:king, :black, {:h, 8}}
+    }
+
+    {:ok, game} = Chex.Game.new()
+    game = %{game | board: board}
+
+    assert Chex.Parser.FEN.serialize(game) ==
+             {:ok, "r6k/2R5/6R1/pp1Ppp2/8/Pn2B1Pr/4KP2/8 w KQkq - 0 1"}
+  end
 end

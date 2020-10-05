@@ -61,32 +61,25 @@ defmodule Chex.Parser.FEN do
 
   @spec serialize_board(%Board{}) :: String.t()
   def serialize_board(board) do
-    8..1
-    |> Enum.map(fn r ->
-      Board.files()
-      |> Enum.map(fn f ->
-        board |> Map.get({f, r})
-      end)
-    end)
-    |> Enum.map(fn rank ->
-      rank
-      |> Enum.chunk_by(&is_nil(&1))
-      |> Enum.map(fn chunk ->
-        chunk
-        |> Enum.at(0)
-        |> case do
-          nil ->
-            Enum.count(chunk)
-            |> Integer.to_string()
-
-          _ ->
-            chunk
-            |> Enum.map(&Piece.to_string(&1))
-        end
-      end)
+    for r <- 8..1, f <- Board.files() do
+      Map.get(board, {f, r})
+    end
+    |> Enum.chunk_every(8)
+    |> Enum.map(fn row ->
+      row
+      |> Enum.reduce({"", 0}, &row_reduce(&1, &2))
+      |> extract_row()
     end)
     |> Enum.join("/")
   end
+
+  defp row_reduce(nil, {_acc, 7}), do: {"8", 0}
+  defp row_reduce(nil, {acc, count}), do: {acc, count + 1}
+  defp row_reduce(piece, {acc, 0}), do: {acc <> Piece.to_string(piece), 0}
+  defp row_reduce(piece, {acc, count}), do: row_reduce(piece, {"#{acc}#{count}", 0})
+
+  defp extract_row({row, 0}), do: row
+  defp extract_row({row, count}), do: "#{row}#{count}"
 
   def decode_rank(chars, pieces, _file_index, _rank) when chars == [], do: pieces
 
