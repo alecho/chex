@@ -50,12 +50,14 @@ defmodule Chex.Game do
   """
   @spec move(Game.t(), {Square.t(), Square.t()} | String.t()) ::
           {:ok, Game.t()} | {:error, atom()}
-  def move(game, move) when byte_size(move) == 4 do
+  def move(game, move, promote_to \\ :queen)
+
+  def move(game, move, promote_to) when byte_size(move) == 4 do
     {from, to} = String.split_at(move, 2)
-    move(game, {Square.from_string(from), Square.from_string(to)})
+    move(game, {Square.from_string(from), Square.from_string(to)}, promote_to)
   end
 
-  def move(game, {from, to} = move) do
+  def move(game, {from, to} = move, promote_to) do
     with true <- move_valid?(game, move),
          {:ok, {piece, game}} <- pickup_piece(game, from),
          {:ok, {capture, game}} <- place_piece(game, to, piece) do
@@ -66,7 +68,7 @@ defmodule Chex.Game do
         game
         |> add_move(move)
         |> capture_piece(capture)
-        # |> promote_pawn()
+        |> maybe_promote_pawn(promote_to)
         |> switch_active_color()
         |> update_check()
         |> update_castling(piece)
@@ -242,4 +244,19 @@ defmodule Chex.Game do
   defp capture_piece(%Game{captures: captures} = game, piece) do
     %{game | captures: [piece | captures]}
   end
+
+  @spec maybe_promote_pawn(Game.t(), Piece.name()) :: Game.t()
+  defp maybe_promote_pawn(%{moves: [{_from, {_, d_rank} = sq} | _mvs]} = game, new_piece)
+       when d_rank in [1, 8] do
+    {_old, board} =
+      game.board
+      |> Map.get_and_update(sq, fn
+        {:pawn, color, start} = cur -> {cur, {new_piece, color, start}}
+        cur -> {cur, cur}
+      end)
+
+    %{game | board: board}
+  end
+
+  defp maybe_promote_pawn(game, _new_piece), do: game
 end
