@@ -7,3 +7,7 @@ otp_release:
   - 21.0
   - 22.0
   - 23.0
+jobs:
+  exclude:
+  - elixir: 1.9
+    otp_release: 23.0
