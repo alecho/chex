@@ -1,14 +1,17 @@
 defmodule Chex.MixProject do
   use Mix.Project
 
+  @version "0.1.2"
+
   def project do
     [
       app: :chex,
-      version: "0.1.2",
+      version: @version,
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
+      docs: docs(),
       deps: deps()
     ]
   end
@@ -27,8 +30,28 @@ defmodule Chex.MixProject do
   defp package() do
     [
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/alecho/chex"},
+      links: links(),
       homepage_url: "https://github.com/alecho/chex"
+    ]
+  end
+
+  defp links() do
+    %{
+      "GitHub" => "https://github.com/alecho/chex",
+      "Readme" => "https://github.com/alecho/chex/blob/v#{@version}/README.md",
+      "Changelog" => "https://github.com/alecho/chex/blob/v#{@version}/CHANGELOG.md"
+    }
+  end
+
+  defp docs() do
+    [
+      source_ref: "v#{@version}",
+      main: "readme",
+      extras: [
+        "README.md",
+        "CHANGELOG.md"
+      ],
+      skip_undefined_reference_warnings_on: ["changelog", "CHANGELOG.md"]
     ]
   end
 
