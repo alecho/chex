@@ -27,9 +27,19 @@ defmodule Chex.Board do
   end
 
   @spec get(%Chex.Board{}, Square.t()) :: term | nil
-  def get(%__MODULE__{} = board, square) do
+  def get(%{} = board, square) do
     board |> Map.get(square)
   end
+
+  @spec get_piece_name(%Chex.Board{}, Square.t()) :: Piece.name() | nil
+  def get_piece_name(%{} = board, square) do
+    board
+    |> get(square)
+    |> extract_piece_name()
+  end
+
+  defp extract_piece_name({name, _c, _id}), do: name
+  defp extract_piece_name(_pice), do: nil
 
   def files(), do: @files
 
