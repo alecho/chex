@@ -60,7 +60,8 @@ defmodule Chex.Game do
   def move(game, {from, to} = move, promote_to) do
     with true <- move_valid?(game, move),
          {:ok, {piece, game}} <- pickup_piece(game, from),
-         {:ok, {capture, game}} <- place_piece(game, to, piece) do
+         {:ok, {capture, game}} <- place_piece(game, to, piece),
+         {:ok, game} <- castle(game, move) do
       piece = Piece.trim(piece)
       capture = if capture != nil, do: Piece.trim(capture)
 
@@ -175,12 +176,11 @@ defmodule Chex.Game do
 
   @spec move_valid?(Game.t(), {Square.t(), Square.t()}) ::
           boolean() | {:error, reason :: atom}
-  defp move_valid?(%Game{} = game, {from, to} = move) do
+  defp move_valid?(%Game{} = game, {from, _to}) do
     with {:ok, {_name, color, _start}} <- piece_at(game, from),
          true <- active_color?(game, color),
          # true <- check_absolute_pin?(game, from),
-         true <- destination_clear?(game, to),
-         true <- path_clear?(game, move),
+         # TODO: Check player matches color when payer support is added.
          do: true
   end
 
@@ -212,6 +212,36 @@ defmodule Chex.Game do
     end
   end
 
+  # Queenside castle
+  defp castle(game, {{:e, r}, {:c, r}}) when r in [1, 8] do
+    game =
+      if Board.get_piece_name(game.board, {:c, r}) == :king do
+        {:ok, {piece, game}} = pickup_piece(game, {:a, r})
+        {:ok, {_cap, game}} = place_piece(game, {:d, r}, piece)
+        game
+      else
+        game
+      end
+
+    {:ok, game}
+  end
+
+  # Kingside castle
+  defp castle(game, {{:e, r}, {:g, r}}) when r in [1, 8] do
+    game =
+      if Board.get_piece_name(game.board, {:g, r}) == :king do
+        {:ok, {piece, game}} = pickup_piece(game, {:h, r})
+        {:ok, {_cap, game}} = place_piece(game, {:f, r}, piece)
+        game
+      else
+        game
+      end
+
+    {:ok, game}
+  end
+
+  defp castle(game, _move), do: {:ok, game}
+
   @spec switch_active_color(Game.t()) :: Game.t()
   defp switch_active_color(%Game{active_color: :white} = game) do
     game |> Map.put(:active_color, :black)
@@ -233,10 +263,6 @@ defmodule Chex.Game do
 
   defp active_color?(%Game{active_color: color}, color), do: true
   defp active_color?(_game, _color), do: {:error, :out_of_turn}
-
-  defp path_clear?(_game, _move), do: true
-
-  defp destination_clear?(_game, _to), do: true
 
   @spec capture_piece(Game.t(), Piece.t() | nil) :: Game.t()
   defp capture_piece(game, nil), do: game

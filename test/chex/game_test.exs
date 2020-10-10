@@ -60,7 +60,7 @@ defmodule Chex.GameTest do
   describe "move/2" do
     test "returns {:ok, game} when move is valid" do
       {:ok, game} = Game.new()
-      assert {:ok, game} = Game.move(game, "e2e4")
+      assert {:ok, _game} = Game.move(game, "e2e4")
     end
 
     test "returns {:error, :no_piece_at_square} when starting square is empty" do
@@ -255,6 +255,120 @@ defmodule Chex.GameTest do
     test "in mate is true" do
       {:ok, game} = Game.new("4k2Q/R7/8/8/8/8/8/4K3 w - - 0 1")
       assert Game.in_check?(game, :black) == true
+    end
+  end
+
+  describe "castling" do
+    test "white kingside castle" do
+      {:ok, game} = Game.new("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1")
+
+      assert Game.move(game, "e1g1") ==
+               {:ok,
+                %Chex.Game{
+                  active_color: :black,
+                  board: %{
+                    :__struct__ => Chex.Board,
+                    {:a, 1} => {:rook, :white, {:a, 1}},
+                    {:a, 8} => {:rook, :black, {:a, 8}},
+                    {:e, 1} => nil,
+                    {:e, 8} => {:king, :black, {:e, 8}},
+                    {:f, 1} => {:rook, :white, {:h, 1}},
+                    {:g, 1} => {:king, :white, {:e, 1}},
+                    {:h, 1} => nil,
+                    {:h, 8} => {:rook, :black, {:h, 8}}
+                  },
+                  captures: [],
+                  castling: [:k, :q],
+                  check: nil,
+                  en_passant: nil,
+                  fullmove_clock: 1,
+                  halfmove_clock: 1,
+                  moves: [{{:e, 1}, {:g, 1}}]
+                }}
+    end
+
+    test "black kingside castle" do
+      {:ok, game} = Game.new("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1")
+
+      assert Game.move(game, "e8g8") ==
+               {:ok,
+                %Chex.Game{
+                  active_color: :white,
+                  board: %{
+                    :__struct__ => Chex.Board,
+                    {:a, 1} => {:rook, :white, {:a, 1}},
+                    {:a, 8} => {:rook, :black, {:a, 8}},
+                    {:e, 1} => {:king, :white, {:e, 1}},
+                    {:e, 8} => nil,
+                    {:f, 8} => {:rook, :black, {:h, 8}},
+                    {:g, 8} => {:king, :black, {:e, 8}},
+                    {:h, 1} => {:rook, :white, {:h, 1}},
+                    {:h, 8} => nil
+                  },
+                  captures: [],
+                  castling: [:K, :Q],
+                  check: nil,
+                  en_passant: nil,
+                  fullmove_clock: 2,
+                  halfmove_clock: 1,
+                  moves: [{{:e, 8}, {:g, 8}}]
+                }}
+    end
+
+    test "white queenside castle" do
+      {:ok, game} = Game.new("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1")
+
+      assert Game.move(game, "e1c1") ==
+               {:ok,
+                %Chex.Game{
+                  active_color: :black,
+                  board: %{
+                    :__struct__ => Chex.Board,
+                    {:a, 1} => nil,
+                    {:a, 8} => {:rook, :black, {:a, 8}},
+                    {:c, 1} => {:king, :white, {:e, 1}},
+                    {:d, 1} => {:rook, :white, {:a, 1}},
+                    {:e, 1} => nil,
+                    {:e, 8} => {:king, :black, {:e, 8}},
+                    {:h, 1} => {:rook, :white, {:h, 1}},
+                    {:h, 8} => {:rook, :black, {:h, 8}}
+                  },
+                  captures: [],
+                  castling: [:k, :q],
+                  check: nil,
+                  en_passant: nil,
+                  fullmove_clock: 1,
+                  halfmove_clock: 1,
+                  moves: [{{:e, 1}, {:c, 1}}]
+                }}
+    end
+
+    test "black queenside castle" do
+      {:ok, game} = Game.new("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1")
+
+      assert Game.move(game, "e8c8") ==
+               {:ok,
+                %Chex.Game{
+                  active_color: :white,
+                  board: %{
+                    :__struct__ => Chex.Board,
+                    {:a, 1} => {:rook, :white, {:a, 1}},
+                    {:a, 8} => nil,
+                    {:c, 8} => {:king, :black, {:e, 8}},
+                    {:d, 8} => {:rook, :black, {:a, 8}},
+                    {:e, 1} => {:king, :white, {:e, 1}},
+                    {:e, 8} => nil,
+                    {:h, 1} => {:rook, :white, {:h, 1}},
+                    {:h, 8} => {:rook, :black, {:h, 8}}
+                  },
+                  captures: [],
+                  castling: [:K, :Q],
+                  check: nil,
+                  en_passant: nil,
+                  fullmove_clock: 2,
+                  halfmove_clock: 1,
+                  moves: [{{:e, 8}, {:c, 8}}]
+                }}
     end
   end
 end

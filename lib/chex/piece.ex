@@ -86,8 +86,7 @@ defmodule Chex.Piece do
       knight: "n",
       rook: "r",
       pawn: "p"
-    }
-    |> Map.get(name)
+    }[name]
     |> case_for_color(color)
   end
 
