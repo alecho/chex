@@ -175,12 +175,10 @@ defmodule Chex.Game do
 
   @spec move_valid?(Game.t(), {Square.t(), Square.t()}) ::
           boolean() | {:error, reason :: atom}
-  defp move_valid?(%Game{} = game, {from, to} = move) do
+  defp move_valid?(%Game{} = game, {from, _to}) do
     with {:ok, {_name, color, _start}} <- piece_at(game, from),
          true <- active_color?(game, color),
          # true <- check_absolute_pin?(game, from),
-         true <- destination_clear?(game, to),
-         true <- path_clear?(game, move),
          do: true
   end
 
@@ -233,10 +231,6 @@ defmodule Chex.Game do
 
   defp active_color?(%Game{active_color: color}, color), do: true
   defp active_color?(_game, _color), do: {:error, :out_of_turn}
-
-  defp path_clear?(_game, _move), do: true
-
-  defp destination_clear?(_game, _to), do: true
 
   @spec capture_piece(Game.t(), Piece.t() | nil) :: Game.t()
   defp capture_piece(game, nil), do: game
