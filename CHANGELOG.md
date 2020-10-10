@@ -9,8 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `Piece.trim/1` to remove starting square from a three element tuple containing
-  a piece name, color, and starting square.
+- This CHANGELOG.
+- LICENSE file with MIT license.
+- `Piece.trim/1` to remove starting square from a three element tuple
+    containing a piece name, color, and starting square.
 - `Queen`, `Bishop`, `Knight`, and `Rook` modules.
 - `Game.find_piece/2` and `Game.find_pieces/2`.
 - `Chex.Color` with a `flip/1`.
@@ -22,13 +24,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `Parser.FEN.parse/1` and `Parser.FEN.serialize/1` now return a tuple with
-  `{:ok, result}` or `{:error, reason}`.
+    `{:ok, result}` or `{:error, reason}`.
 - `Chex.Piece.Movement.walk` now considers the game state and only returns
-  truly valid moves.
+- `Chex.Piece.possible_moves` now takes game state and a square and returns a
+    list of squares.
 
 ### Removed
 
 - `:fen` from `%Chex.Game{}`. You can now serialize a game with modules that
-  implement the Chex.Parser behaviour like `Chex.Parser.FEN.serialize(game)`.
+    implement the Chex.Parser behaviour like `Chex.Parser.FEN.serialize(game)`.
 - OTP application functionality. Users should implement their own state
-  management as they see fit for their use case.
+    management as they see fit for their use case.
