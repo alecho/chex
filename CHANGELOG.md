@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Queen`, `Bishop`, `Knight`, and `Rook` modules.
 - `Game.find_piece/2` and `Game.find_pieces/2`.
 - `Chex.Color` with a `flip/1`.
+- `Piece.King` is now castling aware and provides the castling square(s) in it's
+    `available_moves/3`.
 
 ### Changed
 
