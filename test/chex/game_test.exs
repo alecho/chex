@@ -60,7 +60,7 @@ defmodule Chex.GameTest do
   describe "move/2" do
     test "returns {:ok, game} when move is valid" do
       {:ok, game} = Game.new()
-      assert {:ok, game} = Game.move(game, "e2e4")
+      assert {:ok, _game} = Game.move(game, "e2e4")
     end
 
     test "returns {:error, :no_piece_at_square} when starting square is empty" do

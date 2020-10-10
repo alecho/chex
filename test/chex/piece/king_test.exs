@@ -1,5 +1,5 @@
 defmodule Chex.Piece.KingTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest Chex.Piece.King
 
   test "all moves valid" do
