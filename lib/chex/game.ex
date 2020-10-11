@@ -2,7 +2,7 @@ defmodule Chex.Game do
   @moduledoc """
   Functions for playing a chess game.
   """
-  alias Chex.{Board, Game, Piece, Square}
+  alias Chex.{Board, Color, Game, Piece, Square}
 
   defstruct board: Board.new(),
             active_color: :white,
@@ -12,7 +12,8 @@ defmodule Chex.Game do
             halfmove_clock: 0,
             fullmove_clock: 1,
             captures: [],
-            check: nil
+            check: nil,
+            result: nil
 
   @type t() :: %__MODULE__{}
 
@@ -76,6 +77,7 @@ defmodule Chex.Game do
         |> update_en_passant(piece)
         |> update_halfmove_clock(piece, capture)
         |> maybe_increment_fullmove_clock(piece)
+        |> maybe_update_result()
 
       {:ok, game}
     end
@@ -83,6 +85,9 @@ defmodule Chex.Game do
 
   defdelegate in_check?(board, color), to: Game.Checking
   defdelegate checkmate?(board), to: Game.Checking
+
+  @spec result(Game.t()) :: Color.t() | :draw | nil
+  def result(game), do: game.result
 
   @spec add_move(Game.t(), {Square.t(), Square.t()}) :: Game.t()
   defp add_move(%Game{moves: moves} = game, move) do
@@ -285,4 +290,16 @@ defmodule Chex.Game do
   end
 
   defp maybe_promote_pawn(game, _new_piece), do: game
+
+  defp maybe_update_result(%{check: color} = game) when not is_nil(color) do
+    case checkmate?(game) do
+      true ->
+        %{game | result: Color.flip(color)}
+
+      _ ->
+        game
+    end
+  end
+
+  defp maybe_update_result(game), do: game
 end
