@@ -1,5 +1,5 @@
 ---
-name: Support report
+name: Support request
 about: Ask question to get some assistance.
 title: ''
 labels: support
