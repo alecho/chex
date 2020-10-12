@@ -6,10 +6,13 @@ defmodule Chex.Piece.Pawn do
 
   import Chex.Board, only: [occupied_by_color?: 3, occupied?: 2, file_offset: 2]
   import Chex.Square, only: [valid?: 1]
+  import Chex.Color, only: [flip: 1]
 
   @impl true
   def possible_moves(color, square, game) do
-    moves = moves(color, square)
+    moves =
+      moves(color, square)
+      |> Enum.reject(&occupied_by_color?(game.board, flip(color), &1))
 
     attacks =
       attacking_squares(color, square, game)

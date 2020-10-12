@@ -42,6 +42,10 @@ defmodule Chex.Piece.PawnTest do
     assert Enum.sort(moves) == Enum.sort(expected_moves)
   end
 
-  # @TODO test "pawn promotion"
-  # @TODO test "En passant capture"
+  test "pawn can not move to an occupied square" do
+    {:ok, game} = Chex.Game.new("r1bqkb1r/pppppppp/2n5/8/4n3/N6N/PPPPPPPP/R1BQKB1R b KQkq - 0 1")
+    moves = Chex.Piece.possible_moves(game, {:e, 2})
+
+    refute {:e, 4} in moves
+  end
 end
