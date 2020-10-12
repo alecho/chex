@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Chex.Piece.Movement.walk` now considers the game state and only returns
 - `Chex.Piece.possible_moves` now takes game state and a square and returns a
     list of squares.
+- Moved private functions `Game.pickup_piece.2` and `Game.place_piece/3` to
+    public functions under the `Board` module.
 
 ### Removed
 

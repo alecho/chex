@@ -189,34 +189,6 @@ defmodule Chex.Game do
          do: true
   end
 
-  defp pickup_piece(game, square) do
-    game.board
-    |> Map.get_and_update(square, fn piece ->
-      {piece, nil}
-    end)
-    |> case do
-      {nil, _board} ->
-        {:error, :no_piece_at_square}
-
-      {piece, board} ->
-        {:ok, {piece, %{game | board: board}}}
-    end
-  end
-
-  defp place_piece(game, square, {_name, color, _start} = piece) do
-    game.board
-    |> Map.get_and_update(square, fn capture ->
-      {capture, piece}
-    end)
-    |> case do
-      {{_name, ^color, _start}, _board} ->
-        {:error, :occupied_by_own_color}
-
-      {capture, board} ->
-        {:ok, {capture, %{game | board: board}}}
-    end
-  end
-
   # Queenside castle
   defp castle(game, {{:e, r}, {:c, r}}) when r in [1, 8] do
     game =
@@ -235,8 +207,8 @@ defmodule Chex.Game do
   defp castle(game, {{:e, r}, {:g, r}}) when r in [1, 8] do
     game =
       if Board.get_piece_name(game.board, {:g, r}) == :king do
-        {:ok, {piece, game}} = pickup_piece(game, {:h, r})
-        {:ok, {_cap, game}} = place_piece(game, {:f, r}, piece)
+        {:ok, {piece, game}} = Board.pickup_piece(game, {:h, r})
+        {:ok, {_cap, game}} = Board.place_piece(game, {:f, r}, piece)
         game
       else
         game
