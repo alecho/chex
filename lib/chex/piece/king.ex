@@ -10,7 +10,7 @@ defmodule Chex.Piece.King do
       possible_squares(square)
       |> maybe_prepend_castling(game, color)
 
-    moves -- Board.all_attacking_sqaures(game.board, Color.flip(color), game)
+    moves -- Board.all_attacking_squares(game, Color.flip(color))
   end
 
   def attacking_squares(_color, square, _game), do: possible_squares(square)
@@ -64,7 +64,7 @@ defmodule Chex.Piece.King do
 
   defp can_kingside_castle(game, color) do
     squares = kingside_squares(color)
-    attacked_squares = Board.all_attacking_sqaures(game.board, Color.flip(color), game)
+    attacked_squares = Board.all_attacking_squares(game, Color.flip(color))
 
     occupied = Enum.any?(squares, &Board.occupied?(game.board, &1))
     attacked = Enum.any?(squares, fn sq -> sq in attacked_squares end)
@@ -74,7 +74,7 @@ defmodule Chex.Piece.King do
   end
 
   defp can_queenside_castle(game, color) do
-    attacked_squares = Board.all_attacking_sqaures(game.board, Color.flip(color), game)
+    attacked_squares = Board.all_attacking_squares(game, Color.flip(color))
 
     occupied =
       queenside_squares(color)
