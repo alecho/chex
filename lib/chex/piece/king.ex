@@ -2,7 +2,7 @@ defmodule Chex.Piece.King do
   @moduledoc """
   Describes King moves.
   """
-  alias Chex.{Board, Color, Piece, Square}
+  alias Chex.{Board, Color, Game, Piece, Square}
   @behaviour Piece
 
   def possible_moves(color, square, game) do
@@ -11,7 +11,11 @@ defmodule Chex.Piece.King do
       |> Enum.reject(&Board.occupied_by_color?(game.board, color, &1))
       |> maybe_prepend_castling(game, color)
 
-    moves -- Board.all_attacking_sqaures(game.board, Color.flip(color), game)
+    (moves -- Board.all_attacking_sqaures(game.board, Color.flip(color), game))
+    |> Enum.reject(fn sq ->
+      {:ok, {_piece, _capture, psudo_game}} = Board.move(game, square, sq)
+      Game.in_check?(psudo_game, color)
+    end)
   end
 
   def attacking_squares(_color, square, _game), do: possible_squares(square)

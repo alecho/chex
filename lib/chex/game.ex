@@ -60,8 +60,7 @@ defmodule Chex.Game do
 
   def move(game, {from, to} = move, promote_to) do
     with true <- move_valid?(game, move),
-         {:ok, {piece, game}} <- pickup_piece(game, from),
-         {:ok, {capture, game}} <- place_piece(game, to, piece),
+         {:ok, {piece, capture, game}} <- Board.move(game, from, to),
          {:ok, game} <- castle(game, move) do
       piece = Piece.trim(piece)
       capture = if capture != nil, do: Piece.trim(capture)
@@ -193,8 +192,7 @@ defmodule Chex.Game do
   defp castle(game, {{:e, r}, {:c, r}}) when r in [1, 8] do
     game =
       if Board.get_piece_name(game.board, {:c, r}) == :king do
-        {:ok, {piece, game}} = pickup_piece(game, {:a, r})
-        {:ok, {_cap, game}} = place_piece(game, {:d, r}, piece)
+        {:ok, {_piece, _capture, game}} = Board.move(game, {:a, r}, {:d, r})
         game
       else
         game

@@ -72,6 +72,15 @@ defmodule Chex.Board do
     end
   end
 
+  @spec move(Game.t(), Square.t(), Square.t()) ::
+          {:ok, {Piece.t(), Piece.t(), Game.t()}} | {:error, :reason}
+  def move(game, from, to) do
+    with {:ok, {piece, game}} <- pickup_piece(game, from),
+         {:ok, {capture, game}} <- place_piece(game, to, piece) do
+      {:ok, {piece, capture, game}}
+    end
+  end
+
   def files(), do: @files
 
   def file_index(file), do: Enum.find_index(@files, fn x -> x == file end)
