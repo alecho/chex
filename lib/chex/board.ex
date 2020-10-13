@@ -25,13 +25,14 @@ defmodule Chex.Board do
 
   @spec get_piece_name(%Chex.Board{}, Square.t()) :: Piece.name() | nil
   def get_piece_name(%{} = board, square) do
-    board
-    |> get(square)
-    |> extract_piece_name()
-  end
+    case get(board, square) do
+      {name, _color, _sq} ->
+        name
 
-  defp extract_piece_name({name, _c, _id}), do: name
-  defp extract_piece_name(_pice), do: nil
+      _ ->
+        nil
+    end
+  end
 
   @spec pickup_piece(Game.t(), Square.t()) :: {:ok, {Piece.t(), Game.t()}} | {:error, :reason}
   def pickup_piece(game, square) do
