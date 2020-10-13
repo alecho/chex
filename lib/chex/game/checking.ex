@@ -7,7 +7,7 @@ defmodule Chex.Game.Checking do
 
   @spec in_check?(Game.t(), Color.t()) :: bool()
   def in_check?(game, color) do
-    square = Board.find_piece(game.board, {:king, color})
+    square = Board.find_piece(game, {:king, color})
 
     Board.all_attacking_squares(game, Color.flip(color))
     |> Enum.member?(square)
