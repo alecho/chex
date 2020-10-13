@@ -2,7 +2,6 @@ defmodule Chex.Board do
   @moduledoc """
   Chess board functions.
   """
-  import Map, only: [get_and_update: 3]
   import Enum, only: [reduce: 3]
 
   alias Chex.Square
@@ -17,13 +16,6 @@ defmodule Chex.Board do
       {f, r}
     end
     |> reduce(%__MODULE__{}, fn key, map -> Map.put(map, key, nil) end)
-  end
-
-  def place_at(%__MODULE__{} = board, square, new_piece) do
-    board
-    |> get_and_update(square, fn current_piece ->
-      {current_piece, new_piece}
-    end)
   end
 
   @spec get(%Chex.Board{}, Square.t()) :: term | nil
