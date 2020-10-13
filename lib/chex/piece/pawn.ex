@@ -12,12 +12,12 @@ defmodule Chex.Piece.Pawn do
   def possible_moves(color, square, game) do
     moves =
       moves(color, square)
-      |> Enum.reject(&occupied_by_color?(game.board, flip(color), &1))
+      |> Enum.reject(&occupied_by_color?(game, flip(color), &1))
 
     attacks =
       attacking_squares(color, square, game)
       |> Enum.filter(&occupied?(game, &1))
-      |> Enum.reject(&occupied_by_color?(game.board, color, &1))
+      |> Enum.reject(&occupied_by_color?(game, color, &1))
 
     moves ++ attacks
   end

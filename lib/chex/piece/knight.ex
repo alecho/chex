@@ -23,7 +23,7 @@ defmodule Chex.Piece.Knight do
       {Board.file_offset(file, f_dir), rank + r_dir}
     end)
     |> Enum.filter(&Square.valid?(&1))
-    |> Enum.reject(&Board.occupied_by_color?(game.board, color, &1))
+    |> Enum.reject(&Board.occupied_by_color?(game, color, &1))
   end
 
   @impl true

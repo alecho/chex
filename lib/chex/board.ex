@@ -91,7 +91,7 @@ defmodule Chex.Board do
     if index >= 0, do: Enum.at(@files, index)
   end
 
-  def occupied_by_color?(board, color, square) do
+  def occupied_by_color?(%{board: board}, color, square) do
     case Map.get(board, square) do
       {_name, ^color, _sq} ->
         true
@@ -154,6 +154,6 @@ defmodule Chex.Board do
     board
     |> Map.from_struct()
     |> Enum.map(fn {k, _v} -> k end)
-    |> Enum.filter(&occupied_by_color?(board, color, &1))
+    |> Enum.filter(&occupied_by_color?(%{board: board}, color, &1))
   end
 end

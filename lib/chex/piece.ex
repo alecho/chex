@@ -27,7 +27,7 @@ defmodule Chex.Piece do
     {name, color, _id} = Map.get(game.board, square)
 
     to_module(name).possible_moves(color, square, game)
-    |> Enum.reject(&Board.occupied_by_color?(game.board, color, &1))
+    |> Enum.reject(&Board.occupied_by_color?(game, color, &1))
     |> Enum.reject(fn sq ->
       {:ok, {_piece, _capture, psudo_game}} = Board.move(game, square, sq)
       Game.in_check?(psudo_game, color)
