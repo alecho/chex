@@ -66,7 +66,7 @@ defmodule Chex.Piece.King do
     squares = kingside_squares(color)
     attacked_squares = Board.all_attacking_squares(game, Color.flip(color))
 
-    occupied = Enum.any?(squares, &Board.occupied?(game.board, &1))
+    occupied = Enum.any?(squares, &Board.occupied?(game, &1))
     attacked = Enum.any?(squares, fn sq -> sq in attacked_squares end)
     has_right = piece_to_right(:king, color) in game.castling
 
@@ -78,7 +78,7 @@ defmodule Chex.Piece.King do
 
     occupied =
       queenside_squares(color)
-      |> Enum.any?(&Board.occupied?(game.board, &1))
+      |> Enum.any?(&Board.occupied?(game, &1))
 
     attacked =
       queenside_squares(color, :attacking)

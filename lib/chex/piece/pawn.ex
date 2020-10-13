@@ -16,7 +16,7 @@ defmodule Chex.Piece.Pawn do
 
     attacks =
       attacking_squares(color, square, game)
-      |> Enum.filter(&occupied?(game.board, &1))
+      |> Enum.filter(&occupied?(game, &1))
       |> Enum.reject(&occupied_by_color?(game.board, color, &1))
 
     moves ++ attacks

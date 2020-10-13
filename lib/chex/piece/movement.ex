@@ -39,7 +39,7 @@ defmodule Chex.Piece.Movement do
   defp prepare_arguments(game, squares, color, new_sq, limit) do
     occupied_by_enemy = !Board.occupied_by_color?(game.board, color, new_sq)
     squares = maybe_add_square(squares, new_sq, occupied_by_enemy)
-    occupied = Board.occupied?(game.board, new_sq)
+    occupied = Board.occupied?(game, new_sq)
     limit = occupied_limit(limit, occupied)
 
     {squares, limit}
