@@ -101,7 +101,7 @@ defmodule Chex.Board do
     end
   end
 
-  def occupied?(board, square) do
+  def occupied?(%{board: board}, square) do
     !is_nil(Map.get(board, square))
   end
 
