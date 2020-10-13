@@ -18,14 +18,9 @@ defmodule Chex.Board do
     |> reduce(%__MODULE__{}, fn key, map -> Map.put(map, key, nil) end)
   end
 
-  @spec get(%Chex.Board{}, Square.t()) :: term | nil
-  def get(%{} = board, square) do
-    board |> Map.get(square)
-  end
-
   @spec get_piece_name(%Chex.Board{}, Square.t()) :: Piece.name() | nil
   def get_piece_name(%{} = board, square) do
-    case get(board, square) do
+    case Map.get(board, square) do
       {name, _color, _sq} ->
         name
 
