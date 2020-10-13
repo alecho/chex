@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Piece.trim/1` to remove starting square from a three element tuple
     containing a piece name, color, and starting square.
 - `Queen`, `Bishop`, `Knight`, and `Rook` modules.
-- `Game.find_piece/2` and `Game.find_pieces/2`.
+- `Board.find_piece/2` and `Board.find_pieces/2`.
 - `Chex.Color` with a `flip/1`.
 - `Piece.King` is now castling aware and provides the castling square(s) in it's
     `available_moves/3`.

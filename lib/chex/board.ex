@@ -108,9 +108,9 @@ defmodule Chex.Board do
   @doc """
   Get the square of the first matching piece.
   """
-  @spec find_piece(%Chex.Board{}, Piece.t()) :: Square.t() | nil
-  def find_piece(board, piece) do
-    board
+  @spec find_piece(Game.t(), Piece.t()) :: Square.t() | nil
+  def find_piece(game, piece) do
+    game.board
     |> Map.from_struct()
     |> Enum.reduce_while(nil, &finder(piece, &1, &2))
   end

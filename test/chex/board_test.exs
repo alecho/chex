@@ -30,12 +30,12 @@ defmodule Chex.BoardTest do
   describe "Board.find_piece/2" do
     test "returns the square of the first matching piece" do
       {:ok, game} = Game.new()
-      assert {:a, 2} == Board.find_piece(game.board, {:pawn, :white})
+      assert {:a, 2} == Board.find_piece(game, {:pawn, :white})
     end
 
     test "returns nil when the piece is not on the board" do
       {:ok, game} = Game.new(@empty_board)
-      assert nil == Board.find_piece(game.board, {:pawn, :white})
+      assert nil == Board.find_piece(game, {:pawn, :white})
     end
   end
 
@@ -44,12 +44,12 @@ defmodule Chex.BoardTest do
       {:ok, game} = Game.new()
 
       assert [h: 2, g: 2, f: 2, e: 2, d: 2, c: 2, b: 2, a: 2] ==
-               Board.find_pieces(game.board, {:pawn, :white})
+               Board.find_pieces(game, {:pawn, :white})
     end
 
     test "returns an empty list when the piece is not on the board" do
       {:ok, game} = Game.new(@empty_board)
-      assert [] == Board.find_pieces(game.board, {:pawn, :white})
+      assert [] == Board.find_pieces(game, {:pawn, :white})
     end
   end
 end
