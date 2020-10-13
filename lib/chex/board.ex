@@ -122,8 +122,8 @@ defmodule Chex.Board do
   @doc """
   Find locations of the specified piece on the board.
   """
-  @spec find_pieces(%Chex.Board{}, Piece.t()) :: [Square.t()] | []
-  def find_pieces(board, piece) do
+  @spec find_pieces(Game.t(), Piece.t()) :: [Square.t()] | []
+  def find_pieces(%{board: board}, piece) do
     board
     |> Map.from_struct()
     |> Enum.reduce([], fn {square, {n, c, _}}, acc ->
@@ -132,7 +132,7 @@ defmodule Chex.Board do
   end
 
   def all_attacking_squares(game, color) do
-    game.board
+    game
     |> all_occupied_by_color(color)
     |> Enum.map(fn square ->
       {name, _occupied_color, _sq} = Map.get(game.board, square)
@@ -143,14 +143,14 @@ defmodule Chex.Board do
   end
 
   def all_possible_squares(game, color) do
-    game.board
+    game
     |> all_occupied_by_color(color)
     |> Enum.map(&Chex.Piece.possible_moves(game, &1))
     |> List.flatten()
     |> Enum.uniq()
   end
 
-  def all_occupied_by_color(board, color) do
+  def all_occupied_by_color(%{board: board}, color) do
     board
     |> Map.from_struct()
     |> Enum.map(fn {k, _v} -> k end)
