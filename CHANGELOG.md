@@ -37,3 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     implement the Chex.Parser behaviour like `Chex.Parser.FEN.serialize(game)`.
 - OTP application functionality. Users should implement their own state
     management as they see fit for their use case.
+- `Board.new/0`. There's little reason to use a struct for the board
+    representation and no reason to populate it with 64 keys that point to a nil
+    value.

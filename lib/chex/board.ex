@@ -2,21 +2,12 @@ defmodule Chex.Board do
   @moduledoc """
   Chess board functions.
   """
-  import Enum, only: [reduce: 3]
-
   alias Chex.Square
 
   defstruct []
 
   @files [:a, :b, :c, :d, :e, :f, :g, :h]
-  @ranks 1..8
-
-  def new() do
-    for f <- @files, r <- @ranks do
-      {f, r}
-    end
-    |> reduce(%__MODULE__{}, fn key, map -> Map.put(map, key, nil) end)
-  end
+  # @ranks 1..8
 
   @spec get_piece_name(Game.t(), Square.t()) :: Piece.name() | nil
   def get_piece_name(%{board: board}, square) do
