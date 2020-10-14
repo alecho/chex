@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     list of squares.
 - Moved private functions `Game.pickup_piece.2` and `Game.place_piece/3` to
     public functions under the `Board` module.
+- Board API functions to take a Game struct or map with `:board` key instead of
+    the removed board struct.
 
 ### Removed
 
