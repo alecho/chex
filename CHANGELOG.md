@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     public functions under the `Board` module.
 - Board API functions to take a Game struct or map with `:board` key instead of
     the removed board struct.
+- `%Board{}` to be a plain map.
 
 ### Removed
 
