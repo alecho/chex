@@ -19,9 +19,9 @@ defmodule Chex.BoardTest do
   test "occupied_by_color" do
     results =
       for color <- [:white, :black], piece_color <- [:white, :black] do
-        board =
-          Chex.Board.new()
-          |> Map.put({:a, 1}, {:pawn, piece_color, {:a, 1}})
+        board = %{
+          {:a, 1} => {:pawn, piece_color, {:a, 1}}
+        }
 
         Chex.Board.occupied_by_color?(%{board: board}, color, {:a, 1})
       end

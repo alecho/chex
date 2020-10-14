@@ -4,7 +4,7 @@ defmodule Chex.Game do
   """
   alias Chex.{Board, Color, Game, Piece, Square}
 
-  defstruct board: Board.new(),
+  defstruct board: %{},
             active_color: :white,
             castling: [:K, :Q, :k, :q],
             en_passant: nil,
