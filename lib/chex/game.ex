@@ -2,7 +2,7 @@ defmodule Chex.Game do
   @moduledoc """
   Functions for playing a chess game.
   """
-  alias Chex.{Board, Game, Piece, Square}
+  alias Chex.{Board, Color, Game, Piece, Square}
 
   defstruct board: Board.new(),
             active_color: :white,
@@ -12,7 +12,8 @@ defmodule Chex.Game do
             halfmove_clock: 0,
             fullmove_clock: 1,
             captures: [],
-            check: nil
+            check: nil,
+            result: nil
 
   @type t() :: %__MODULE__{}
 
@@ -59,8 +60,7 @@ defmodule Chex.Game do
 
   def move(game, {from, to} = move, promote_to) do
     with true <- move_valid?(game, move),
-         {:ok, {piece, game}} <- pickup_piece(game, from),
-         {:ok, {capture, game}} <- place_piece(game, to, piece),
+         {:ok, {piece, capture, game}} <- Board.move(game, from, to),
          {:ok, game} <- castle(game, move) do
       piece = Piece.trim(piece)
       capture = if capture != nil, do: Piece.trim(capture)
@@ -76,6 +76,7 @@ defmodule Chex.Game do
         |> update_en_passant(piece)
         |> update_halfmove_clock(piece, capture)
         |> maybe_increment_fullmove_clock(piece)
+        |> maybe_update_result()
 
       {:ok, game}
     end
@@ -83,6 +84,9 @@ defmodule Chex.Game do
 
   defdelegate in_check?(board, color), to: Game.Checking
   defdelegate checkmate?(board), to: Game.Checking
+
+  @spec result(Game.t()) :: Color.t() | :draw | nil
+  def result(game), do: game.result
 
   @spec add_move(Game.t(), {Square.t(), Square.t()}) :: Game.t()
   defp add_move(%Game{moves: moves} = game, move) do
@@ -184,40 +188,11 @@ defmodule Chex.Game do
          do: true
   end
 
-  defp pickup_piece(game, square) do
-    game.board
-    |> Map.get_and_update(square, fn piece ->
-      {piece, nil}
-    end)
-    |> case do
-      {nil, _board} ->
-        {:error, :no_piece_at_square}
-
-      {piece, board} ->
-        {:ok, {piece, %{game | board: board}}}
-    end
-  end
-
-  defp place_piece(game, square, {_name, color, _start} = piece) do
-    game.board
-    |> Map.get_and_update(square, fn capture ->
-      {capture, piece}
-    end)
-    |> case do
-      {{_name, ^color, _start}, _board} ->
-        {:error, :occupied_by_own_color}
-
-      {capture, board} ->
-        {:ok, {capture, %{game | board: board}}}
-    end
-  end
-
   # Queenside castle
   defp castle(game, {{:e, r}, {:c, r}}) when r in [1, 8] do
     game =
       if Board.get_piece_name(game.board, {:c, r}) == :king do
-        {:ok, {piece, game}} = pickup_piece(game, {:a, r})
-        {:ok, {_cap, game}} = place_piece(game, {:d, r}, piece)
+        {:ok, {_piece, _capture, game}} = Board.move(game, {:a, r}, {:d, r})
         game
       else
         game
@@ -230,8 +205,8 @@ defmodule Chex.Game do
   defp castle(game, {{:e, r}, {:g, r}}) when r in [1, 8] do
     game =
       if Board.get_piece_name(game.board, {:g, r}) == :king do
-        {:ok, {piece, game}} = pickup_piece(game, {:h, r})
-        {:ok, {_cap, game}} = place_piece(game, {:f, r}, piece)
+        {:ok, {piece, game}} = Board.pickup_piece(game, {:h, r})
+        {:ok, {_cap, game}} = Board.place_piece(game, {:f, r}, piece)
         game
       else
         game
@@ -285,4 +260,16 @@ defmodule Chex.Game do
   end
 
   defp maybe_promote_pawn(game, _new_piece), do: game
+
+  defp maybe_update_result(%{check: color} = game) when not is_nil(color) do
+    case checkmate?(game) do
+      true ->
+        %{game | result: Color.flip(color)}
+
+      _ ->
+        game
+    end
+  end
+
+  defp maybe_update_result(game), do: game
 end

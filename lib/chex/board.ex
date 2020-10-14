@@ -41,6 +41,46 @@ defmodule Chex.Board do
   defp extract_piece_name({name, _c, _id}), do: name
   defp extract_piece_name(_pice), do: nil
 
+  @spec pickup_piece(Game.t(), Square.t()) :: {:ok, {Piece.t(), Game.t()}} | {:error, :reason}
+  def pickup_piece(game, square) do
+    game.board
+    |> Map.get_and_update(square, fn piece ->
+      {piece, nil}
+    end)
+    |> case do
+      {nil, _board} ->
+        {:error, :no_piece_at_square}
+
+      {piece, board} ->
+        {:ok, {piece, %{game | board: board}}}
+    end
+  end
+
+  @spec place_piece(Game.t(), Square.t(), Piece.t()) ::
+          {:ok, {Piece.t(), Game.t()}} | {:error, :reason}
+  def place_piece(game, square, {_name, color, _start} = piece) do
+    game.board
+    |> Map.get_and_update(square, fn capture ->
+      {capture, piece}
+    end)
+    |> case do
+      {{_name, ^color, _start}, _board} ->
+        {:error, :occupied_by_own_color}
+
+      {capture, board} ->
+        {:ok, {capture, %{game | board: board}}}
+    end
+  end
+
+  @spec move(Game.t(), Square.t(), Square.t()) ::
+          {:ok, {Piece.t(), Piece.t(), Game.t()}} | {:error, :reason}
+  def move(game, from, to) do
+    with {:ok, {piece, game}} <- pickup_piece(game, from),
+         {:ok, {capture, game}} <- place_piece(game, to, piece) do
+      {:ok, {piece, capture, game}}
+    end
+  end
+
   def files(), do: @files
 
   def file_index(file), do: Enum.find_index(@files, fn x -> x == file end)

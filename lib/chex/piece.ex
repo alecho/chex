@@ -2,7 +2,7 @@ defmodule Chex.Piece do
   @moduledoc """
   Piece behaviour and piece functions.
   """
-  alias Chex.{Game, Piece, Square}
+  alias Chex.{Board, Game, Piece, Square}
 
   @typedoc """
   A name atom.
@@ -25,7 +25,13 @@ defmodule Chex.Piece do
   @spec possible_moves(Game.t(), Square.t()) :: [Square.t()]
   def possible_moves(game, square) do
     {name, color, _id} = Map.get(game.board, square)
+
     to_module(name).possible_moves(color, square, game)
+    |> Enum.reject(&Board.occupied_by_color?(game.board, color, &1))
+    |> Enum.reject(fn sq ->
+      {:ok, {_piece, _capture, psudo_game}} = Board.move(game, square, sq)
+      Game.in_check?(psudo_game, color)
+    end)
   end
 
   @spec attacking_squares(t(), Square.t(), Game.t()) :: [Square.t()]

@@ -8,7 +8,6 @@ defmodule Chex.Piece.King do
   def possible_moves(color, square, game) do
     moves =
       possible_squares(square)
-      |> Enum.reject(&Board.occupied_by_color?(game.board, color, &1))
       |> maybe_prepend_castling(game, color)
 
     moves -- Board.all_attacking_sqaures(game.board, Color.flip(color), game)
