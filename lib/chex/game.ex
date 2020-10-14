@@ -191,7 +191,7 @@ defmodule Chex.Game do
   # Queenside castle
   defp castle(game, {{:e, r}, {:c, r}}) when r in [1, 8] do
     game =
-      if Board.get_piece_name(game.board, {:c, r}) == :king do
+      if Board.get_piece_name(game, {:c, r}) == :king do
         {:ok, {_piece, _capture, game}} = Board.move(game, {:a, r}, {:d, r})
         game
       else
@@ -204,7 +204,7 @@ defmodule Chex.Game do
   # Kingside castle
   defp castle(game, {{:e, r}, {:g, r}}) when r in [1, 8] do
     game =
-      if Board.get_piece_name(game.board, {:g, r}) == :king do
+      if Board.get_piece_name(game, {:g, r}) == :king do
         {:ok, {piece, game}} = Board.pickup_piece(game, {:h, r})
         {:ok, {_cap, game}} = Board.place_piece(game, {:f, r}, piece)
         game
