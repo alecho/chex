@@ -4,8 +4,6 @@ defmodule Chex.Board do
   """
   alias Chex.Square
 
-  defstruct []
-
   @files [:a, :b, :c, :d, :e, :f, :g, :h]
   # @ranks 1..8
 
@@ -76,11 +74,8 @@ defmodule Chex.Board do
 
   def occupied_by_color?(%{board: board}, color, square) do
     case Map.get(board, square) do
-      {_name, ^color, _sq} ->
-        true
-
-      _ ->
-        false
+      {_name, ^color, _sq} -> true
+      _ -> false
     end
   end
 
@@ -94,7 +89,6 @@ defmodule Chex.Board do
   @spec find_piece(Game.t(), Piece.t()) :: Square.t() | nil
   def find_piece(game, piece) do
     game.board
-    |> Map.from_struct()
     |> Enum.reduce_while(nil, &finder(piece, &1, &2))
   end
 
@@ -108,7 +102,6 @@ defmodule Chex.Board do
   @spec find_pieces(Game.t(), Piece.t()) :: [Square.t()] | []
   def find_pieces(%{board: board}, piece) do
     board
-    |> Map.from_struct()
     |> Enum.reduce([], fn {square, {n, c, _}}, acc ->
       if {n, c} == piece, do: [square | acc], else: acc
     end)
@@ -135,7 +128,6 @@ defmodule Chex.Board do
 
   def all_occupied_by_color(%{board: board}, color) do
     board
-    |> Map.from_struct()
     |> Enum.map(fn {k, _v} -> k end)
     |> Enum.filter(&occupied_by_color?(%{board: board}, color, &1))
   end

@@ -12,7 +12,6 @@ defmodule Chex.GameTest do
         game == %Game{
           active_color: :white,
           board: %{
-            :__struct__ => Chex.Board,
             {:a, 1} => {:rook, :white, {:a, 1}},
             {:a, 2} => {:pawn, :white, {:a, 2}},
             {:a, 7} => {:pawn, :black, {:a, 7}},
@@ -250,7 +249,6 @@ defmodule Chex.GameTest do
                 %Chex.Game{
                   active_color: :black,
                   board: %{
-                    :__struct__ => Chex.Board,
                     {:a, 1} => {:rook, :white, {:a, 1}},
                     {:a, 8} => {:rook, :black, {:a, 8}},
                     {:e, 1} => nil,
@@ -278,7 +276,6 @@ defmodule Chex.GameTest do
                 %Chex.Game{
                   active_color: :white,
                   board: %{
-                    :__struct__ => Chex.Board,
                     {:a, 1} => {:rook, :white, {:a, 1}},
                     {:a, 8} => {:rook, :black, {:a, 8}},
                     {:e, 1} => {:king, :white, {:e, 1}},
@@ -306,7 +303,6 @@ defmodule Chex.GameTest do
                 %Chex.Game{
                   active_color: :black,
                   board: %{
-                    :__struct__ => Chex.Board,
                     {:a, 1} => nil,
                     {:a, 8} => {:rook, :black, {:a, 8}},
                     {:c, 1} => {:king, :white, {:e, 1}},
@@ -334,7 +330,6 @@ defmodule Chex.GameTest do
                 %Chex.Game{
                   active_color: :white,
                   board: %{
-                    :__struct__ => Chex.Board,
                     {:a, 1} => {:rook, :white, {:a, 1}},
                     {:a, 8} => nil,
                     {:c, 8} => {:king, :black, {:e, 8}},

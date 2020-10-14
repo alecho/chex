@@ -43,7 +43,7 @@ defmodule Chex.Parser.FEN do
 
   def extension(), do: nil
 
-  @spec decode_board(String.t()) :: %Board{}
+  @spec decode_board(String.t()) :: %{}
   def decode_board(str) do
     str
     |> split("/")
@@ -54,12 +54,12 @@ defmodule Chex.Parser.FEN do
       |> decode_rank([], 0, 8 - i)
     end)
     |> List.flatten()
-    |> Enum.reduce(%Board{}, fn {square, piece}, board ->
+    |> Enum.reduce(%{}, fn {square, piece}, board ->
       Map.put(board, square, Tuple.append(piece, square))
     end)
   end
 
-  @spec serialize_board(%Board{}) :: String.t()
+  @spec serialize_board(%{}) :: String.t()
   def serialize_board(board) do
     for r <- 8..1, f <- Board.files() do
       Map.get(board, {f, r})

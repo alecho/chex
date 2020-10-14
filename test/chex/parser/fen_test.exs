@@ -15,7 +15,6 @@ defmodule Chex.Parser.FENTest do
     {:ok, game} = Chex.Parser.FEN.parse(@starting_pos)
 
     assert game.board == %{
-             :__struct__ => Chex.Board,
              {:c, 2} => {:pawn, :white, {:c, 2}},
              {:g, 1} => {:knight, :white, {:g, 1}},
              {:a, 8} => {:rook, :black, {:a, 8}},
@@ -55,7 +54,6 @@ defmodule Chex.Parser.FENTest do
     {:ok, game} = Chex.Parser.FEN.parse(@after_nf3)
 
     assert game.board == %{
-             :__struct__ => Chex.Board,
              {:c, 2} => {:pawn, :white, {:c, 2}},
              {:f, 1} => {:bishop, :white, {:f, 1}},
              {:c, 5} => {:pawn, :black, {:c, 5}},
@@ -159,7 +157,6 @@ defmodule Chex.Parser.FENTest do
 
   test "serializes complicated board" do
     board = %{
-      :__struct__ => Chex.Board,
       {:a, 3} => {:pawn, :white, {:a, 3}},
       {:a, 5} => {:pawn, :black, {:a, 5}},
       {:a, 8} => {:rook, :black, {:a, 8}},
