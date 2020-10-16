@@ -1,7 +1,6 @@
 defmodule Chex.Piece do
-  @moduledoc """
-  Piece behaviour and piece functions.
-  """
+  @moduledoc false
+
   alias Chex.{Board, Game, Piece, Square}
 
   @typedoc """

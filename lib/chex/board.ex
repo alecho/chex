@@ -1,7 +1,6 @@
 defmodule Chex.Board do
-  @moduledoc """
-  Chess board functions.
-  """
+  @moduledoc false
+
   alias Chex.Square
 
   @files [:a, :b, :c, :d, :e, :f, :g, :h]

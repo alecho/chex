@@ -1,7 +1,6 @@
 defmodule Chex.Engine do
-  @moduledoc """
-  Basic UCI engine implementation.
-  """
+  @moduledoc false
+
   require Logger
   use GenServer
 

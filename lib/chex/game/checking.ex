@@ -1,7 +1,5 @@
 defmodule Chex.Game.Checking do
-  @moduledoc """
-  Functions for working with checking and mate.
-  """
+  @moduledoc false
 
   alias Chex.{Board, Color}
 
