@@ -17,4 +17,11 @@ defmodule Chex.Game.Checking do
   def checkmate?(%{active_color: color} = game) do
     in_check?(game, color) && Board.all_possible_squares(game, color) == []
   end
+
+  @spec stalemate?(Game.t()) :: bool()
+  def stalemate?(%{check: check}) when not is_nil(check), do: false
+
+  def stalemate?(%{active_color: color} = game) do
+    Board.all_possible_squares(game, color) == []
+  end
 end
