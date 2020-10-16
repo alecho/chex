@@ -82,8 +82,9 @@ defmodule Chex.Game do
     end
   end
 
-  defdelegate in_check?(board, color), to: Game.Checking
-  defdelegate checkmate?(board), to: Game.Checking
+  defdelegate in_check?(game, color), to: Game.Checking
+  defdelegate checkmate?(game), to: Game.Checking
+  defdelegate stalemate?(game), to: Game.Checking
 
   @spec result(Game.t()) :: Color.t() | :draw | nil
   def result(game), do: game.result
@@ -261,15 +262,17 @@ defmodule Chex.Game do
 
   defp maybe_promote_pawn(game, _new_piece), do: game
 
-  defp maybe_update_result(%{check: color} = game) when not is_nil(color) do
-    case checkmate?(game) do
-      true ->
-        %{game | result: Color.flip(color)}
-
-      _ ->
-        game
+  defp maybe_update_result(%{check: nil} = game) do
+    case stalemate?(game) do
+      true -> %{game | result: :draw}
+      _ -> game
     end
   end
 
-  defp maybe_update_result(game), do: game
+  defp maybe_update_result(%{check: color} = game) do
+    case checkmate?(game) do
+      true -> %{game | result: Color.flip(color)}
+      _ -> game
+    end
+  end
 end
