@@ -17,10 +17,8 @@ defmodule Chex.Game do
 
   @type t() :: %__MODULE__{}
 
-  @starting_pos "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-
   @doc """
-  Creates a new game from `fen`.
+  Creates a new game, optionally  from a FEN string.
 
   Returns a %Game{} initialized with fen or the default starting positions.
 
@@ -32,8 +30,16 @@ defmodule Chex.Game do
   {:ok, %Chex.Game{}}
 
   """
+  @spec new() :: {:ok, Game.t()}
+  def new() do
+    {:ok,
+     %Game{
+       board: Board.starting_position()
+     }}
+  end
+
   @spec new(String.t()) :: {:ok, Game.t()} | {:error, atom()}
-  def new(fen \\ @starting_pos), do: FEN.parse(fen)
+  def new(fen), do: FEN.parse(fen)
 
   @doc """
   Makes a move within the chess game.

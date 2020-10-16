@@ -7,6 +7,41 @@ defmodule Chex.Board do
   @files [:a, :b, :c, :d, :e, :f, :g, :h]
   # @ranks 1..8
 
+  @starting_position %{
+    {:a, 1} => {:rook, :white, {:a, 1}},
+    {:a, 2} => {:pawn, :white, {:a, 2}},
+    {:a, 7} => {:pawn, :black, {:a, 7}},
+    {:a, 8} => {:rook, :black, {:a, 8}},
+    {:b, 1} => {:knight, :white, {:b, 1}},
+    {:b, 2} => {:pawn, :white, {:b, 2}},
+    {:b, 7} => {:pawn, :black, {:b, 7}},
+    {:b, 8} => {:knight, :black, {:b, 8}},
+    {:c, 1} => {:bishop, :white, {:c, 1}},
+    {:c, 2} => {:pawn, :white, {:c, 2}},
+    {:c, 7} => {:pawn, :black, {:c, 7}},
+    {:c, 8} => {:bishop, :black, {:c, 8}},
+    {:d, 1} => {:queen, :white, {:d, 1}},
+    {:d, 2} => {:pawn, :white, {:d, 2}},
+    {:d, 7} => {:pawn, :black, {:d, 7}},
+    {:d, 8} => {:queen, :black, {:d, 8}},
+    {:e, 1} => {:king, :white, {:e, 1}},
+    {:e, 2} => {:pawn, :white, {:e, 2}},
+    {:e, 7} => {:pawn, :black, {:e, 7}},
+    {:e, 8} => {:king, :black, {:e, 8}},
+    {:f, 1} => {:bishop, :white, {:f, 1}},
+    {:f, 2} => {:pawn, :white, {:f, 2}},
+    {:f, 7} => {:pawn, :black, {:f, 7}},
+    {:f, 8} => {:bishop, :black, {:f, 8}},
+    {:g, 1} => {:knight, :white, {:g, 1}},
+    {:g, 2} => {:pawn, :white, {:g, 2}},
+    {:g, 7} => {:pawn, :black, {:g, 7}},
+    {:g, 8} => {:knight, :black, {:g, 8}},
+    {:h, 1} => {:rook, :white, {:h, 1}},
+    {:h, 2} => {:pawn, :white, {:h, 2}},
+    {:h, 7} => {:pawn, :black, {:h, 7}},
+    {:h, 8} => {:rook, :black, {:h, 8}}
+  }
+
   @spec get_piece_name(Game.t(), Square.t()) :: Piece.name() | nil
   def get_piece_name(%{board: board}, square) do
     case Map.get(board, square) do
@@ -62,6 +97,8 @@ defmodule Chex.Board do
       {:ok, {piece, capture, game}}
     end
   end
+
+  def starting_position, do: @starting_position
 
   def files, do: @files
 
