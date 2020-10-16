@@ -213,12 +213,8 @@ defmodule Chex.Game do
   end
 
   @spec switch_active_color(Game.t()) :: Game.t()
-  defp switch_active_color(%Game{active_color: :white} = game) do
-    game |> Map.put(:active_color, :black)
-  end
-
-  defp switch_active_color(%Game{active_color: :black} = game) do
-    game |> Map.put(:active_color, :white)
+  defp switch_active_color(%{active_color: color} = game) do
+    %{game | active_color: Color.flip(color)}
   end
 
   defp piece_at(game, square) do
