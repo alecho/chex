@@ -15,6 +15,14 @@ defmodule Chex.Board do
     end
   end
 
+  @spec get_piece_color(Game.t(), Square.t()) :: Piece.name() | nil
+  def get_piece_color(%{board: board}, square) do
+    case Map.get(board, square) do
+      {_name, color, _sq} -> color
+      _ -> nil
+    end
+  end
+
   @spec pickup_piece(Game.t(), Square.t()) :: {:ok, {Piece.t(), Game.t()}} | {:error, :reason}
   def pickup_piece(game, square) do
     game.board

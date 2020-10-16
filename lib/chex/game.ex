@@ -176,9 +176,9 @@ defmodule Chex.Game do
   @spec move_valid?(Game.t(), {Square.t(), Square.t()}) ::
           boolean() | {:error, reason :: atom}
   defp move_valid?(%Game{} = game, {from, _to}) do
-    with {:ok, {_name, color, _start}} <- piece_at(game, from),
+    with true <- occupied?(game, from),
+         color <- Board.get_piece_color(game, from),
          true <- active_color?(game, color),
-         # true <- check_absolute_pin?(game, from),
          do: true
   end
 
@@ -217,13 +217,10 @@ defmodule Chex.Game do
     %{game | active_color: Color.flip(color)}
   end
 
-  defp piece_at(game, square) do
-    case Map.get(game.board, square) do
-      nil ->
-        {:error, :no_piece_at_square}
-
-      piece ->
-        {:ok, piece}
+  defp occupied?(game, square) do
+    case Board.occupied?(game, square) do
+      true -> true
+      false -> {:error, :no_piece_at_square}
     end
   end
 

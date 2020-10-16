@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Chex.Color` with a `flip/1`.
 - `Piece.King` is now castling aware and provides the castling square(s) in it's
     `available_moves/3`.
-- `Board.get_piece_name/2` to get just the name of a piece at a square.
+- `Board.get_piece_name/2` and `Board.get_piece_name/2` to get just the name or
+    color of a piece at a square.
 - Castling support.
 - Checkmate support.
 - Stalemate support.
