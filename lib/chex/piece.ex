@@ -24,7 +24,7 @@ defmodule Chex.Piece do
 
   @spec possible_moves(Game.t(), Square.t()) :: [Square.t()]
   def possible_moves(game, square) do
-    {name, color, _id} = Map.get(game.board, square)
+    {name, color, _id} = game.board[square]
 
     to_module(name).possible_moves(color, square, game)
     |> Enum.reject(&Board.occupied_by_color?(game, color, &1))
@@ -82,7 +82,7 @@ defmodule Chex.Piece do
     if str == str_up, do: :white, else: :black
   end
 
-  def to_string({name, color, _id}), do: Chex.Piece.to_string({name, color})
+  def to_string({name, color, _id}), do: Piece.to_string({name, color})
 
   def to_string({name, color}) do
     %{

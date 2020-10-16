@@ -44,7 +44,7 @@ defmodule Chex.Board do
 
   @spec get_piece_name(Game.t(), Square.t()) :: Piece.name() | nil
   def get_piece_name(%{board: board}, square) do
-    case Map.get(board, square) do
+    case board[square] do
       {name, _color, _sq} -> name
       _ -> nil
     end
@@ -52,7 +52,7 @@ defmodule Chex.Board do
 
   @spec get_piece_color(Game.t(), Square.t()) :: Piece.name() | nil
   def get_piece_color(%{board: board}, square) do
-    case Map.get(board, square) do
+    case board[square] do
       {_name, color, _sq} -> color
       _ -> nil
     end
@@ -107,9 +107,7 @@ defmodule Chex.Board do
   def file_offset(file, 0), do: file
 
   def file_offset(file, offset) do
-    offset_index =
-      file
-      |> file_index
+    offset_index = file_index(file)
 
     index = offset_index + offset
 
@@ -118,23 +116,22 @@ defmodule Chex.Board do
   end
 
   def occupied_by_color?(%{board: board}, color, square) do
-    case Map.get(board, square) do
+    case board[square] do
       {_name, ^color, _sq} -> true
       _ -> false
     end
   end
 
   def occupied?(%{board: board}, square) do
-    !is_nil(Map.get(board, square))
+    !is_nil(board[square])
   end
 
   @doc """
   Get the square of the first matching piece.
   """
   @spec find_piece(Game.t(), Piece.t()) :: Square.t() | nil
-  def find_piece(game, piece) do
-    game.board
-    |> Enum.reduce_while(nil, &finder(piece, &1, &2))
+  def find_piece(%{board: board}, piece) do
+    Enum.reduce_while(board, nil, &finder(piece, &1, &2))
   end
 
   defp finder({name, color}, {square, {name, color, _}}, _acc), do: {:halt, square}
@@ -146,8 +143,7 @@ defmodule Chex.Board do
   """
   @spec find_pieces(Game.t(), Piece.t()) :: [Square.t()] | []
   def find_pieces(%{board: board}, piece) do
-    board
-    |> Enum.reduce([], fn {square, {n, c, _}}, acc ->
+    Enum.reduce(board, [], fn {square, {n, c, _}}, acc ->
       if {n, c} == piece, do: [square | acc], else: acc
     end)
   end
@@ -156,7 +152,7 @@ defmodule Chex.Board do
     game
     |> all_occupied_by_color(color)
     |> Enum.map(fn square ->
-      {name, _occupied_color, _sq} = Map.get(game.board, square)
+      {name, _occupied_color, _sq} = game.board[square]
       Chex.Piece.attacking_squares({name, color}, square, game)
     end)
     |> List.flatten()

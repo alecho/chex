@@ -96,8 +96,8 @@ defmodule Chex.GameTest do
     test "moves the piece on the :board" do
       {:ok, game} = Game.new()
       {:ok, game} = Game.move(game, "e2e4")
-      assert game.board |> Map.get({:e, 2}) == nil
-      assert game.board |> Map.get({:e, 4}) == {:pawn, :white, {:e, 2}}
+      assert game.board[{:e, 2}] == nil
+      assert game.board[{:e, 4}] == {:pawn, :white, {:e, 2}}
     end
 
     test "updates :en_passant" do
@@ -214,23 +214,23 @@ defmodule Chex.GameTest do
     test "promotes pawn to queen when piece is not specified" do
       {:ok, game} = Game.new("k7/4P3/8/8/8/8/3p4/K7 w - - 0 1")
       {:ok, game} = Game.move(game, "e7e8")
-      assert {:queen, :white, {:e, 7}} = Map.get(game.board, {:e, 8})
+      assert {:queen, :white, {:e, 7}} = game.board[{:e, 8}]
       {:ok, game} = Game.move(game, "d2d1")
-      assert {:queen, :black, {:d, 2}} = Map.get(game.board, {:d, 1})
+      assert {:queen, :black, {:d, 2}} = game.board[{:d, 1}]
     end
 
     test "promotes pawn to the specified piece" do
       {:ok, game} = Game.new("k7/4P3/8/8/8/8/3p4/K7 w - - 0 1")
       {:ok, game} = Game.move(game, "e7e8", :rook)
-      assert {:rook, :white, {:e, 7}} = Map.get(game.board, {:e, 8})
+      assert {:rook, :white, {:e, 7}} = game.board[{:e, 8}]
       {:ok, game} = Game.move(game, "d2d1", :bishop)
-      assert {:bishop, :black, {:d, 2}} = Map.get(game.board, {:d, 1})
+      assert {:bishop, :black, {:d, 2}} = game.board[{:d, 1}]
     end
 
     test "doesn't promote other pieces" do
       {:ok, game} = Game.new("k7/4R3/8/8/8/8/3p4/K7 w - - 0 1")
       {:ok, game} = Game.move(game, "e7e8")
-      assert {:rook, :white, {:e, 7}} = Map.get(game.board, {:e, 8})
+      assert {:rook, :white, {:e, 7}} = game.board[{:e, 8}]
     end
 
     test "promoting pawn to queen may check" do

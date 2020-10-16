@@ -62,7 +62,7 @@ defmodule Chex.Parser.FEN do
   @spec serialize_board(%{}) :: String.t()
   def serialize_board(board) do
     for r <- 8..1, f <- Board.files() do
-      Map.get(board, {f, r})
+      board[{f, r}]
     end
     |> Enum.chunk_every(8)
     |> Enum.map(fn row ->
