@@ -173,12 +173,6 @@ defmodule Chex.Game do
     %{game | halfmove_clock: game.halfmove_clock + 1}
   end
 
-  @spec to_fen(Game.t()) :: String.t()
-  def to_fen(%Game{} = game) do
-    {:ok, fen} = Chex.Parser.FEN.serialize(game)
-    fen
-  end
-
   @spec move_valid?(Game.t(), {Square.t(), Square.t()}) ::
           boolean() | {:error, reason :: atom}
   defp move_valid?(%Game{} = game, {from, _to}) do

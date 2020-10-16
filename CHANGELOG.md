@@ -45,3 +45,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Board.new/0`. There's little reason to use a struct for the board
     representation and no reason to populate it with 64 keys that point to a nil
     value.
+- `Game.to_fen` in favor of calling the serializer function directly.
