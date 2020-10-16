@@ -184,32 +184,33 @@ defmodule Chex.Game do
 
   # Queenside castle
   defp castle(game, {{:e, r}, {:c, r}}) when r in [1, 8] do
-    game =
-      if Board.get_piece_name(game, {:c, r}) == :king do
-        {:ok, {_piece, _capture, game}} = Board.move(game, {:a, r}, {:d, r})
-        game
-      else
-        game
-      end
-
-    {:ok, game}
+    {:ok,
+     case Board.get_piece_name(game, {:c, r}) do
+       :king -> castle_queenside(game, r)
+       _ -> game
+     end}
   end
 
   # Kingside castle
   defp castle(game, {{:e, r}, {:g, r}}) when r in [1, 8] do
-    game =
-      if Board.get_piece_name(game, {:g, r}) == :king do
-        {:ok, {piece, game}} = Board.pickup_piece(game, {:h, r})
-        {:ok, {_cap, game}} = Board.place_piece(game, {:f, r}, piece)
-        game
-      else
-        game
-      end
-
-    {:ok, game}
+    {:ok,
+     case Board.get_piece_name(game, {:g, r}) do
+       :king -> castle_kingside(game, r)
+       _ -> game
+     end}
   end
 
   defp castle(game, _move), do: {:ok, game}
+
+  defp castle_kingside(game, rank) do
+    {:ok, {_p, _c, game}} = Board.move(game, {:h, rank}, {:f, rank})
+    game
+  end
+
+  defp castle_queenside(game, rank) do
+    {:ok, {_p, _c, game}} = Board.move(game, {:a, rank}, {:d, rank})
+    game
+  end
 
   @spec switch_active_color(Game.t()) :: Game.t()
   defp switch_active_color(%Game{active_color: :white} = game) do
