@@ -1,7 +1,6 @@
 defmodule Chex.Piece.Rook do
-  @moduledoc """
-  Describe Rook moves.
-  """
+  @moduledoc false
+
   @behaviour Chex.Piece
 
   import Chex.Piece.Movement

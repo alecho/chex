@@ -1,7 +1,6 @@
 defmodule Chex.Piece.Pawn do
-  @moduledoc """
-  Describe Pawn moves and attacks.
-  """
+  @moduledoc false
+
   @behaviour Chex.Piece
 
   import Chex.Board, only: [occupied_by_color?: 3, occupied?: 2, file_offset: 2]

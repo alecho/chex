@@ -1,7 +1,6 @@
 defmodule Chex.Piece.Movement do
-  @moduledoc """
-  Piece movement helper functions.
-  """
+  @moduledoc false
+
   alias Chex.{Board, Square}
 
   @typedoc """

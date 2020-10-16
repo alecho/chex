@@ -1,7 +1,6 @@
 defmodule Chex.Game do
-  @moduledoc """
-  Functions for playing a chess game.
-  """
+  @moduledoc false
+
   alias Chex.{Board, Color, Game, Parser.FEN, Piece, Square}
 
   defstruct board: %{},
