@@ -10,17 +10,12 @@ defmodule Chex.Piece do
   @type name :: :king | :queen | :bishop | :knight | :rook | :pawn
 
   @typedoc """
-  A color atom.
+  A name(), Color.() pair.
   """
-  @type color :: :white | :black
+  @type t :: {name(), Color.t()}
 
-  @typedoc """
-  A name(), color() pair.
-  """
-  @type t :: {name(), color()}
-
-  @callback possible_moves(color(), Square.t(), Game.t()) :: [Square.t()]
-  @callback attacking_squares(color(), Square.t(), en_passant :: Square.t()) :: [Square.t()]
+  @callback possible_moves(Color.t(), Square.t(), Game.t()) :: [Square.t()]
+  @callback attacking_squares(Color.t(), Square.t(), en_passant :: Square.t()) :: [Square.t()]
 
   @spec possible_moves(Game.t(), Square.t()) :: [Square.t()]
   def possible_moves(game, square) do
@@ -57,7 +52,7 @@ defmodule Chex.Piece do
   {:pawn, :white}
 
   """
-  @spec trim({name(), color(), Square.t()}) :: Piece.t()
+  @spec trim({name(), Color.t(), Square.t()}) :: Piece.t()
   def trim({name, color, _start}), do: {name, color}
 
   @spec piece_from_string(String.t()) :: atom
