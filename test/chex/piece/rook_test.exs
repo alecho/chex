@@ -2,17 +2,19 @@ defmodule Chex.Piece.RookTest do
   use ExUnit.Case, async: true
   doctest Chex.Piece.Rook
 
+  alias Chex.Piece.Rook
+
   @empty_board "8/8/8/8/4R3/8/8/8 w - - 0 1"
 
   describe "Rook.possible_moves/3" do
     test "starting position moves" do
       {:ok, game} = Chex.Game.new()
-      assert Chex.Piece.Rook.possible_moves(:white, {:a, 1}, game) == []
+      assert Rook.possible_moves(:white, {:a, 1}, game) == []
     end
 
     test "only piece in middle of board" do
       {:ok, game} = Chex.Game.new(@empty_board)
-      moves = Chex.Piece.Rook.possible_moves(:white, {:e, 4}, game)
+      moves = Rook.possible_moves(:white, {:e, 4}, game)
 
       expected_moves = [
         {:a, 4},
@@ -36,7 +38,7 @@ defmodule Chex.Piece.RookTest do
 
     test "surrounded by enemy pawns" do
       {:ok, game} = Chex.Game.new("8/8/8/3ppp2/3pRp2/3ppp2/8/8 w - - 0 1")
-      moves = Chex.Piece.Rook.possible_moves(:white, {:e, 4}, game)
+      moves = Rook.possible_moves(:white, {:e, 4}, game)
 
       expected_moves = [
         {:d, 4},

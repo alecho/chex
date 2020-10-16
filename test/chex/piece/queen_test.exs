@@ -2,22 +2,24 @@ defmodule Chex.Piece.QueenTest do
   use ExUnit.Case, async: true
   doctest Chex.Piece.Queen
 
+  alias Chex.Piece.Queen
+
   @empty_board "8/8/8/8/4Q3/8/8/8 w - - 0 1"
 
   describe "Queen.possible_moves/3" do
     test "white starting position moves" do
       {:ok, game} = Chex.Game.new()
-      assert Chex.Piece.Queen.possible_moves(:white, {:d, 1}, game) == []
+      assert Queen.possible_moves(:white, {:d, 1}, game) == []
     end
 
     test "black starting position moves" do
       {:ok, game} = Chex.Game.new()
-      assert Chex.Piece.Queen.possible_moves(:black, {:d, 8}, game) == []
+      assert Queen.possible_moves(:black, {:d, 8}, game) == []
     end
 
     test "only piece in middle of board" do
       {:ok, game} = Chex.Game.new(@empty_board)
-      moves = Chex.Piece.Queen.possible_moves(:white, {:e, 4}, game)
+      moves = Queen.possible_moves(:white, {:e, 4}, game)
 
       expected_moves = [
         {:a, 4},
@@ -54,7 +56,7 @@ defmodule Chex.Piece.QueenTest do
 
     test "surrounded by enemy pawns" do
       {:ok, game} = Chex.Game.new("8/8/8/3ppp2/3pQp2/3ppp2/8/8 w - - 0 1")
-      moves = Chex.Piece.Queen.possible_moves(:white, {:e, 4}, game)
+      moves = Queen.possible_moves(:white, {:e, 4}, game)
 
       expected_moves = [d: 3, d: 4, d: 5, e: 3, e: 5, f: 3, f: 4, f: 5]
 
@@ -63,7 +65,7 @@ defmodule Chex.Piece.QueenTest do
 
     test "surrounded by friendly pawns" do
       {:ok, game} = Chex.Game.new("8/8/8/3ppp2/3pqp2/3ppp2/8/8 w - - 0 1")
-      moves = Chex.Piece.Queen.possible_moves(:black, {:e, 4}, game)
+      moves = Queen.possible_moves(:black, {:e, 4}, game)
 
       expected_moves = []
 

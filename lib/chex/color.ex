@@ -1,7 +1,5 @@
 defmodule Chex.Color do
-  @moduledoc """
-
-  """
+  @moduledoc false
 
   @typedoc """
   A color atom.

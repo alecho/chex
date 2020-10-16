@@ -41,7 +41,7 @@ defmodule Chex.Parser.FEN do
     {:ok, "#{bd} #{ac} #{ct} #{ep} #{hm} #{fm}"}
   end
 
-  def extension(), do: nil
+  def extension, do: nil
 
   @spec decode_board(String.t()) :: %{}
   def decode_board(str) do

@@ -2,17 +2,19 @@ defmodule Chex.Parser.FENTest do
   use ExUnit.Case
   doctest Chex.Parser.FEN
 
+  alias Chex.Parser.FEN
+
   @starting_pos "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
   @after_e4 "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
   # @after_c5 "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"
   @after_nf3 "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
 
   test "returns a Game struct" do
-    assert {:ok, %Chex.Game{}} = Chex.Parser.FEN.parse(@starting_pos)
+    assert {:ok, %Chex.Game{}} = FEN.parse(@starting_pos)
   end
 
   test "parses starting positions" do
-    {:ok, game} = Chex.Parser.FEN.parse(@starting_pos)
+    {:ok, game} = FEN.parse(@starting_pos)
 
     assert game.board == %{
              {:c, 2} => {:pawn, :white, {:c, 2}},
@@ -51,7 +53,7 @@ defmodule Chex.Parser.FENTest do
   end
 
   test "parses empty sqaure positions" do
-    {:ok, game} = Chex.Parser.FEN.parse(@after_nf3)
+    {:ok, game} = FEN.parse(@after_nf3)
 
     assert game.board == %{
              {:c, 2} => {:pawn, :white, {:c, 2}},
@@ -93,66 +95,66 @@ defmodule Chex.Parser.FENTest do
     assert {:ok,
             %Chex.Game{
               active_color: :white
-            }} = Chex.Parser.FEN.parse(@starting_pos)
+            }} = FEN.parse(@starting_pos)
   end
 
   test "parses black active color" do
     assert {:ok,
             %Chex.Game{
               active_color: :black
-            }} = Chex.Parser.FEN.parse(@after_e4)
+            }} = FEN.parse(@after_e4)
   end
 
   test "parses present castling at starting position" do
     assert {:ok,
             %Chex.Game{
               castling: [:K, :Q, :k, :q]
-            }} = Chex.Parser.FEN.parse(@starting_pos)
+            }} = FEN.parse(@starting_pos)
   end
 
   test "parses absent castling availability" do
     assert {:ok,
             %Chex.Game{
               castling: []
-            }} = Chex.Parser.FEN.parse("r2k3r/8/8/8/8/8/8/R3K2R b - - 12 75")
+            }} = FEN.parse("r2k3r/8/8/8/8/8/8/R3K2R b - - 12 75")
   end
 
   test "parses absent en passant" do
     assert {:ok,
             %Chex.Game{
               en_passant: nil
-            }} = Chex.Parser.FEN.parse(@starting_pos)
+            }} = FEN.parse(@starting_pos)
   end
 
   test "parses present en passant" do
     assert {:ok,
             %Chex.Game{
               en_passant: {:e, 3}
-            }} = Chex.Parser.FEN.parse(@after_e4)
+            }} = FEN.parse(@after_e4)
   end
 
   test "parses halfmove_clock" do
     assert {:ok,
             %Chex.Game{
               halfmove_clock: 1
-            }} = Chex.Parser.FEN.parse(@after_nf3)
+            }} = FEN.parse(@after_nf3)
   end
 
   test "parses fullmove_clock" do
     assert {:ok,
             %Chex.Game{
               fullmove_clock: 2
-            }} = Chex.Parser.FEN.parse(@after_nf3)
+            }} = FEN.parse(@after_nf3)
   end
 
   test "parses newgame" do
     {:ok, game} = Chex.Game.new()
-    assert Chex.Parser.FEN.serialize(game) == {:ok, @starting_pos}
+    assert FEN.serialize(game) == {:ok, @starting_pos}
   end
 
   test "parses after first move" do
     {:ok, game} = Chex.Game.new(@after_e4)
-    assert Chex.Parser.FEN.serialize(game) == {:ok, @after_e4}
+    assert FEN.serialize(game) == {:ok, @after_e4}
   end
 
   test "serializes complicated board" do
@@ -178,7 +180,7 @@ defmodule Chex.Parser.FENTest do
     {:ok, game} = Chex.Game.new()
     game = %{game | board: board}
 
-    assert Chex.Parser.FEN.serialize(game) ==
+    assert FEN.serialize(game) ==
              {:ok, "r6k/2R5/6R1/pp1Ppp2/8/Pn2B1Pr/4KP2/8 w KQkq - 0 1"}
   end
 end

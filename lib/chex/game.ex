@@ -2,7 +2,7 @@ defmodule Chex.Game do
   @moduledoc """
   Functions for playing a chess game.
   """
-  alias Chex.{Board, Color, Game, Piece, Square}
+  alias Chex.{Board, Color, Game, Parser.FEN, Piece, Square}
 
   defstruct board: %{},
             active_color: :white,
@@ -33,7 +33,7 @@ defmodule Chex.Game do
 
   """
   @spec new(String.t()) :: {:ok, Game.t()} | {:error, atom()}
-  def new(fen \\ @starting_pos), do: Chex.Parser.FEN.parse(fen)
+  def new(fen \\ @starting_pos), do: FEN.parse(fen)
 
   @doc """
   Makes a move within the chess game.
@@ -179,7 +179,6 @@ defmodule Chex.Game do
     with {:ok, {_name, color, _start}} <- piece_at(game, from),
          true <- active_color?(game, color),
          # true <- check_absolute_pin?(game, from),
-         # TODO: Check player matches color when payer support is added.
          do: true
   end
 
