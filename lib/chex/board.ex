@@ -1,7 +1,9 @@
 defmodule Chex.Board do
   @moduledoc false
 
-  alias Chex.Square
+  alias Chex.{Color, Game, Piece, Square}
+
+  @type value :: {Piece.name(), Color.t(), Square.t()}
 
   @files [:a, :b, :c, :d, :e, :f, :g, :h]
   # @ranks 1..8
@@ -49,7 +51,7 @@ defmodule Chex.Board do
     end
   end
 
-  @spec get_piece_color(Game.t(), Square.t()) :: Piece.name() | nil
+  @spec get_piece_color(Game.t(), Square.t()) :: Color.t() | nil
   def get_piece_color(%{board: board}, square) do
     case board[square] do
       {_name, color, _sq} -> color
@@ -57,7 +59,8 @@ defmodule Chex.Board do
     end
   end
 
-  @spec pickup_piece(Game.t(), Square.t()) :: {:ok, {Piece.t(), Game.t()}} | {:error, :reason}
+  @spec pickup_piece(Game.t(), Square.t()) ::
+          {:ok, {value(), Game.t()}} | {:error, :reason}
   def pickup_piece(game, square) do
     case Map.pop(game.board, square) do
       {nil, _board} -> {:error, :no_piece_at_square}
@@ -65,8 +68,8 @@ defmodule Chex.Board do
     end
   end
 
-  @spec place_piece(Game.t(), Square.t(), Piece.t()) ::
-          {:ok, {Piece.t(), Game.t()}} | {:error, :reason}
+  @spec place_piece(Game.t(), Square.t(), value()) ::
+          {:ok, {value(), Game.t()}} | {:error, :reason}
   def place_piece(game, square, {_name, color, _start} = piece) do
     game.board
     |> Map.get_and_update(square, fn capture ->
@@ -82,7 +85,7 @@ defmodule Chex.Board do
   end
 
   @spec move(Game.t(), Square.t(), Square.t()) ::
-          {:ok, {Piece.t(), Piece.t(), Game.t()}} | {:error, :reason}
+          {:ok, {value(), value(), Game.t()}} | {:error, :reason}
   def move(game, from, to) do
     with {:ok, {piece, game}} <- pickup_piece(game, from),
          {:ok, {capture, game}} <- place_piece(game, to, piece) do

@@ -1,7 +1,7 @@
 defmodule Chex.Piece do
   @moduledoc false
 
-  alias Chex.{Board, Game, Piece, Square}
+  alias Chex.{Board, Color, Game, Piece, Square}
 
   @typedoc """
   A name atom.
@@ -34,7 +34,7 @@ defmodule Chex.Piece do
     module.attacking_squares(color, square, game)
   end
 
-  @spec from_string(String.t()) :: Piece.t()
+  @spec from_string(String.t()) :: t()
   def from_string(str) do
     {piece_from_string(str), color_from_string(str)}
   end
@@ -51,7 +51,7 @@ defmodule Chex.Piece do
   {:pawn, :white}
 
   """
-  @spec trim({name(), Color.t(), Square.t()}) :: Piece.t()
+  @spec trim({name(), Color.t(), Square.t()}) :: t()
   def trim({name, color, _start}), do: {name, color}
 
   @spec piece_from_string(String.t()) :: atom
