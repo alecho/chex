@@ -251,11 +251,9 @@ defmodule Chex.GameTest do
                   board: %{
                     {:a, 1} => {:rook, :white, {:a, 1}},
                     {:a, 8} => {:rook, :black, {:a, 8}},
-                    {:e, 1} => nil,
                     {:e, 8} => {:king, :black, {:e, 8}},
                     {:f, 1} => {:rook, :white, {:h, 1}},
                     {:g, 1} => {:king, :white, {:e, 1}},
-                    {:h, 1} => nil,
                     {:h, 8} => {:rook, :black, {:h, 8}}
                   },
                   captures: [],
@@ -279,11 +277,9 @@ defmodule Chex.GameTest do
                     {:a, 1} => {:rook, :white, {:a, 1}},
                     {:a, 8} => {:rook, :black, {:a, 8}},
                     {:e, 1} => {:king, :white, {:e, 1}},
-                    {:e, 8} => nil,
                     {:f, 8} => {:rook, :black, {:h, 8}},
                     {:g, 8} => {:king, :black, {:e, 8}},
-                    {:h, 1} => {:rook, :white, {:h, 1}},
-                    {:h, 8} => nil
+                    {:h, 1} => {:rook, :white, {:h, 1}}
                   },
                   captures: [],
                   castling: [:K, :Q],
@@ -303,11 +299,9 @@ defmodule Chex.GameTest do
                 %Chex.Game{
                   active_color: :black,
                   board: %{
-                    {:a, 1} => nil,
                     {:a, 8} => {:rook, :black, {:a, 8}},
                     {:c, 1} => {:king, :white, {:e, 1}},
                     {:d, 1} => {:rook, :white, {:a, 1}},
-                    {:e, 1} => nil,
                     {:e, 8} => {:king, :black, {:e, 8}},
                     {:h, 1} => {:rook, :white, {:h, 1}},
                     {:h, 8} => {:rook, :black, {:h, 8}}
@@ -331,11 +325,9 @@ defmodule Chex.GameTest do
                   active_color: :white,
                   board: %{
                     {:a, 1} => {:rook, :white, {:a, 1}},
-                    {:a, 8} => nil,
                     {:c, 8} => {:king, :black, {:e, 8}},
                     {:d, 8} => {:rook, :black, {:a, 8}},
                     {:e, 1} => {:king, :white, {:e, 1}},
-                    {:e, 8} => nil,
                     {:h, 1} => {:rook, :white, {:h, 1}},
                     {:h, 8} => {:rook, :black, {:h, 8}}
                   },
