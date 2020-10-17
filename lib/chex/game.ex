@@ -15,6 +15,7 @@ defmodule Chex.Game do
             result: nil
 
   @type t() :: %__MODULE__{}
+  @type move() :: {Square.t(), Square.t()} | String.t()
 
   @doc """
   Creates a new game, optionally  from a FEN string.
@@ -54,10 +55,12 @@ defmodule Chex.Game do
   {:ok, %Chex.Game{}}
 
   """
-  @spec move(Game.t(), {Square.t(), Square.t()} | String.t()) ::
+  @spec move(Game.t(), move()) ::
           {:ok, Game.t()} | {:error, atom()}
-  def move(game, move, promote_to \\ :queen)
+  def move(game, move), do: move(game, move, :queen)
 
+  @spec move(Game.t(), move(), Piece.name()) ::
+          {:ok, Game.t()} | {:error, atom()}
   def move(game, move, promote_to) when byte_size(move) == 4 do
     {from, to} = String.split_at(move, 2)
     move(game, {Square.from_string(from), Square.from_string(to)}, promote_to)
