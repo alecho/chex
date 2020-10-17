@@ -59,16 +59,9 @@ defmodule Chex.Board do
 
   @spec pickup_piece(Game.t(), Square.t()) :: {:ok, {Piece.t(), Game.t()}} | {:error, :reason}
   def pickup_piece(game, square) do
-    game.board
-    |> Map.get_and_update(square, fn piece ->
-      {piece, nil}
-    end)
-    |> case do
-      {nil, _board} ->
-        {:error, :no_piece_at_square}
-
-      {piece, board} ->
-        {:ok, {piece, %{game | board: board}}}
+    case Map.pop(game.board, square) do
+      {nil, _board} -> {:error, :no_piece_at_square}
+      {piece, board} -> {:ok, {piece, %{game | board: board}}}
     end
   end
 
