@@ -1,7 +1,7 @@
 defmodule Chex.Piece do
   @moduledoc false
 
-  alias Chex.{Board, Color, Game, Piece, Square}
+  alias Chex.{Board, Color, Game, Piece}
 
   @typedoc """
   A name atom.
@@ -13,10 +13,12 @@ defmodule Chex.Piece do
   """
   @type t :: {name(), Color.t()}
 
-  @callback possible_moves(Color.t(), Square.t(), Game.t()) :: [Square.t()]
-  @callback attacking_squares(Color.t(), Square.t(), en_passant :: Square.t()) :: [Square.t()]
+  @callback possible_moves(Color.t(), Chex.square(), Chex.game()) :: [Chex.square()]
+  @callback attacking_squares(Color.t(), Chex.square(), en_passant :: Chex.square()) :: [
+              Chex.square()
+            ]
 
-  @spec possible_moves(Game.t(), Square.t()) :: [Square.t()]
+  @spec possible_moves(Chex.game(), Chex.square()) :: [Chex.square()]
   def possible_moves(game, square) do
     {name, color, _id} = game.board[square]
 
@@ -28,7 +30,7 @@ defmodule Chex.Piece do
     end)
   end
 
-  @spec attacking_squares(t(), Square.t(), Game.t()) :: [Square.t()]
+  @spec attacking_squares(t(), Chex.square(), Chex.game()) :: [Chex.square()]
   def attacking_squares({name, color}, square, game) do
     module = to_module(name)
     module.attacking_squares(color, square, game)
@@ -51,7 +53,7 @@ defmodule Chex.Piece do
   {:pawn, :white}
 
   """
-  @spec trim({name(), Color.t(), Square.t()}) :: t()
+  @spec trim({name(), Color.t(), Chex.square()}) :: t()
   def trim({name, color, _start}), do: {name, color}
 
   @spec piece_from_string(String.t()) :: atom

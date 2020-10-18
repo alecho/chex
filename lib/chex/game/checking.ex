@@ -1,9 +1,9 @@
 defmodule Chex.Game.Checking do
   @moduledoc false
 
-  alias Chex.{Game, Board, Color}
+  alias Chex.{Board, Color}
 
-  @spec in_check?(Game.t(), Color.t()) :: bool()
+  @spec in_check?(Chex.game(), Color.t()) :: bool()
   def in_check?(game, color) do
     square = Board.find_piece(game, {:king, color})
 
@@ -11,12 +11,12 @@ defmodule Chex.Game.Checking do
     |> Enum.member?(square)
   end
 
-  @spec checkmate?(Game.t()) :: bool()
+  @spec checkmate?(Chex.game()) :: bool()
   def checkmate?(%{active_color: color} = game) do
     in_check?(game, color) && Board.all_possible_squares(game, color) == []
   end
 
-  @spec stalemate?(Game.t()) :: bool()
+  @spec stalemate?(Chex.game()) :: bool()
   def stalemate?(%{check: check}) when not is_nil(check), do: false
 
   def stalemate?(%{active_color: color} = game) do

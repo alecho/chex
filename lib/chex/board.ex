@@ -1,9 +1,9 @@
 defmodule Chex.Board do
   @moduledoc false
 
-  alias Chex.{Color, Game, Piece, Square}
+  alias Chex.{Color, Piece}
 
-  @type value :: {Piece.name(), Color.t(), Square.t()}
+  @type value :: {Piece.name(), Color.t(), Chex.square()}
 
   @files [:a, :b, :c, :d, :e, :f, :g, :h]
   # @ranks 1..8
@@ -43,7 +43,7 @@ defmodule Chex.Board do
     {:h, 8} => {:rook, :black, {:h, 8}}
   }
 
-  @spec get_piece_name(Game.t(), Square.t()) :: Piece.name() | nil
+  @spec get_piece_name(Chex.game(), Chex.square()) :: Piece.name() | nil
   def get_piece_name(%{board: board}, square) do
     case board[square] do
       {name, _color, _sq} -> name
@@ -51,7 +51,7 @@ defmodule Chex.Board do
     end
   end
 
-  @spec get_piece_color(Game.t(), Square.t()) :: Color.t() | nil
+  @spec get_piece_color(Chex.game(), Chex.square()) :: Color.t() | nil
   def get_piece_color(%{board: board}, square) do
     case board[square] do
       {_name, color, _sq} -> color
@@ -59,8 +59,8 @@ defmodule Chex.Board do
     end
   end
 
-  @spec pickup_piece(Game.t(), Square.t()) ::
-          {:ok, {value(), Game.t()}} | {:error, :reason}
+  @spec pickup_piece(Chex.game(), Chex.square()) ::
+          {:ok, {value(), Chex.game()}} | {:error, :reason}
   def pickup_piece(game, square) do
     case Map.pop(game.board, square) do
       {nil, _board} -> {:error, :no_piece_at_square}
@@ -68,8 +68,8 @@ defmodule Chex.Board do
     end
   end
 
-  @spec place_piece(Game.t(), Square.t(), value()) ::
-          {:ok, {value(), Game.t()}} | {:error, :reason}
+  @spec place_piece(Chex.game(), Chex.square(), value()) ::
+          {:ok, {value(), Chex.game()}} | {:error, :reason}
   def place_piece(game, square, {_name, color, _start} = piece) do
     game.board
     |> Map.get_and_update(square, fn capture ->
@@ -84,8 +84,8 @@ defmodule Chex.Board do
     end
   end
 
-  @spec move(Game.t(), Square.t(), Square.t()) ::
-          {:ok, {value(), value(), Game.t()}} | {:error, :reason}
+  @spec move(Chex.game(), Chex.square(), Chex.square()) ::
+          {:ok, {value(), value(), Chex.game()}} | {:error, :reason}
   def move(game, from, to) do
     with {:ok, {piece, game}} <- pickup_piece(game, from),
          {:ok, {capture, game}} <- place_piece(game, to, piece) do
@@ -124,7 +124,7 @@ defmodule Chex.Board do
   @doc """
   Get the square of the first matching piece.
   """
-  @spec find_piece(Game.t(), Piece.t()) :: Square.t() | nil
+  @spec find_piece(Chex.game(), Piece.t()) :: Chex.square() | nil
   def find_piece(%{board: board}, piece) do
     Enum.reduce_while(board, nil, &finder(piece, &1, &2))
   end
@@ -136,7 +136,7 @@ defmodule Chex.Board do
   @doc """
   Find locations of the specified piece on the board.
   """
-  @spec find_pieces(Game.t(), Piece.t()) :: [Square.t()] | []
+  @spec find_pieces(Chex.game(), Piece.t()) :: [Chex.square()] | []
   def find_pieces(%{board: board}, piece) do
     Enum.reduce(board, [], fn {square, {n, c, _}}, acc ->
       if {n, c} == piece, do: [square | acc], else: acc

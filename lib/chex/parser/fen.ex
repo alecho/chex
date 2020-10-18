@@ -3,7 +3,7 @@ defmodule Chex.Parser.FEN do
   Forsyth–Edwards Notation parser.
   """
 
-  alias Chex.{Board, Game, Parser, Piece, Square}
+  alias Chex.{Board, Game, Parser, Piece}
 
   @behaviour Parser
 
@@ -133,7 +133,7 @@ defmodule Chex.Parser.FEN do
     |> Enum.join()
   end
 
-  @spec decode_en_passant(String.t()) :: Square.t()
+  @spec decode_en_passant(String.t()) :: Chex.square()
   def decode_en_passant("-"), do: nil
 
   def decode_en_passant(san) when byte_size(san) == 2 do
@@ -141,14 +141,14 @@ defmodule Chex.Parser.FEN do
     decode_en_passant(file, rank)
   end
 
-  @spec decode_en_passant(String.t(), String.t()) :: Square.t()
+  @spec decode_en_passant(String.t(), String.t()) :: Chex.square()
   def decode_en_passant(file, rank)
       when file in ["a", "b", "c", "d", "e", "f", "g", "h"] and
              rank in ["1", "2", "3", "4", "5", "6", "7", "8"] do
     {String.to_existing_atom(file), String.to_integer(rank)}
   end
 
-  @spec serialize_en_passant(Square.t()) :: String.t()
+  @spec serialize_en_passant(Chex.square()) :: String.t()
   def serialize_en_passant(nil), do: "-"
 
   def serialize_en_passant({file, rank}) do
