@@ -14,9 +14,6 @@ defmodule Chex.Game do
             check: nil,
             result: nil
 
-  @type t() :: %__MODULE__{}
-  @type move() :: {Square.t(), Square.t()} | String.t()
-
   @doc """
   Creates a new game, optionally  from a FEN string.
 
@@ -30,7 +27,7 @@ defmodule Chex.Game do
   {:ok, %Chex.Game{}}
 
   """
-  @spec new() :: {:ok, Game.t()}
+  @spec new() :: {:ok, Chex.game()}
   def new() do
     {:ok,
      %Game{
@@ -38,7 +35,7 @@ defmodule Chex.Game do
      }}
   end
 
-  @spec new(String.t()) :: {:ok, Game.t()} | {:error, atom()}
+  @spec new(String.t()) :: {:ok, Chex.game()} | {:error, atom()}
   def new(fen), do: FEN.parse(fen)
 
   @doc """
@@ -55,12 +52,12 @@ defmodule Chex.Game do
   {:ok, %Chex.Game{}}
 
   """
-  @spec move(Game.t(), move()) ::
-          {:ok, Game.t()} | {:error, atom()}
+  @spec move(Chex.game(), Chex.move()) ::
+          {:ok, Chex.game()} | {:error, atom()}
   def move(game, move), do: move(game, move, :queen)
 
-  @spec move(Game.t(), move(), Piece.name()) ::
-          {:ok, Game.t()} | {:error, atom()}
+  @spec move(Chex.game(), Chex.move(), Piece.name()) ::
+          {:ok, Chex.game()} | {:error, atom()}
   def move(game, move, promote_to) when byte_size(move) == 4 do
     {from, to} = String.split_at(move, 2)
     move(game, {Square.from_string(from), Square.from_string(to)}, promote_to)
@@ -94,15 +91,15 @@ defmodule Chex.Game do
   defdelegate checkmate?(game), to: Game.Checking
   defdelegate stalemate?(game), to: Game.Checking
 
-  @spec result(Game.t()) :: Color.t() | :draw | nil
+  @spec result(Chex.game()) :: Chex.result()
   def result(game), do: game.result
 
-  @spec add_move(Game.t(), {Square.t(), Square.t()}) :: Game.t()
+  @spec add_move(Chex.game(), {Chex.square(), Chex.square()}) :: Chex.game()
   defp add_move(%Game{moves: moves} = game, move) do
     %{game | moves: [move | moves]}
   end
 
-  @spec maybe_increment_fullmove_clock(Game.t(), Piece.t()) :: Game.t()
+  @spec maybe_increment_fullmove_clock(Chex.game(), Piece.t()) :: Chex.game()
   defp maybe_increment_fullmove_clock(game, {_name, :black}) do
     %{game | fullmove_clock: game.fullmove_clock + 1}
   end
@@ -114,7 +111,7 @@ defmodule Chex.Game do
     %{game | check: check}
   end
 
-  @spec update_castling(Game.t(), Piece.t()) :: Game.t()
+  @spec update_castling(Chex.game(), Piece.t()) :: Chex.game()
   defp update_castling(game, {:king, :black}) do
     delete_castling_rights(game, [:k, :q])
   end
@@ -153,7 +150,7 @@ defmodule Chex.Game do
     game
   end
 
-  @spec update_en_passant(Game.t(), Piece.t()) :: Game.t()
+  @spec update_en_passant(Chex.game(), Piece.t()) :: Chex.game()
   defp update_en_passant(
          %Game{moves: [{{file, 2}, {file, 4}} | _prev_moves]} = game,
          {:pawn, :white}
@@ -172,7 +169,7 @@ defmodule Chex.Game do
 
   defp update_en_passant(game, _move), do: %{game | en_passant: nil}
 
-  @spec update_halfmove_clock(Game.t(), Piece.t(), Piece.t() | nil) :: Game.t()
+  @spec update_halfmove_clock(Chex.game(), Piece.t(), Piece.t() | nil) :: Chex.game()
   defp update_halfmove_clock(game, {_, _}, {_, _}), do: %{game | halfmove_clock: 0}
 
   defp update_halfmove_clock(game, {:pawn, _color}, _), do: %{game | halfmove_clock: 0}
@@ -181,7 +178,7 @@ defmodule Chex.Game do
     %{game | halfmove_clock: game.halfmove_clock + 1}
   end
 
-  @spec move_valid?(Game.t(), {Square.t(), Square.t()}) ::
+  @spec move_valid?(Chex.game(), {Chex.square(), Chex.square()}) ::
           boolean() | {:error, reason :: atom}
   defp move_valid?(%Game{} = game, {from, _to}) do
     with true <- occupied?(game, from),
@@ -220,7 +217,7 @@ defmodule Chex.Game do
     game
   end
 
-  @spec switch_active_color(Game.t()) :: Game.t()
+  @spec switch_active_color(Chex.game()) :: Chex.game()
   defp switch_active_color(%{active_color: color} = game) do
     %{game | active_color: Color.flip(color)}
   end
@@ -235,14 +232,14 @@ defmodule Chex.Game do
   defp active_color?(%Game{active_color: color}, color), do: true
   defp active_color?(_game, _color), do: {:error, :out_of_turn}
 
-  @spec capture_piece(Game.t(), Piece.t() | nil) :: Game.t()
+  @spec capture_piece(Chex.game(), Piece.t() | nil) :: Chex.game()
   defp capture_piece(game, nil), do: game
 
   defp capture_piece(%Game{captures: captures} = game, piece) do
     %{game | captures: [piece | captures]}
   end
 
-  @spec maybe_promote_pawn(Game.t(), Piece.name()) :: Game.t()
+  @spec maybe_promote_pawn(Chex.game(), Piece.name()) :: Chex.game()
   defp maybe_promote_pawn(%{moves: [{_from, {_, d_rank} = sq} | _mvs]} = game, new_piece)
        when d_rank in [1, 8] do
     {_old, board} =
