@@ -3,6 +3,8 @@ defmodule Chex.MixProject do
 
   @version "0.1.2"
 
+  @source_url "https://github.com/alecho/chex"
+
   def project do
     [
       app: :chex,
@@ -11,6 +13,7 @@ defmodule Chex.MixProject do
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
+      source_url: @source_url,
       docs: docs(),
       deps: deps()
     ]
@@ -31,15 +34,15 @@ defmodule Chex.MixProject do
     [
       licenses: ["MIT"],
       links: links(),
-      homepage_url: "https://github.com/alecho/chex"
+      homepage_url: @source_url
     ]
   end
 
   defp links() do
     %{
-      "GitHub" => "https://github.com/alecho/chex",
-      "Readme" => "https://github.com/alecho/chex/blob/v#{@version}/README.md",
-      "Changelog" => "https://github.com/alecho/chex/blob/v#{@version}/CHANGELOG.md"
+      "GitHub" => @source_url,
+      "Readme" => @source_url <> "/v#{@version}/README.md",
+      "Changelog" => @source_url <> "/blob/v#{@version}/CHANGELOG.md"
     }
   end
 
