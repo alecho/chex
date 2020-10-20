@@ -99,7 +99,7 @@ defmodule Chex.Piece do
       |> Kernel.to_string()
       |> String.capitalize()
 
-    String.to_atom("Elixir.Chex.Piece." <> name)
+    Module.concat([Chex.Piece, name])
   end
 
   @spec case_for_color(String.t(), atom) :: String.t()
