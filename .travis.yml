@@ -11,6 +11,8 @@ jobs:
   exclude:
   - elixir: 1.9
     otp_release: 23.0
+install:
+  - mix deps.get --only=test
 script:
   - mix test
   - mix format --check-formatted
