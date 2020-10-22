@@ -11,3 +11,7 @@ jobs:
   exclude:
   - elixir: 1.9
     otp_release: 23.0
+script:
+  - mix test
+  - mix format --check-formatted
+  - mix credo --strict --format=oneline
