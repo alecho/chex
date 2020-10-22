@@ -146,7 +146,9 @@ defmodule Chex do
 
   ## Examples
 
-      iex> {:ok, _game} = Chex.new_game()
+      iex> {:ok, game} = Chex.new_game()
+      iex> game.active_color
+      :white
 
   """
   @spec new_game :: {:ok, game()}
