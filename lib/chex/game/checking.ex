@@ -3,7 +3,7 @@ defmodule Chex.Game.Checking do
 
   alias Chex.{Board, Color}
 
-  @spec in_check?(Chex.game(), Color.t()) :: bool()
+  @spec in_check?(Chex.game(), Chex.color()) :: bool()
   def in_check?(game, color) do
     square = Board.find_piece(game, {:king, color})
 

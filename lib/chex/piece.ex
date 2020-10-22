@@ -1,24 +1,14 @@
 defmodule Chex.Piece do
   @moduledoc false
 
-  alias Chex.{Board, Color, Game, Piece}
+  alias Chex.{Board, Game}
 
-  @typedoc """
-  A name atom.
-  """
-  @type name :: :king | :queen | :bishop | :knight | :rook | :pawn
-
-  @typedoc """
-  A name(), Color.() pair.
-  """
-  @type t :: {name(), Color.t()}
-
-  @callback possible_moves(Color.t(), Chex.square(), Chex.game()) :: [Chex.square()]
-  @callback attacking_squares(Color.t(), Chex.square(), en_passant :: Chex.square()) :: [
+  @callback possible_moves(Chex.color(), Chex.square(), Chex.game()) :: [Chex.square()]
+  @callback attacking_squares(Chex.color(), Chex.square(), en_passant :: Chex.square()) :: [
               Chex.square()
             ]
 
-  @spec possible_moves(Chex.game(), Chex.square()) :: [Chex.square()]
+  @spec possible_moves(Chex.game(), Chex.square()) :: [Chex.square()] | []
   def possible_moves(game, square) do
     {name, color, _id} = game.board[square]
 
@@ -30,13 +20,13 @@ defmodule Chex.Piece do
     end)
   end
 
-  @spec attacking_squares(t(), Chex.square(), Chex.game()) :: [Chex.square()]
+  @spec attacking_squares(Chex.piece(), Chex.square(), Chex.game()) :: [Chex.square()]
   def attacking_squares({name, color}, square, game) do
     module = to_module(name)
     module.attacking_squares(color, square, game)
   end
 
-  @spec from_string(String.t()) :: t()
+  @spec from_string(String.t()) :: Chex.piece()
   def from_string(str) do
     {piece_from_string(str), color_from_string(str)}
   end
@@ -44,7 +34,7 @@ defmodule Chex.Piece do
   @doc """
   Removes the trailing starting square from a three element tuple.
 
-  Returns a Piece.t(). This is useful as the piece data stored in the
+  Returns a piece(). This is useful as the piece data stored in the
   game.board contains the piece's starting square as a means of identification.
 
   ## Examples
@@ -53,7 +43,7 @@ defmodule Chex.Piece do
   {:pawn, :white}
 
   """
-  @spec trim({name(), Color.t(), Chex.square()}) :: t()
+  @spec trim({Chex.name(), Chex.color(), Chex.square()}) :: Chex.piece()
   def trim({name, color, _start}), do: {name, color}
 
   @spec piece_from_string(String.t()) :: atom
@@ -78,7 +68,7 @@ defmodule Chex.Piece do
     if str == str_up, do: :white, else: :black
   end
 
-  def to_string({name, color, _id}), do: Piece.to_string({name, color})
+  def to_string({name, color, _id}), do: __MODULE__.to_string({name, color})
 
   def to_string({name, color}) do
     %{
@@ -92,7 +82,7 @@ defmodule Chex.Piece do
     |> case_for_color(color)
   end
 
-  @spec to_module(name :: name()) :: module()
+  @spec to_module(name :: Chex.name()) :: module()
   def to_module(name) do
     name =
       name
