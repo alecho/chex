@@ -1,9 +1,7 @@
 defmodule Chex.Board do
   @moduledoc false
 
-  alias Chex.{Color, Piece}
-
-  @type value :: {Piece.name(), Color.t(), Chex.square()}
+  @type value :: {Chex.name(), Chex.color(), Chex.square()}
 
   @files [:a, :b, :c, :d, :e, :f, :g, :h]
   # @ranks 1..8
@@ -43,7 +41,7 @@ defmodule Chex.Board do
     {:h, 8} => {:rook, :black, {:h, 8}}
   }
 
-  @spec get_piece_name(Chex.game(), Chex.square()) :: Piece.name() | nil
+  @spec get_piece_name(Chex.game(), Chex.square()) :: Chex.name() | nil
   def get_piece_name(%{board: board}, square) do
     case board[square] do
       {name, _color, _sq} -> name
@@ -51,7 +49,7 @@ defmodule Chex.Board do
     end
   end
 
-  @spec get_piece_color(Chex.game(), Chex.square()) :: Color.t() | nil
+  @spec get_piece_color(Chex.game(), Chex.square()) :: Chex.color() | nil
   def get_piece_color(%{board: board}, square) do
     case board[square] do
       {_name, color, _sq} -> color
@@ -124,7 +122,7 @@ defmodule Chex.Board do
   @doc """
   Get the square of the first matching piece.
   """
-  @spec find_piece(Chex.game(), Piece.t()) :: Chex.square() | nil
+  @spec find_piece(Chex.game(), Chex.piece()) :: Chex.square() | nil
   def find_piece(%{board: board}, piece) do
     Enum.reduce_while(board, nil, &finder(piece, &1, &2))
   end
@@ -136,7 +134,7 @@ defmodule Chex.Board do
   @doc """
   Find locations of the specified piece on the board.
   """
-  @spec find_pieces(Chex.game(), Piece.t()) :: [Chex.square()] | []
+  @spec find_pieces(Chex.game(), Chex.piece()) :: [Chex.square()] | []
   def find_pieces(%{board: board}, piece) do
     Enum.reduce(board, [], fn {square, {n, c, _}}, acc ->
       if {n, c} == piece, do: [square | acc], else: acc

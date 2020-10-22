@@ -27,8 +27,8 @@ defmodule Chex.Game do
   {:ok, %Chex.Game{}}
 
   """
-  @spec new() :: {:ok, Chex.game()}
-  def new() do
+  @spec new :: {:ok, Chex.game()}
+  def new do
     {:ok,
      %Game{
        board: Board.starting_position()
@@ -56,7 +56,7 @@ defmodule Chex.Game do
           {:ok, Chex.game()} | {:error, atom()}
   def move(game, move), do: move(game, move, :queen)
 
-  @spec move(Chex.game(), Chex.move(), Piece.name()) ::
+  @spec move(Chex.game(), Chex.move(), Chex.name()) ::
           {:ok, Chex.game()} | {:error, atom()}
   def move(game, move, promote_to) when byte_size(move) == 4 do
     {from, to} = String.split_at(move, 2)
@@ -99,7 +99,7 @@ defmodule Chex.Game do
     %{game | moves: [move | moves]}
   end
 
-  @spec maybe_increment_fullmove_clock(Chex.game(), Piece.t()) :: Chex.game()
+  @spec maybe_increment_fullmove_clock(Chex.game(), Chex.piece()) :: Chex.game()
   defp maybe_increment_fullmove_clock(game, {_name, :black}) do
     %{game | fullmove_clock: game.fullmove_clock + 1}
   end
@@ -111,7 +111,7 @@ defmodule Chex.Game do
     %{game | check: check}
   end
 
-  @spec update_castling(Chex.game(), Piece.t()) :: Chex.game()
+  @spec update_castling(Chex.game(), Chex.piece()) :: Chex.game()
   defp update_castling(game, {:king, :black}) do
     delete_castling_rights(game, [:k, :q])
   end
@@ -150,7 +150,7 @@ defmodule Chex.Game do
     game
   end
 
-  @spec update_en_passant(Chex.game(), Piece.t()) :: Chex.game()
+  @spec update_en_passant(Chex.game(), Chex.piece()) :: Chex.game()
   defp update_en_passant(
          %Game{moves: [{{file, 2}, {file, 4}} | _prev_moves]} = game,
          {:pawn, :white}
@@ -169,7 +169,7 @@ defmodule Chex.Game do
 
   defp update_en_passant(game, _move), do: %{game | en_passant: nil}
 
-  @spec update_halfmove_clock(Chex.game(), Piece.t(), Piece.t() | nil) :: Chex.game()
+  @spec update_halfmove_clock(Chex.game(), Chex.piece(), Chex.piece() | nil) :: Chex.game()
   defp update_halfmove_clock(game, {_, _}, {_, _}), do: %{game | halfmove_clock: 0}
 
   defp update_halfmove_clock(game, {:pawn, _color}, _), do: %{game | halfmove_clock: 0}
@@ -232,14 +232,14 @@ defmodule Chex.Game do
   defp active_color?(%Game{active_color: color}, color), do: true
   defp active_color?(_game, _color), do: {:error, :out_of_turn}
 
-  @spec capture_piece(Chex.game(), Piece.t() | nil) :: Chex.game()
+  @spec capture_piece(Chex.game(), Chex.piece() | nil) :: Chex.game()
   defp capture_piece(game, nil), do: game
 
   defp capture_piece(%Game{captures: captures} = game, piece) do
     %{game | captures: [piece | captures]}
   end
 
-  @spec maybe_promote_pawn(Chex.game(), Piece.name()) :: Chex.game()
+  @spec maybe_promote_pawn(Chex.game(), Chex.name()) :: Chex.game()
   defp maybe_promote_pawn(%{moves: [{_from, {_, d_rank} = sq} | _mvs]} = game, new_piece)
        when d_rank in [1, 8] do
     {_old, board} =
