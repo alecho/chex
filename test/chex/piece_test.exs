@@ -32,12 +32,12 @@ defmodule Chex.PieceTest do
   describe "Piece.possible_moves/2" do
     test "starting position white pawn moves" do
       {:ok, game} = Game.new()
-      assert Piece.possible_moves(game, {:a, 2}) == [a: 3, a: 4]
+      assert Piece.possible_moves(game, {:a, 2}) == [a: 4, a: 3]
     end
 
     test "starting position black pawn moves" do
       {:ok, game} = Game.new()
-      assert Piece.possible_moves(game, {:a, 7}) == [a: 6, a: 5]
+      assert Piece.possible_moves(game, {:a, 7}) == [a: 5, a: 6]
     end
 
     test "starting position white rook moves" do

@@ -20,10 +20,15 @@ defmodule Chex.Piece do
     end)
   end
 
-  @spec attacking_squares(Chex.piece(), Chex.square(), Chex.game()) :: [Chex.square()]
-  def attacking_squares({name, color}, square, game) do
-    module = to_module(name)
-    module.attacking_squares(color, square, game)
+  @spec attacking_squares(Chex.game(), Chex.square()) :: [Chex.square()]
+  def attacking_squares(game, square) do
+    case game.board[square] do
+      {name, color, _id} ->
+        to_module(name).attacking_squares(color, square, game)
+
+      _ ->
+        []
+    end
   end
 
   @spec from_string(String.t()) :: Chex.piece()

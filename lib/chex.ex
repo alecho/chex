@@ -250,7 +250,7 @@ defmodule Chex do
 
       iex> {:ok, game} = Chex.new_game()
       iex> Chex.possible_moves(game, {:e, 2})
-      [e: 3, e: 4]
+      [e: 4, e: 3]
 
       iex> {:ok, game} = Chex.new_game()
       iex> Chex.possible_moves(game, {:b, 8})
