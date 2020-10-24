@@ -8,13 +8,13 @@ defmodule Chex.Piece.Pawn do
   import Chex.Piece.Movement, only: [walk: 6]
 
   @impl true
-  def possible_moves(color, square, game) do
+  def possible_moves(game, square, color) do
     moves =
       moves(game, color, square)
       |> Enum.reject(&occupied?(game, &1))
 
     attacks =
-      attacking_squares(color, square, game)
+      attacking_squares(game, square, color)
       |> Enum.filter(&occupied?(game, &1))
       |> Enum.reject(&occupied_by_color?(game, color, &1))
 
@@ -22,7 +22,7 @@ defmodule Chex.Piece.Pawn do
   end
 
   @impl true
-  def attacking_squares(color, square, _game) do
+  def attacking_squares(_game, square, color) do
     attacks(color, square)
     |> Enum.filter(&valid?(&1))
   end

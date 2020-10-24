@@ -6,7 +6,7 @@ defmodule Chex.Piece.Bishop do
   import Chex.Piece.Movement
 
   @impl true
-  def possible_moves(color, square, game) do
+  def possible_moves(game, square, color) do
     walk(game, square, color, :ne) ++
       walk(game, square, color, :se) ++
       walk(game, square, color, :sw) ++
@@ -14,5 +14,5 @@ defmodule Chex.Piece.Bishop do
   end
 
   @impl true
-  def attacking_squares(color, square, game), do: possible_moves(color, square, game)
+  def attacking_squares(game, square, color), do: possible_moves(game, square, color)
 end

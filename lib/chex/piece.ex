@@ -3,16 +3,14 @@ defmodule Chex.Piece do
 
   alias Chex.{Board, Game}
 
-  @callback possible_moves(Chex.color(), Chex.square(), Chex.game()) :: [Chex.square()]
-  @callback attacking_squares(Chex.color(), Chex.square(), en_passant :: Chex.square()) :: [
-              Chex.square()
-            ]
+  @callback possible_moves(Chex.game(), Chex.square(), Chex.color()) :: [Chex.square()]
+  @callback attacking_squares(Chex.game(), Chex.square(), Chex.color()) :: [Chex.square()]
 
   @spec possible_moves(Chex.game(), Chex.square()) :: [Chex.square()] | []
   def possible_moves(game, square) do
     {name, color, _id} = game.board[square]
 
-    to_module(name).possible_moves(color, square, game)
+    to_module(name).possible_moves(game, square, color)
     |> Enum.reject(&Board.occupied_by_color?(game, color, &1))
     |> Enum.reject(fn sq ->
       {:ok, {_piece, _capture, psudo_game}} = Board.move(game, square, sq)
@@ -24,7 +22,7 @@ defmodule Chex.Piece do
   def attacking_squares(game, square) do
     case game.board[square] do
       {name, color, _id} ->
-        to_module(name).attacking_squares(color, square, game)
+        to_module(name).attacking_squares(game, square, color)
 
       _ ->
         []
