@@ -212,7 +212,7 @@ defmodule Chex.GameTest do
     end
 
     test "promotes pawn to queen when piece is not specified" do
-      {:ok, game} = Game.new("k7/4P3/8/8/8/8/3p4/K7 w - - 0 1")
+      {:ok, game} = Game.new("8/3KP3/8/8/8/8/2kp4/8 w - - 0 1")
       {:ok, game} = Game.move(game, "e7e8")
       assert {:queen, :white, {:e, 7}} = game.board[{:e, 8}]
       {:ok, game} = Game.move(game, "d2d1")
@@ -220,7 +220,7 @@ defmodule Chex.GameTest do
     end
 
     test "promotes pawn to the specified piece" do
-      {:ok, game} = Game.new("k7/4P3/8/8/8/8/3p4/K7 w - - 0 1")
+      {:ok, game} = Game.new("8/3KP3/8/8/8/8/2kp4/8 w - - 0 1")
       {:ok, game} = Game.move(game, "e7e8", :rook)
       assert {:rook, :white, {:e, 7}} = game.board[{:e, 8}]
       {:ok, game} = Game.move(game, "d2d1", :bishop)

@@ -64,7 +64,7 @@ defmodule Chex.Game do
   end
 
   def move(game, {from, to} = move, promote_to) do
-    with true <- move_valid?(game, move),
+    with {:ok, _} <- validate_move(game, move),
          {:ok, {piece, capture, game}} <- Board.move(game, from, to),
          {:ok, game} <- castle(game, move) do
       piece = Piece.trim(piece)
@@ -178,13 +178,23 @@ defmodule Chex.Game do
     %{game | halfmove_clock: game.halfmove_clock + 1}
   end
 
-  @spec move_valid?(Chex.game(), {Chex.square(), Chex.square()}) ::
-          boolean() | {:error, reason :: atom}
-  defp move_valid?(%Game{} = game, {from, _to}) do
-    with true <- occupied?(game, from),
+  @spec validate_move(Chex.game(), Chex.move()) ::
+          {:ok, Chex.game()} | {:error, reason :: atom}
+  defp validate_move(%Game{} = game, {from, to}) do
+    with {:ok, :noop} <-
+           Board.occupied?(game, from)
+           |> maybe_error(:no_piece_at_square),
          color <- Board.get_piece_color(game, from),
-         true <- active_color?(game, color),
-         do: true
+         {:ok, :noop} <-
+           (game.active_color == color)
+           |> maybe_error(:out_of_turn),
+         {:ok, :noop} <-
+           !Board.occupied_by_color?(game, color, to)
+           |> maybe_error(:occupied_by_own_color),
+         {:ok, :noop} <-
+           (to in Piece.possible_moves(game, from))
+           |> maybe_error(:invalid_move),
+         do: {:ok, game}
   end
 
   # Queenside castle
@@ -222,15 +232,8 @@ defmodule Chex.Game do
     %{game | active_color: Color.flip(color)}
   end
 
-  defp occupied?(game, square) do
-    case Board.occupied?(game, square) do
-      true -> true
-      false -> {:error, :no_piece_at_square}
-    end
-  end
-
-  defp active_color?(%Game{active_color: color}, color), do: true
-  defp active_color?(_game, _color), do: {:error, :out_of_turn}
+  defp maybe_error(true, _reason), do: {:ok, :noop}
+  defp maybe_error(false, reason), do: {:error, reason}
 
   @spec capture_piece(Chex.game(), Chex.piece() | nil) :: Chex.game()
   defp capture_piece(game, nil), do: game

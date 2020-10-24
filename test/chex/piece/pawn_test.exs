@@ -45,9 +45,14 @@ defmodule Chex.Piece.PawnTest do
   end
 
   test "pawn can not move to an occupied square" do
-    {:ok, game} = Chex.Game.new("r1bqkb1r/pppppppp/2n5/8/4n3/N6N/PPPPPPPP/R1BQKB1R b KQkq - 0 1")
-    moves = Chex.Piece.possible_moves(game, {:e, 2})
+    {:ok, game} =
+      Chex.Game.new("rnbqk2r/pppp1ppp/5n2/1B2p3/1b2P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1")
 
-    refute {:e, 4} in moves
+    assert Chex.Piece.possible_moves(game, {:e, 4}) == []
+    assert Chex.Piece.possible_moves(game, {:e, 5}) == []
+    assert Chex.Piece.possible_moves(game, {:f, 2}) == []
+    assert Chex.Piece.possible_moves(game, {:f, 7}) == []
+    refute {:b, 4} in Chex.Piece.possible_moves(game, {:b, 2})
+    refute {:b, 5} in Chex.Piece.possible_moves(game, {:b, 7})
   end
 end
