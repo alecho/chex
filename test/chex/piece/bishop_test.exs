@@ -2,24 +2,24 @@ defmodule Chex.Piece.BishopTest do
   use ExUnit.Case, async: true
   doctest Chex.Piece.Bishop
 
-  alias Chex.Piece.Bishop
+  alias Chex.Piece
 
   @empty_board "8/8/8/8/4B3/8/8/8 w - - 0 1"
 
-  describe "Bishop.possible_moves/3" do
+  describe "Piece.possible_moves/2 with bishop" do
     test "white starting position moves" do
       {:ok, game} = Chex.Game.new()
-      assert Bishop.possible_moves(:white, {:c, 1}, game) == []
+      assert Piece.possible_moves(game, {:c, 1}) == []
     end
 
     test "black starting position moves" do
       {:ok, game} = Chex.Game.new()
-      assert Bishop.possible_moves(:black, {:c, 8}, game) == []
+      assert Piece.possible_moves(game, {:c, 8}) == []
     end
 
     test "only piece in middle of board" do
       {:ok, game} = Chex.Game.new(@empty_board)
-      moves = Bishop.possible_moves(:white, {:e, 4}, game)
+      moves = Piece.possible_moves(game, {:e, 4})
 
       expected_moves = [
         a: 8,
@@ -42,7 +42,7 @@ defmodule Chex.Piece.BishopTest do
 
     test "surrounded by enemy pawns" do
       {:ok, game} = Chex.Game.new("8/8/8/3ppp2/3pBp2/3ppp2/8/8 w - - 0 1")
-      moves = Bishop.possible_moves(:white, {:e, 4}, game)
+      moves = Piece.possible_moves(game, {:e, 4})
 
       assert Enum.sort(moves) == [d: 3, d: 5, f: 3, f: 5]
     end

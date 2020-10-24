@@ -6,7 +6,7 @@ defmodule Chex.Piece.Queen do
   import Chex.Piece.Movement
 
   @impl true
-  def possible_moves(color, square, game) do
+  def possible_moves(game, square, color) do
     walk(game, square, color, :n) ++
       walk(game, square, color, :s) ++
       walk(game, square, color, :e) ++
@@ -18,5 +18,5 @@ defmodule Chex.Piece.Queen do
   end
 
   @impl true
-  def attacking_squares(color, square, game), do: possible_moves(color, square, game)
+  def attacking_squares(game, square, color), do: possible_moves(game, square, color)
 end

@@ -4,7 +4,7 @@ defmodule Chex.Piece.King do
   alias Chex.{Board, Color, Piece, Square}
   @behaviour Piece
 
-  def possible_moves(color, square, game) do
+  def possible_moves(game, square, color) do
     moves =
       possible_squares(square)
       |> maybe_prepend_castling(game, color)
@@ -12,7 +12,7 @@ defmodule Chex.Piece.King do
     moves -- Board.all_attacking_squares(game, Color.flip(color))
   end
 
-  def attacking_squares(_color, square, _game), do: possible_squares(square)
+  def attacking_squares(_game, square, _color), do: possible_squares(square)
 
   defp maybe_prepend_castling(moves, %{check: c}, c), do: moves
   defp maybe_prepend_castling(moves, %{castling: []}, _color), do: moves

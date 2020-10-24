@@ -17,7 +17,7 @@ defmodule Chex.Piece.Knight do
   ]
 
   @impl true
-  def possible_moves(color, {file, rank}, game) do
+  def possible_moves(game, {file, rank}, color) do
     Enum.map(@directions, fn {f_dir, r_dir} ->
       {Board.file_offset(file, f_dir), rank + r_dir}
     end)
@@ -26,5 +26,5 @@ defmodule Chex.Piece.Knight do
   end
 
   @impl true
-  def attacking_squares(color, square, game), do: possible_moves(color, square, game)
+  def attacking_squares(game, square, color), do: possible_moves(game, square, color)
 end
