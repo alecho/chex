@@ -19,4 +19,33 @@ defmodule Chex.Square do
   def valid?({f, r}) do
     Enum.member?(Chex.Board.files(), f) && Enum.member?(1..8, r)
   end
+
+  @doc """
+
+  ## Examples
+
+      iex> Chex.Square.from_reverse_rtl_index(0)
+      {:a, 8}
+
+      iex> Chex.Square.from_reverse_rtl_index(1)
+      {:b, 8}
+
+      iex> Chex.Square.from_reverse_rtl_index(2)
+      {:c, 8}
+
+      iex> Chex.Square.from_reverse_rtl_index(7)
+      {:h, 8}
+
+      iex> Chex.Square.from_reverse_rtl_index(56)
+      {:a, 1}
+
+      iex> Chex.Square.from_reverse_rtl_index(63)
+      {:h, 1}
+
+  """
+  def from_reverse_rtl_index(i) do
+    fi = Integer.floor_div(i, 8)
+    file = Chex.Board.files() |> Enum.at(Integer.mod(i, 8))
+    {file, abs(fi - 8)}
+  end
 end

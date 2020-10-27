@@ -9,7 +9,47 @@ defmodule Chex.Parser.FEN do
 
   # import Map, only: [put: 3]
   import Enum, only: [at: 2]
-  import String, only: [split: 1, split: 2, split: 3]
+  import String, only: [split: 1, split: 3]
+  import NimbleParsec
+
+  piece = integer(1)
+  square = ascii_char('pPrRnNbBqQkK')
+
+  row =
+    choice([piece, square])
+    |> times(min: 1, max: 8)
+
+  defparsec(
+    :board,
+    row
+    |> ignore(string("/"))
+    |> concat(row)
+    |> ignore(string("/"))
+    |> concat(row)
+    |> ignore(string("/"))
+    |> concat(row)
+    |> ignore(string("/"))
+    |> concat(row)
+    |> ignore(string("/"))
+    |> concat(row)
+    |> ignore(string("/"))
+    |> concat(row)
+    |> ignore(string("/"))
+    |> concat(row)
+    |> map({:expand_digits, []})
+  )
+
+  defp expand_digits(int) when int < 9 do
+    List.duplicate(nil, int)
+  end
+
+  defp expand_digits(int) do
+    [int]
+    |> to_string()
+    |> Chex.piece_from_string()
+  end
+
+  # defparsec(:board, row(), debug: true)
 
   def parse(fen) when is_binary(fen) do
     [bd, ac, ct, ep, hm, fm] = split(fen)
@@ -45,18 +85,20 @@ defmodule Chex.Parser.FEN do
 
   @spec decode_board(String.t()) :: %{}
   def decode_board(str) do
-    str
-    |> split("/")
-    |> Enum.with_index()
-    |> Enum.map(fn {rank_string, i} ->
-      rank_string
-      |> String.codepoints()
-      |> decode_rank([], 0, 8 - i)
-    end)
+    {:ok, result, _, _, _, _} = board(str)
+
+    result
     |> List.flatten()
-    |> Enum.reduce(%{}, fn {square, piece}, board ->
-      Map.put(board, square, Tuple.append(piece, square))
+    |> Enum.with_index()
+    |> Map.new(fn
+      {nil, _} ->
+        {nil, false}
+
+      {{name, color}, i} ->
+        sq = Chex.Square.from_reverse_rtl_index(i)
+        {sq, {name, color, sq}}
     end)
+    |> Map.delete(nil)
   end
 
   @spec serialize_board(%{}) :: String.t()
