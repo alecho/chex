@@ -16,6 +16,15 @@ defmodule Chex.Square do
     {String.to_existing_atom(fs), String.to_integer(rs)}
   end
 
+  def from_charlist([file, rank] = list) when is_list(list) do
+    {file_to_atom(file), rank - 48}
+  end
+
+  defp file_to_atom(file) when is_integer(file) do
+    [file]
+    |> List.to_existing_atom()
+  end
+
   def valid?({f, r}) do
     Enum.member?(Chex.Board.files(), f) && Enum.member?(1..8, r)
   end
