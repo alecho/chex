@@ -1,5 +1,5 @@
 defmodule Chex.Piece.PawnTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest Chex.Piece.Pawn
 
   alias Chex.Piece
@@ -55,6 +55,19 @@ defmodule Chex.Piece.PawnTest do
       assert Piece.possible_moves(game, {:f, 7}) == []
       refute {:b, 4} in Piece.possible_moves(game, {:b, 2})
       refute {:b, 5} in Piece.possible_moves(game, {:b, 7})
+    end
+
+    test "white en passant" do
+      {:ok, game} = Chex.Game.new("rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 2")
+
+      assert {:f, 6} in Piece.possible_moves(game, {:e, 5})
+    end
+
+    test "black en passant" do
+      {:ok, game} =
+        Chex.Game.new("rnbqkbnr/pp1ppppp/8/8/1Pp1P3/3P4/P1P2PPP/RNBQKBNR b KQkq b3 0 1")
+
+      assert {:b, 3} in Piece.possible_moves(game, {:c, 4})
     end
   end
 end

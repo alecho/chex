@@ -24,10 +24,8 @@ defmodule Chex.Move.SANTest do
       assert {{:e, 4}, {:d, 5}} = SAN.parse("exd5", game)
     end
 
-    @tag :skip
     test "en passant capture" do
       {:ok, game} = Chex.Game.new("rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 2")
-
       assert {{:e, 5}, {:f, 6}} = SAN.parse("exf6e.p.", game)
     end
 
