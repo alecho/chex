@@ -1,5 +1,5 @@
-# Generated from lib/chex/move/san_parser.ex.exs, do not edit.
-# Generated at 2020-11-04 19:11:17Z.
+# Generated from lib/chex/move/san/san_parser.ex.exs, do not edit.
+# Generated at 2020-11-10 05:16:53Z.
 
 defmodule Chex.Move.SanParser do
   @moduledoc false
@@ -52,23 +52,27 @@ defmodule Chex.Move.SanParser do
             [
               move__1: 6,
               move__0: 6,
-              move__45: 6,
-              move__40: 6,
               move__49: 6,
-              move__47: 6,
-              move__46: 6,
-              move__39: 6,
               move__44: 6,
-              move__42: 6,
-              move__41: 6,
-              move__29: 6,
-              move__37: 6,
+              move__53: 6,
+              move__51: 6,
+              move__50: 6,
+              move__43: 6,
+              move__48: 6,
+              move__46: 6,
+              move__45: 6,
               move__33: 6,
+              move__41: 6,
+              move__37: 6,
+              move__39: 6,
+              move__36: 6,
               move__35: 6,
               move__32: 6,
-              move__31: 6,
-              move__28: 6,
               move__27: 6,
+              move__26: 6,
+              move__31: 6,
+              move__29: 6,
+              move__28: 6,
               move__16: 6,
               move__24: 6,
               move__20: 6,
@@ -88,7 +92,7 @@ defmodule Chex.Move.SanParser do
             ]}
 
   defp move__0(rest, acc, stack, context, line, offset) do
-    move__29(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
+    move__33(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
   end
 
   defp move__2(rest, acc, stack, context, line, offset) do
@@ -105,7 +109,7 @@ defmodule Chex.Move.SanParser do
 
   defp move__5(rest, _acc, _stack, context, line, offset) do
     {:error,
-     "expected file (a-h) or rank (1-8), followed by capture indicator (x) or square or nothing, followed by capture indicator (x) or nothing, followed by square, followed by promotion indicator (=), followed by piece identifier or En passant indicator (e.p.) or nothing, followed by check indicator (+) or checkmate indicator or nothing or piece identifier, followed by square or file (a-h) or rank (1-8), followed by capture indicator (x) or square or nothing, followed by capture indicator (x) or nothing, followed by square, followed by check indicator (+) or nothing or string \"O-O\", followed by string \"-O\" or string \"O-O-O\"",
+     "expected file (a-h) or rank (1-8), followed by capture indicator (x) or square or nothing, followed by capture indicator (x) or nothing, followed by square, followed by promotion indicator (=), followed by piece identifier or En passant indicator (e.p.) or nothing, followed by check indicator (+) or checkmate indicator or nothing or piece identifier, followed by square or file (a-h) or rank (1-8), followed by capture indicator (x) or square or nothing, followed by capture indicator (x) or nothing, followed by square, followed by check indicator (+) or checkmate indicator or nothing or string \"O-O\", followed by string \"-O\" or string \"O-O-O\"",
      rest, context, line, offset}
   end
 
@@ -278,87 +282,108 @@ defmodule Chex.Move.SanParser do
     move__14(rest, acc, stack, context, line, offset)
   end
 
-  defp move__26(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
-       when x0 === 43 do
-    move__27(rest, [check: true] ++ acc, stack, context, comb__line, comb__offset + 1)
+  defp move__26(rest, acc, stack, context, line, offset) do
+    move__30(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
   end
 
-  defp move__26(<<rest::binary>>, acc, stack, context, comb__line, comb__offset) do
-    move__27(rest, [] ++ acc, stack, context, comb__line, comb__offset)
+  defp move__28(rest, acc, [_, previous_acc | stack], context, line, offset) do
+    move__27(rest, acc ++ previous_acc, stack, context, line, offset)
+  end
+
+  defp move__29(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
+    move__28(rest, [], stack, context, line, offset)
+  end
+
+  defp move__30(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
+       when x0 === 43 do
+    move__31(rest, [check: true] ++ acc, stack, context, comb__line, comb__offset + 1)
+  end
+
+  defp move__30(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
+       when x0 === 35 do
+    move__31(rest, [checkmate: true] ++ acc, stack, context, comb__line, comb__offset + 1)
+  end
+
+  defp move__30(rest, acc, stack, context, line, offset) do
+    move__29(rest, acc, stack, context, line, offset)
+  end
+
+  defp move__31(rest, acc, [_, previous_acc | stack], context, line, offset) do
+    move__27(rest, acc ++ previous_acc, stack, context, line, offset)
   end
 
   defp move__27(rest, acc, [_, previous_acc | stack], context, line, offset) do
     move__1(rest, acc ++ previous_acc, stack, context, line, offset)
   end
 
-  defp move__28(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
+  defp move__32(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
     move__15(rest, [], stack, context, line, offset)
   end
 
-  defp move__29(rest, acc, stack, context, line, offset) do
-    move__33(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
-  end
-
-  defp move__31(rest, acc, [_, previous_acc | stack], context, line, offset) do
-    move__30(rest, acc ++ previous_acc, stack, context, line, offset)
-  end
-
-  defp move__32(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
-    move__31(rest, [], stack, context, line, offset)
-  end
-
   defp move__33(rest, acc, stack, context, line, offset) do
-    move__34(rest, [], [acc | stack], context, line, offset)
+    move__37(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
   end
 
-  defp move__34(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
+  defp move__35(rest, acc, [_, previous_acc | stack], context, line, offset) do
+    move__34(rest, acc ++ previous_acc, stack, context, line, offset)
+  end
+
+  defp move__36(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
+    move__35(rest, [], stack, context, line, offset)
+  end
+
+  defp move__37(rest, acc, stack, context, line, offset) do
+    move__38(rest, [], [acc | stack], context, line, offset)
+  end
+
+  defp move__38(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
        when x0 >= 97 and x0 <= 104 do
-    move__35(rest, [x0] ++ acc, stack, context, comb__line, comb__offset + 1)
+    move__39(rest, [x0] ++ acc, stack, context, comb__line, comb__offset + 1)
+  end
+
+  defp move__38(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
+       when x0 >= 49 and x0 <= 56 do
+    move__39(rest, [x0] ++ acc, stack, context, comb__line, comb__offset + 1)
+  end
+
+  defp move__38(rest, _acc, stack, context, line, offset) do
+    [acc | stack] = stack
+    move__36(rest, acc, stack, context, line, offset)
+  end
+
+  defp move__39(rest, user_acc, [acc | stack], context, line, offset) do
+    _ = user_acc
+    move__40(rest, [origin: :lists.reverse(user_acc)] ++ acc, stack, context, line, offset)
+  end
+
+  defp move__40(<<x0::integer, _::binary>> = rest, acc, stack, context, line, offset)
+       when x0 === 120 do
+    move__41(rest, acc, stack, context, line, offset)
+  end
+
+  defp move__40(<<x0::integer, x1::integer, _::binary>> = rest, acc, stack, context, line, offset)
+       when x0 >= 97 and x0 <= 104 and (x1 >= 49 and x1 <= 56) do
+    move__41(rest, acc, stack, context, line, offset)
+  end
+
+  defp move__40(rest, acc, stack, context, line, offset) do
+    move__36(rest, acc, stack, context, line, offset)
+  end
+
+  defp move__41(rest, acc, [_, previous_acc | stack], context, line, offset) do
+    move__34(rest, acc ++ previous_acc, stack, context, line, offset)
   end
 
   defp move__34(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
-       when x0 >= 49 and x0 <= 56 do
-    move__35(rest, [x0] ++ acc, stack, context, comb__line, comb__offset + 1)
-  end
-
-  defp move__34(rest, _acc, stack, context, line, offset) do
-    [acc | stack] = stack
-    move__32(rest, acc, stack, context, line, offset)
-  end
-
-  defp move__35(rest, user_acc, [acc | stack], context, line, offset) do
-    _ = user_acc
-    move__36(rest, [origin: :lists.reverse(user_acc)] ++ acc, stack, context, line, offset)
-  end
-
-  defp move__36(<<x0::integer, _::binary>> = rest, acc, stack, context, line, offset)
        when x0 === 120 do
-    move__37(rest, acc, stack, context, line, offset)
+    move__42(rest, [capture: true] ++ acc, stack, context, comb__line, comb__offset + 1)
   end
 
-  defp move__36(<<x0::integer, x1::integer, _::binary>> = rest, acc, stack, context, line, offset)
-       when x0 >= 97 and x0 <= 104 and (x1 >= 49 and x1 <= 56) do
-    move__37(rest, acc, stack, context, line, offset)
+  defp move__34(<<rest::binary>>, acc, stack, context, comb__line, comb__offset) do
+    move__42(rest, [] ++ acc, stack, context, comb__line, comb__offset)
   end
 
-  defp move__36(rest, acc, stack, context, line, offset) do
-    move__32(rest, acc, stack, context, line, offset)
-  end
-
-  defp move__37(rest, acc, [_, previous_acc | stack], context, line, offset) do
-    move__30(rest, acc ++ previous_acc, stack, context, line, offset)
-  end
-
-  defp move__30(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
-       when x0 === 120 do
-    move__38(rest, [capture: true] ++ acc, stack, context, comb__line, comb__offset + 1)
-  end
-
-  defp move__30(<<rest::binary>>, acc, stack, context, comb__line, comb__offset) do
-    move__38(rest, [] ++ acc, stack, context, comb__line, comb__offset)
-  end
-
-  defp move__38(
+  defp move__42(
          <<x0::integer, x1::integer, rest::binary>>,
          acc,
          stack,
@@ -367,73 +392,73 @@ defmodule Chex.Move.SanParser do
          comb__offset
        )
        when x0 >= 97 and x0 <= 104 and (x1 >= 49 and x1 <= 56) do
-    move__39(rest, [destination: [x0, x1]] ++ acc, stack, context, comb__line, comb__offset + 2)
+    move__43(rest, [destination: [x0, x1]] ++ acc, stack, context, comb__line, comb__offset + 2)
   end
 
-  defp move__38(rest, acc, stack, context, line, offset) do
-    move__28(rest, acc, stack, context, line, offset)
-  end
-
-  defp move__39(rest, acc, stack, context, line, offset) do
-    move__43(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
-  end
-
-  defp move__41(rest, acc, [_, previous_acc | stack], context, line, offset) do
-    move__40(rest, acc ++ previous_acc, stack, context, line, offset)
-  end
-
-  defp move__42(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
-    move__41(rest, [], stack, context, line, offset)
-  end
-
-  defp move__43(<<"=", x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
-       when x0 === 82 or x0 === 78 or x0 === 66 or x0 === 81 or x0 === 75 do
-    move__44(rest, [promote: [x0]] ++ acc, stack, context, comb__line, comb__offset + 2)
-  end
-
-  defp move__43(<<"e.p.", rest::binary>>, acc, stack, context, comb__line, comb__offset) do
-    move__44(rest, [en_passant: true] ++ acc, stack, context, comb__line, comb__offset + 4)
+  defp move__42(rest, acc, stack, context, line, offset) do
+    move__32(rest, acc, stack, context, line, offset)
   end
 
   defp move__43(rest, acc, stack, context, line, offset) do
-    move__42(rest, acc, stack, context, line, offset)
-  end
-
-  defp move__44(rest, acc, [_, previous_acc | stack], context, line, offset) do
-    move__40(rest, acc ++ previous_acc, stack, context, line, offset)
-  end
-
-  defp move__40(rest, acc, stack, context, line, offset) do
-    move__48(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
-  end
-
-  defp move__46(rest, acc, [_, previous_acc | stack], context, line, offset) do
-    move__45(rest, acc ++ previous_acc, stack, context, line, offset)
-  end
-
-  defp move__47(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
-    move__46(rest, [], stack, context, line, offset)
-  end
-
-  defp move__48(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
-       when x0 === 43 do
-    move__49(rest, [check: true] ++ acc, stack, context, comb__line, comb__offset + 1)
-  end
-
-  defp move__48(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
-       when x0 === 35 do
-    move__49(rest, [checkmate: true] ++ acc, stack, context, comb__line, comb__offset + 1)
-  end
-
-  defp move__48(rest, acc, stack, context, line, offset) do
-    move__47(rest, acc, stack, context, line, offset)
-  end
-
-  defp move__49(rest, acc, [_, previous_acc | stack], context, line, offset) do
-    move__45(rest, acc ++ previous_acc, stack, context, line, offset)
+    move__47(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
   end
 
   defp move__45(rest, acc, [_, previous_acc | stack], context, line, offset) do
+    move__44(rest, acc ++ previous_acc, stack, context, line, offset)
+  end
+
+  defp move__46(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
+    move__45(rest, [], stack, context, line, offset)
+  end
+
+  defp move__47(<<"=", x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
+       when x0 === 82 or x0 === 78 or x0 === 66 or x0 === 81 or x0 === 75 do
+    move__48(rest, [promote: [x0]] ++ acc, stack, context, comb__line, comb__offset + 2)
+  end
+
+  defp move__47(<<"e.p.", rest::binary>>, acc, stack, context, comb__line, comb__offset) do
+    move__48(rest, [en_passant: true] ++ acc, stack, context, comb__line, comb__offset + 4)
+  end
+
+  defp move__47(rest, acc, stack, context, line, offset) do
+    move__46(rest, acc, stack, context, line, offset)
+  end
+
+  defp move__48(rest, acc, [_, previous_acc | stack], context, line, offset) do
+    move__44(rest, acc ++ previous_acc, stack, context, line, offset)
+  end
+
+  defp move__44(rest, acc, stack, context, line, offset) do
+    move__52(rest, [], [{rest, context, line, offset}, acc | stack], context, line, offset)
+  end
+
+  defp move__50(rest, acc, [_, previous_acc | stack], context, line, offset) do
+    move__49(rest, acc ++ previous_acc, stack, context, line, offset)
+  end
+
+  defp move__51(_, _, [{rest, context, line, offset} | _] = stack, _, _, _) do
+    move__50(rest, [], stack, context, line, offset)
+  end
+
+  defp move__52(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
+       when x0 === 43 do
+    move__53(rest, [check: true] ++ acc, stack, context, comb__line, comb__offset + 1)
+  end
+
+  defp move__52(<<x0::integer, rest::binary>>, acc, stack, context, comb__line, comb__offset)
+       when x0 === 35 do
+    move__53(rest, [checkmate: true] ++ acc, stack, context, comb__line, comb__offset + 1)
+  end
+
+  defp move__52(rest, acc, stack, context, line, offset) do
+    move__51(rest, acc, stack, context, line, offset)
+  end
+
+  defp move__53(rest, acc, [_, previous_acc | stack], context, line, offset) do
+    move__49(rest, acc ++ previous_acc, stack, context, line, offset)
+  end
+
+  defp move__49(rest, acc, [_, previous_acc | stack], context, line, offset) do
     move__1(rest, acc ++ previous_acc, stack, context, line, offset)
   end
 

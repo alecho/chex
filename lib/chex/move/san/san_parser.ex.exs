@@ -62,7 +62,7 @@ defmodule Chex.Move.SanParser do
     )
     |> optional(capture)
     |> concat(square |> tag(:destination))
-    |> optional(check)
+    |> optional(choice([check, checkmate]))
 
   castle = choice([kingside_castle, queenside_castle]) |> unwrap_and_tag(:castle)
 
