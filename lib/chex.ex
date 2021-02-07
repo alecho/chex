@@ -19,6 +19,8 @@ defmodule Chex do
     * `:captures` - A list of captured pieces. Most recent captures first.
     * `:check` - The color of the player in check.
     * `:result` - Set on game completion.
+    * `:pgn` - A map with PGN tag pairs and `:moves` as values. `nil` if if not
+    created from PGN data.
 
   """
   @type game :: %Game{
@@ -31,7 +33,8 @@ defmodule Chex do
           fullmove_clock: pos_integer(),
           captures: [piece()] | [],
           check: color() | nil,
-          result: result()
+          result: result(),
+          pgn: map() | nil
         }
 
   @typedoc """

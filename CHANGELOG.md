@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Castling support.
 - Checkmate support.
 - Stalemate support.
+- `:pgn` key for games that were imported from a PGN file. This is `nil` or a
+map with keys from the tag pair section. Known supported keys such as the STR
+are converted to atoms others remain strings.
 
 ### Changed
 

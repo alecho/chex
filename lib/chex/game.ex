@@ -12,7 +12,8 @@ defmodule Chex.Game do
             fullmove_clock: 1,
             captures: [],
             check: nil,
-            result: nil
+            result: nil,
+            pgn: nil
 
   @doc """
   Creates a new game, optionally  from a FEN string.
