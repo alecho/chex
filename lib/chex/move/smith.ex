@@ -1,9 +1,9 @@
-defmodule Chex.Move.SAN do
+defmodule Chex.Move.Smith do
   @moduledoc false
 
-  alias Chex.Move.{Parser, SanParser}
+  alias Chex.Move.{Parser, SmithParser}
 
-  import SanParser, only: [move: 1]
+  import SmithParser, only: [move: 1]
 
   @behaviour Parser
 

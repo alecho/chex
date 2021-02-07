@@ -1,7 +1,7 @@
 defmodule Chex.Game do
   @moduledoc false
 
-  alias Chex.{Board, Color, Game, Parser.FEN, Piece, Square}
+  alias Chex.{Board, Color, Game, Move, Parser.FEN, Piece}
 
   defstruct board: %{},
             active_color: :white,
@@ -55,15 +55,17 @@ defmodule Chex.Game do
   """
   @spec move(Chex.game(), Chex.move()) ::
           {:ok, Chex.game()} | {:error, atom()}
-  def move(game, move), do: move(game, move, :queen)
-
-  @spec move(Chex.game(), Chex.move(), Chex.name()) ::
-          {:ok, Chex.game()} | {:error, atom()}
-  def move(game, move, promote_to) when byte_size(move) == 4 do
-    {from, to} = String.split_at(move, 2)
-    move(game, {Square.from_string(from), Square.from_string(to)}, promote_to)
+  def move(game, move) when is_binary(move) do
+    move = Move.parse(move, game)
+    move(game, move)
   end
 
+  def move(game, {from, to, promote}), do: move(game, {from, to}, promote)
+
+  def move(game, move), do: move(game, move, :queen)
+
+  @spec move(Chex.game(), {Chex.square(), Chex.square()}, Chex.name()) ::
+          {:ok, Chex.game()} | {:error, atom()}
   def move(game, {from, to} = move, promote_to) do
     with {:ok, _} <- validate_move(game, move),
          {:ok, {piece, capture, game}} <- Board.move(game, from, to),
