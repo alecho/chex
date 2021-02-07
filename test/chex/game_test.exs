@@ -221,9 +221,9 @@ defmodule Chex.GameTest do
 
     test "promotes pawn to the specified piece" do
       {:ok, game} = Game.new("8/3KP3/8/8/8/8/2kp4/8 w - - 0 1")
-      {:ok, game} = Game.move(game, "e7e8", :rook)
+      {:ok, game} = Game.move(game, "e7e8r")
       assert {:rook, :white, {:e, 7}} = game.board[{:e, 8}]
-      {:ok, game} = Game.move(game, "d2d1", :bishop)
+      {:ok, game} = Game.move(game, "d2d1b")
       assert {:bishop, :black, {:d, 2}} = game.board[{:d, 1}]
     end
 

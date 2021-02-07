@@ -43,9 +43,12 @@ defmodule Chex do
   @type square :: {file :: atom, rank :: pos_integer}
 
   @typedoc """
-  A starting `t:square/0` and a destination `t:square/0` as a two element tuple.
+  A starting `t:square/0` and a destination `t:square/0` as a two element tuple
+  or a three element tuple with a piece t:name() to promote to.
   """
-  @type move :: {from :: square(), to :: square()} | String.t()
+  @type move ::
+          {from :: square(), to :: square()}
+          | {from :: square(), to :: square(), piece :: name()}
 
   @typedoc """
   One of `:white`, `:black`, `:draw`, or `nil`.
