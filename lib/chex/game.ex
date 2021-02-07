@@ -90,6 +90,39 @@ defmodule Chex.Game do
     end
   end
 
+  @doc """
+  Makes a series of `moves` within the chess game.
+
+  Returns a `{:ok, %Game{}` modified by the move or an error tuple.
+
+  ## Examples
+
+  iex> {:ok, game} = Chex.Game.new()
+  iex> Chex.Game.move(game, "e4e5")
+  {error: :no_piece_at_square}
+  iex> Chex.Game.move(game, "e2e4")
+  {:ok, %Chex.Game{}}
+
+  """
+  @spec moves(Chex.game(), [Chex.move()]) ::
+          {:ok, Chex.game()} | {:error, atom()}
+  def moves(game, moves) do
+    Enum.reduce_while(moves, game, fn san, game ->
+      case Chex.Move.parse(san, game) do
+        {:error, _} = error ->
+          {:halt, error}
+
+        move ->
+          {:ok, game} = move(game, move)
+          {:cont, game}
+      end
+    end)
+    |> case do
+      {:error, _} = error -> error
+      game -> {:ok, game}
+    end
+  end
+
   defdelegate in_check?(game, color), to: Game.Checking
   defdelegate checkmate?(game), to: Game.Checking
   defdelegate stalemate?(game), to: Game.Checking
