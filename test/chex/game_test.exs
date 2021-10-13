@@ -1,6 +1,5 @@
 defmodule Chex.GameTest do
   use ExUnit.Case, async: true
-  import AssertValue
 
   alias Chex.Game
 
@@ -8,7 +7,7 @@ defmodule Chex.GameTest do
     test "returns new game state" do
       {:ok, game} = Game.new()
 
-      assert_value(
+      assert(
         game == %Game{
           active_color: :white,
           board: %{
