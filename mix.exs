@@ -71,7 +71,8 @@ defmodule Chex.MixProject do
       {:dialyxir, "~> 1.1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
-      {:nimble_parsec, "~> 1.0"}
+      {:nimble_parsec, "~> 1.0"},
+      {:recode, "~> 0.4", only: [:dev, :test]}
     ]
   end
 end
