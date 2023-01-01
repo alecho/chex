@@ -14,3 +14,4 @@ script:
   - mix test
   - mix format --check-formatted
   - MIX_ENV=test mix credo --strict --format=oneline
+  - MIX_ENV=test mix recode --dry
