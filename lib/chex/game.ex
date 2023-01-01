@@ -183,8 +183,7 @@ defmodule Chex.Game do
 
   defp delete_castling_rights(game, rights) when is_list(rights) do
     {_old, game} =
-      game
-      |> Map.get_and_update(:castling, fn current_rights ->
+      Map.get_and_update(game, :castling, fn current_rights ->
         {current_rights, current_rights -- rights}
       end)
 
@@ -287,8 +286,7 @@ defmodule Chex.Game do
   defp maybe_promote_pawn(%{moves: [{_from, {_, d_rank} = sq} | _mvs]} = game, new_piece)
        when d_rank in [1, 8] do
     {_old, board} =
-      game.board
-      |> Map.get_and_update(sq, fn
+      Map.get_and_update(game.board, sq, fn
         {:pawn, color, start} = cur -> {cur, {new_piece, color, start}}
         cur -> {cur, cur}
       end)

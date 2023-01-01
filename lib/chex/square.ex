@@ -21,8 +21,7 @@ defmodule Chex.Square do
   end
 
   defp file_to_atom(file) when is_integer(file) do
-    [file]
-    |> List.to_existing_atom()
+    List.to_existing_atom([file])
   end
 
   def valid?({f, r}) do
@@ -54,7 +53,7 @@ defmodule Chex.Square do
   """
   def from_reverse_rtl_index(i) do
     fi = Integer.floor_div(i, 8)
-    file = Chex.Board.files() |> Enum.at(Integer.mod(i, 8))
+    file = Enum.at(Chex.Board.files(), Integer.mod(i, 8))
     {file, abs(fi - 8)}
   end
 end

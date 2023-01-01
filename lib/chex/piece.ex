@@ -52,22 +52,22 @@ defmodule Chex.Piece do
 
   @spec piece_from_string(String.t()) :: atom
   defp piece_from_string(str) when byte_size(str) == 1 do
-    %{
-      "k" => :king,
-      "q" => :queen,
-      "b" => :bishop,
-      "n" => :knight,
-      "r" => :rook,
-      "p" => :pawn
-    }
-    |> Map.get(String.downcase(str, :ascii))
+    Map.get(
+      %{
+        "k" => :king,
+        "q" => :queen,
+        "b" => :bishop,
+        "n" => :knight,
+        "r" => :rook,
+        "p" => :pawn
+      },
+      String.downcase(str, :ascii)
+    )
   end
 
   @spec color_from_string(String.t()) :: atom
   defp color_from_string(str) when byte_size(str) == 1 do
-    str_up =
-      str
-      |> String.upcase(:ascii)
+    str_up = String.upcase(str, :ascii)
 
     if str == str_up, do: :white, else: :black
   end

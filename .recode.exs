@@ -20,8 +20,8 @@ alias Recode.Task
     {Task.AliasExpansion, []},
     {Task.AliasOrder, []},
     {Task.EnforceLineLength, active: false},
-    {Task.PipeFunOne, [active: false]},
-    {Task.SinglePipe, [active: false]},
+    {Task.PipeFunOne, []},
+    {Task.SinglePipe, []},
     {Task.Specs, active: false, exclude: "test/**/*.{ex,exs}", config: [only: :visible]},
     {Task.TestFileExt, [active: false]},
     {Task.UnusedVariable, active: false}

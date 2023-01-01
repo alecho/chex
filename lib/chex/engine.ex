@@ -39,7 +39,7 @@ defmodule Chex.Engine do
 
   def handle_info({port, {:data, "id name " <> _rem}}, state) do
     Logger.debug("Engine UCI ok")
-    state = state |> Map.put(:uci, true)
+    state = Map.put(state, :uci, true)
     Port.command(port, "isready\n")
 
     {:noreply, state}
@@ -47,7 +47,7 @@ defmodule Chex.Engine do
 
   def handle_info({port, {:data, "readyok" <> _rem}}, state) do
     Logger.debug("Engine is ready")
-    state = state |> Map.put(:ready, true)
+    state = Map.put(state, :ready, true)
     Port.command(port, "setoption name Minimum Thinking Time value 500\n")
 
     {:noreply, state}
@@ -72,9 +72,7 @@ defmodule Chex.Engine do
     |> Map.get(:port)
     |> Port.command(command <> "\n")
 
-    state
-    |> Map.put(:status, :thinking)
-
+    Map.put(state, :status, :thinking)
     {:noreply, state}
   end
 
@@ -87,7 +85,7 @@ defmodule Chex.Engine do
   end
 
   def handle_call({:move, fen}, from, state) do
-    port = state |> Map.get(:port)
+    port = Map.get(state, :port)
 
     state =
       state

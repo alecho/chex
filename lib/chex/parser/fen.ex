@@ -129,7 +129,7 @@ defmodule Chex.Parser.FEN do
   def decode_rank(chars, pieces, _file_index, _rank) when chars == [], do: pieces
 
   def decode_rank(chars, pieces, file_index, rank) do
-    {char, chars} = chars |> List.pop_at(0)
+    {char, chars} = List.pop_at(chars, 0)
 
     case Integer.parse(char) do
       :error ->
@@ -174,15 +174,14 @@ defmodule Chex.Parser.FEN do
   def serialize_castling([]), do: "-"
 
   def serialize_castling(list) do
-    list
-    |> Enum.join()
+    Enum.join(list)
   end
 
   @spec decode_en_passant(String.t()) :: Chex.square()
   def decode_en_passant("-"), do: nil
 
   def decode_en_passant(san) when byte_size(san) == 2 do
-    [file | [rank]] = san |> split("", trim: true)
+    [file | [rank]] = split(san, "", trim: true)
     decode_en_passant(file, rank)
   end
 

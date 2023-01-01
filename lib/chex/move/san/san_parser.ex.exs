@@ -49,7 +49,7 @@ defmodule Chex.Move.SanParser do
       |> lookahead(choice([capture, square]))
     )
     |> optional(capture)
-    |> concat(square |> tag(:destination))
+    |> concat(tag(square, :destination))
     |> optional(choice([promotion, en_passant]))
     |> optional(choice([check, checkmate]))
 
@@ -61,7 +61,7 @@ defmodule Chex.Move.SanParser do
       |> lookahead(choice([capture, square]))
     )
     |> optional(capture)
-    |> concat(square |> tag(:destination))
+    |> concat(tag(square, :destination))
     |> optional(choice([check, checkmate]))
 
   castle = choice([kingside_castle, queenside_castle]) |> unwrap_and_tag(:castle)

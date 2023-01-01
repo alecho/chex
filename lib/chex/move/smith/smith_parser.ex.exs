@@ -11,7 +11,7 @@ defmodule Chex.Move.SmithParser do
   file = utf8_char([@files]) |> label("file (a-h)")
   rank = utf8_char([@ranks]) |> label("rank (1-8)")
   square = concat(file, rank) |> label("square")
-  move = concat(square |> tag(:origin), square |> tag(:destination))
+  move = concat(tag(square, :origin), tag(square, :destination))
   promotion = utf8_char(@pieces) |> label("lowercase piece identifier") |> tag(:promote)
 
   kingside_castle =
@@ -22,7 +22,7 @@ defmodule Chex.Move.SmithParser do
 
   defparsec(
     :move,
-    choice([move |> lookahead_not(utf8_char([?c])), kingside_castle, queenside_castle])
+    choice([lookahead_not(move, utf8_char([?c])), kingside_castle, queenside_castle])
     |> optional(promotion),
     inline: true
   )

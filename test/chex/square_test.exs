@@ -7,8 +7,7 @@ defmodule Chex.SquareTest do
     squares = for f <- [:a, :b, :c, :d, :e, :f, :g, :h], r <- 1..8, do: {f, r}
 
     results =
-      squares
-      |> Enum.map(fn sq ->
+      Enum.map(squares, fn sq ->
         {sq, Chex.Square.color(sq)}
       end)
 

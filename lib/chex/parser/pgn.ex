@@ -47,7 +47,7 @@ defmodule Chex.Parser.PGN do
     |> ignore(string("\""))
     |> ignore(repeat(ascii_char([?\s])))
     |> ignore(string("]"))
-    |> wrap
+    |> wrap()
 
   move_num =
     integer(min: 1, max: 3)
@@ -96,8 +96,8 @@ defmodule Chex.Parser.PGN do
 
   def parse(str) when is_binary(str) do
     with {:ok, tags, rem, _, _, _} <- tag_pairs(str),
-         {:ok, moves, _rem, _, _, _} = rem |> movetext(),
-         {:ok, [result], _rem, _, _, _} = rem |> result() do
+         {:ok, moves, _rem, _, _, _} = movetext(rem),
+         {:ok, [result], _rem, _, _, _} = result(rem) do
       tags = tag_pairs_to_map(tags) |> Map.merge(%{moves: moves})
       game = %{Chex.new_game!() | pgn: tags, result: result}
 
