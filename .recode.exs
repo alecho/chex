@@ -17,8 +17,8 @@ alias Recode.Task
     # Tasks could be added by a tuple of the tasks module name and an options
     # keyword list. A task can be deactived by `active: false`. The execution of
     # a deactivated task can be forced by calling `mix recode --task ModuleName`.
-    {Task.AliasExpansion, [active: false]},
-    {Task.AliasOrder, [active: false]},
+    {Task.AliasExpansion, []},
+    {Task.AliasOrder, []},
     {Task.EnforceLineLength, active: false},
     {Task.PipeFunOne, [active: false]},
     {Task.SinglePipe, [active: false]},

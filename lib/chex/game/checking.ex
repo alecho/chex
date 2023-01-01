@@ -1,7 +1,8 @@
 defmodule Chex.Game.Checking do
   @moduledoc false
 
-  alias Chex.{Board, Color}
+  alias Chex.Board
+  alias Chex.Color
 
   @spec in_check?(Chex.game(), Chex.color()) :: bool()
   def in_check?(game, color) do

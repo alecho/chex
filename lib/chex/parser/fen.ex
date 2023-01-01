@@ -3,7 +3,10 @@ defmodule Chex.Parser.FEN do
   Forsyth–Edwards Notation parser.
   """
 
-  alias Chex.{Board, Game, Parser, Piece}
+  alias Chex.Board
+  alias Chex.Game
+  alias Chex.Parser
+  alias Chex.Piece
 
   @behaviour Parser
 

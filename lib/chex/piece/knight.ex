@@ -3,7 +3,8 @@ defmodule Chex.Piece.Knight do
 
   @behaviour Chex.Piece
 
-  alias Chex.{Board, Square}
+  alias Chex.Board
+  alias Chex.Square
 
   @directions [
     {2, 1},

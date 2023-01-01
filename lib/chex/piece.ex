@@ -1,7 +1,8 @@
 defmodule Chex.Piece do
   @moduledoc false
 
-  alias Chex.{Board, Game}
+  alias Chex.Board
+  alias Chex.Game
 
   @callback possible_moves(Chex.game(), Chex.square(), Chex.color()) :: [Chex.square()]
   @callback attacking_squares(Chex.game(), Chex.square(), Chex.color()) :: [Chex.square()]

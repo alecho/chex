@@ -3,7 +3,10 @@ defmodule Chex do
   A library for playing chess in Elixir.
   """
 
-  alias Chex.{Board, Color, Game, Piece}
+  alias Chex.Board
+  alias Chex.Color
+  alias Chex.Game
+  alias Chex.Piece
 
   @typedoc """
   The main type representing a single game. Values should be treated as

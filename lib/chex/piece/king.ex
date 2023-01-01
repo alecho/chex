@@ -1,7 +1,11 @@
 defmodule Chex.Piece.King do
   @moduledoc false
 
-  alias Chex.{Board, Color, Piece, Square}
+  alias Chex.Board
+  alias Chex.Color
+  alias Chex.Piece
+  alias Chex.Square
+
   @behaviour Piece
 
   def possible_moves(game, square, color) do

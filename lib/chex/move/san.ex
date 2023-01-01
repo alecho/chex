@@ -1,7 +1,8 @@
 defmodule Chex.Move.SAN do
   @moduledoc false
 
-  alias Chex.Move.{Parser, SanParser}
+  alias Chex.Move.Parser
+  alias Chex.Move.SanParser
 
   import SanParser, only: [move: 1]
 

@@ -1,7 +1,8 @@
 defmodule Chex.Move.Smith do
   @moduledoc false
 
-  alias Chex.Move.{Parser, SmithParser}
+  alias Chex.Move.Parser
+  alias Chex.Move.SmithParser
 
   import SmithParser, only: [move: 1]
 

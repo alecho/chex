@@ -3,7 +3,8 @@ defmodule Chex.BoardTest do
   import AssertValue
   doctest Chex.Board
 
-  alias Chex.{Board, Game}
+  alias Chex.Board
+  alias Chex.Game
 
   @empty_board "8/8/8/4N3/8/8/8/8 w - - 0 1"
 

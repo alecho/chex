@@ -3,8 +3,8 @@ defmodule Chex.Parser.PGN do
   Portable Game Notation parser.
   """
 
-  alias Chex.Parser
   alias Chex.Move
+  alias Chex.Parser
 
   @behaviour Parser
 

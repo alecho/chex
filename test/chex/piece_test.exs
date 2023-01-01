@@ -3,7 +3,8 @@ defmodule Chex.PieceTest do
   import AssertValue
   doctest Chex.Piece
 
-  alias Chex.{Game, Piece}
+  alias Chex.Game
+  alias Chex.Piece
 
   test "correctly parses pieces" do
     results =

@@ -1,7 +1,12 @@
 defmodule Chex.Game do
   @moduledoc false
 
-  alias Chex.{Board, Color, Game, Move, Parser.FEN, Piece}
+  alias Chex.Board
+  alias Chex.Color
+  alias Chex.Game
+  alias Chex.Move
+  alias Chex.Parser.FEN
+  alias Chex.Piece
 
   defstruct board: %{},
             active_color: :white,

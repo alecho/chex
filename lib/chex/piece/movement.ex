@@ -1,7 +1,8 @@
 defmodule Chex.Piece.Movement do
   @moduledoc false
 
-  alias Chex.{Board, Square}
+  alias Chex.Board
+  alias Chex.Square
 
   @typedoc """
   A direction atom.
