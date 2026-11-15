@@ -67,7 +67,7 @@ defmodule Chex.MixProject do
   defp deps do
     [
       {:assert_value, "~> 0.10.0", only: [:dev, :test]},
-      {:credo, "~> 1.6.7", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7.19", only: :dev, runtime: false},
       {:dialyxir, "~> 1.1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},

@@ -1,8 +1,8 @@
 defmodule Chex.Move do
   @moduledoc false
 
-  alias Chex.{Piece, Square}
   alias Chex.Move.{SAN, Smith}
+  alias Chex.{Piece, Square}
 
   @files ?a..?h
   @file_atoms [:a, :b, :c, :d, :e, :f, :g, :h]

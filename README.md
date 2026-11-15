@@ -129,3 +129,16 @@ iex> game.result
 :white
 ```
 
+
+## Development and compatibility
+
+The library retains its Elixir `~> 1.9` requirement. CI tests Elixir 1.9.4,
+1.10.4, 1.11.4, 1.14.5, 1.18.6, 1.19.7, and 1.20.5 with compatible OTP
+versions. Run the test suite with `MIX_ENV=test mix deps.get` followed by
+`MIX_ENV=test mix test`.
+
+Development tools have a newer minimum than the library: use Elixir 1.18 or
+newer for the development environment. CI runs strict Credo on 1.20.5 and
+builds documentation on 1.20.5. Credo is a development-only
+dependency so it does not prevent testing the library on older Elixir versions.
+Formatting remains checked with Elixir 1.11.4 to keep the existing format stable.

@@ -72,9 +72,6 @@ defmodule Chex.Engine do
     |> Map.get(:port)
     |> Port.command(command <> "\n")
 
-    state
-    |> Map.put(:status, :thinking)
-
     {:noreply, state}
   end
 
