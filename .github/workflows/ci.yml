@@ -48,6 +48,7 @@ jobs:
         with:
           elixir-version: ${{ matrix.elixir }}
           otp-version: ${{ matrix.otp }}
+          install-rebar: false # All dependencies use Mix; avoid legacy Windows installer crashes.
       - name: Install dependencies
         run: mix deps.get --only test
       - name: Run tests
