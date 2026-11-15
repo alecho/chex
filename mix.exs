@@ -55,6 +55,7 @@ defmodule Chex.MixProject do
     [
       source_ref: "v#{@version}",
       main: "readme",
+      assets: "assets",
       extras: [
         "README.md",
         "CHANGELOG.md"

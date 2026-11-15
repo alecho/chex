@@ -1,5 +1,9 @@
 # Chex [![Build Status](https://travis-ci.com/alecho/chex.svg?branch=master)](https://travis-ci.com/alecho/chex)
 
+<p align="center">
+  <img src="assets/chex-logo.png" alt="Chex: golden chess pieces in a cereal bowl with a spoon" width="320" />
+</p>
+
 Chess in Elixir.
 
 ## Documentation
