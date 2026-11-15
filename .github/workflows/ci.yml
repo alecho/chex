@@ -48,6 +48,7 @@ jobs:
         with:
           elixir-version: ${{ matrix.elixir }}
           otp-version: ${{ matrix.otp }}
+          install-rebar: false
       - name: Install dependencies
         run: mix deps.get --only test
       - name: Run tests
@@ -58,3 +59,11 @@ jobs:
       - name: Check code quality
         if: matrix.elixir == '1.11.4'
         run: mix credo --strict --format=oneline
+      - name: Compile development tools and build documentation
+        if: matrix.elixir == '1.14.5'
+        env:
+          MIX_ENV: dev
+        run: |
+          mix deps.get
+          mix compile
+          mix docs
