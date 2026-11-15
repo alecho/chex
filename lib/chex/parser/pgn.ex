@@ -3,8 +3,8 @@ defmodule Chex.Parser.PGN do
   Portable Game Notation parser.
   """
 
-  alias Chex.Parser
   alias Chex.Move
+  alias Chex.Parser
 
   @behaviour Parser
 
@@ -95,9 +95,9 @@ defmodule Chex.Parser.PGN do
   )
 
   def parse(str) when is_binary(str) do
-    with {:ok, tags, rem, _, _, _} <- tag_pairs(str),
-         {:ok, moves, _rem, _, _, _} = rem |> movetext(),
-         {:ok, [result], _rem, _, _, _} = rem |> result() do
+    with {:ok, tags, rem, _, _, _} <- tag_pairs(str) do
+      {:ok, moves, _rem, _, _, _} = rem |> movetext()
+      {:ok, [result], _rem, _, _, _} = rem |> result()
       tags = tag_pairs_to_map(tags) |> Map.merge(%{moves: moves})
       game = %{Chex.new_game!() | pgn: tags, result: result}
 
@@ -123,7 +123,7 @@ defmodule Chex.Parser.PGN do
   end
 
   def serialize(_), do: {:ok, ""}
-  def extension(), do: :pgn
+  def extension, do: :pgn
 
   def tag_pairs_to_map(list) do
     list

@@ -25,17 +25,15 @@ defmodule Chex.Move do
   """
   @spec parse(String.t(), Chex.game()) :: Chex.move() | {:error, term}
   def parse(move, game) when is_binary(move) do
-    try do
-      cond do
-        Smith.valid?(move) -> Smith.parse_move(move)
-        SAN.valid?(move) -> SAN.parse_move(move)
-      end
-      |> to_map()
-      |> to_move(game)
-      |> maybe_error()
-    rescue
-      _e in CondClauseError -> {:error, :invalid_move}
+    cond do
+      Smith.valid?(move) -> Smith.parse_move(move)
+      SAN.valid?(move) -> SAN.parse_move(move)
     end
+    |> to_map()
+    |> to_move(game)
+    |> maybe_error()
+  rescue
+    _e in CondClauseError -> {:error, :invalid_move}
   end
 
   @doc """
