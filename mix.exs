@@ -37,6 +37,13 @@ defmodule Chex.MixProject do
 
   defp package() do
     [
+      # Preserve Hex's default patterns, excluding absent paths that an explicit
+      # file list would otherwise treat as errors, and include the logo assets.
+      files:
+        Enum.filter(
+          ~w(lib priv .formatter.exs mix.exs README* readme* LICENSE* license* CHANGELOG* changelog* src c_src Makefile* assets),
+          &(Path.wildcard(&1) != [])
+        ),
       licenses: ["MIT"],
       links: links(),
       homepage_url: @source_url
