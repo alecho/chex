@@ -107,12 +107,11 @@ defmodule Chex.Parser.FEN do
       board[{f, r}]
     end
     |> Enum.chunk_every(8)
-    |> Enum.map(fn row ->
+    |> Enum.map_join("/", fn row ->
       row
       |> Enum.reduce({"", 0}, &row_to_string(&1, &2))
       |> row_to_string()
     end)
-    |> Enum.join("/")
   end
 
   defp row_to_string({row, 0}), do: row
