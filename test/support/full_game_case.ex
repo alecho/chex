@@ -1,4 +1,6 @@
 defmodule Chex.FullGameCase do
+  @moduledoc false
+
   use ExUnit.CaseTemplate
 
   import Chex.Parser.PGN, only: [movetext: 1]
