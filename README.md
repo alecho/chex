@@ -1,4 +1,4 @@
-# Chex [![Build Status](https://travis-ci.com/alecho/chex.svg?branch=master)](https://travis-ci.com/alecho/chex)
+# Chex [![CI](https://github.com/alecho/chex/actions/workflows/ci.yml/badge.svg)](https://github.com/alecho/chex/actions/workflows/ci.yml)
 
 Chess in Elixir.
 
