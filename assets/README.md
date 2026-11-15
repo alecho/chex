@@ -1,12 +1,13 @@
 # Chex logo
 
-`chex-logo.png` is the transparent, full-color logo for Chex. The mark combines
-a cereal bowl, golden chess pieces and a spoon, with a purple accent for Elixir.
-It is original artwork, not the Chex cereal brand's logo.
+`chex-logo.png` is the approved horizontal, transparent logo for Chex. The mark
+combines a navy spoon outline with chessboard diamonds containing knight and
+pawn symbols, alongside the Chex wordmark and a plum underline.
 
-Use the PNG at its natural aspect ratio. The white outer keyline helps preserve
-contrast on light and dark backgrounds. The repository README displays it at
-320 CSS pixels wide with descriptive alternative text.
+Use the PNG at its natural aspect ratio. Its navy artwork is intended for a
+light background; on dark surfaces place it on a light panel. The repository
+README displays it at 640 CSS pixels wide with descriptive alternative text.
 
-Generated with OpenAI image generation for issue #22. This is a raster master,
-not an editable vector asset. No application behavior or chess rules changed.
+The transparent artwork was generated with OpenAI image generation from the
+owner-approved design for issue #22. This is a raster asset, not an editable
+vector file. No application behavior or chess rules changed.
