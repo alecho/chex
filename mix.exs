@@ -9,7 +9,7 @@ defmodule Chex.MixProject do
     [
       app: :chex,
       version: @version,
-      elixir: "~> 1.9",
+      elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -67,7 +67,7 @@ defmodule Chex.MixProject do
   defp deps do
     [
       {:assert_value, "~> 0.10.0", only: [:dev, :test]},
-      {:credo, "~> 1.6.7", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7.19", only: :dev, runtime: false},
       {:dialyxir, "~> 1.1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
