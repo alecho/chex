@@ -132,13 +132,17 @@ iex> game.result
 
 ## Development and compatibility
 
-The library retains its Elixir `~> 1.9` requirement. CI tests Elixir 1.9.4,
-1.10.4, 1.11.4, 1.14.5, 1.18.6, 1.19.7, and 1.20.5 with compatible OTP
-versions. Run the test suite with `MIX_ENV=test mix deps.get` followed by
-`MIX_ENV=test mix test`.
+The library requires Elixir `~> 1.16` (1.16 or later within Elixir 1.x).
+This is a breaking compatibility change for consumers using Elixir 1.9–1.15:
+upgrade Elixir before adopting this change, or remain on an earlier Chex release.
 
-Development tools have a newer minimum than the library: use Elixir 1.18 or
-newer for the development environment. CI runs strict Credo on 1.20.5 and
-builds documentation on 1.20.5. Credo is a development-only
-dependency so it does not prevent testing the library on older Elixir versions.
-Formatting remains checked with Elixir 1.11.4 to keep the existing format stable.
+CI tests Elixir 1.16.3 / OTP 26.2, 1.17.3 / OTP 27.3, 1.18.6 / OTP 27.3,
+1.19.7 / OTP 28.5, and 1.20.5 / OTP 28.5. These cover the upstream-supported
+Elixir minor releases as of November 2026; see the
+[official support and compatibility table](https://hexdocs.pm/elixir/compatibility-and-deprecations.html).
+Run tests with `MIX_ENV=test mix deps.get` followed by `MIX_ENV=test mix test`.
+
+Development tools require Elixir 1.18 or newer. CI checks formatting, strict
+Credo, and documentation builds on Elixir 1.20.5. Credo and the test watcher
+are development-only dependencies, so their newer requirements do not raise
+the library runtime minimum above 1.16.
