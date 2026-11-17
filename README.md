@@ -1,5 +1,9 @@
 # Chex [![CI](https://github.com/alecho/chex/actions/workflows/ci.yml/badge.svg)](https://github.com/alecho/chex/actions/workflows/ci.yml)
 
+<p align="center">
+  <img src="assets/chex-logo.png" alt="Chex wordmark beside a spoon-shaped chessboard diamond with knight and pawn symbols" width="640" />
+</p>
+
 Chess in Elixir.
 
 ## Documentation
