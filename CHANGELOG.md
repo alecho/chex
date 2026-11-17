@@ -21,6 +21,13 @@ are converted to atoms others remain strings.
 
 ### Changed
 
+- **Breaking:** raise the minimum Elixir version from 1.9 to 1.16, dropping
+  upstream-unsupported Elixir 1.9–1.15. Consumers on those releases must upgrade
+  Elixir or retain an earlier Chex release. CI now covers supported Elixir
+  1.16–1.20 with compatible OTP versions.
+- Development tooling requires Elixir 1.18+; formatting, strict Credo, and
+  documentation are verified on Elixir 1.20.5.
+
 - `Parser.FEN.parse/1` and `Parser.FEN.serialize/1` now return a tuple with
     `{:ok, result}` or `{:error, reason}`.
 

@@ -1,8 +1,8 @@
 defmodule Chex.Move do
   @moduledoc false
 
-  alias Chex.{Piece, Square}
   alias Chex.Move.{SAN, Smith}
+  alias Chex.{Piece, Square}
 
   @files ?a..?h
   @file_atoms [:a, :b, :c, :d, :e, :f, :g, :h]
@@ -25,17 +25,15 @@ defmodule Chex.Move do
   """
   @spec parse(String.t(), Chex.game()) :: Chex.move() | {:error, term}
   def parse(move, game) when is_binary(move) do
-    try do
-      cond do
-        Smith.valid?(move) -> Smith.parse_move(move)
-        SAN.valid?(move) -> SAN.parse_move(move)
-      end
-      |> to_map()
-      |> to_move(game)
-      |> maybe_error()
-    rescue
-      _e in CondClauseError -> {:error, :invalid_move}
+    cond do
+      Smith.valid?(move) -> Smith.parse_move(move)
+      SAN.valid?(move) -> SAN.parse_move(move)
     end
+    |> to_map()
+    |> to_move(game)
+    |> maybe_error()
+  rescue
+    _e in CondClauseError -> {:error, :invalid_move}
   end
 
   @doc """
@@ -119,24 +117,24 @@ defmodule Chex.Move do
 
   defp find_origin(game, piece, dest, from_file) when from_file in @file_atoms do
     Chex.Board.find_pieces(game, piece)
-    |> Enum.filter(fn sq -> dest in Chex.Piece.possible_moves(game, sq) end)
-    |> Enum.filter(fn {f, _} -> f == from_file end)
+    |> Enum.filter(fn {f, _} = sq ->
+      dest in Chex.Piece.possible_moves(game, sq) and f == from_file
+    end)
     |> List.first()
   end
 
   defp find_origin(game, piece, dest, from_rank) when from_rank in @rank_ints do
     Chex.Board.find_pieces(game, piece)
-    |> Enum.filter(fn sq -> dest in Chex.Piece.possible_moves(game, sq) end)
-    |> Enum.filter(fn {_, r} -> r == from_rank end)
+    |> Enum.filter(fn {_, r} = sq ->
+      dest in Chex.Piece.possible_moves(game, sq) and r == from_rank
+    end)
     |> List.first()
   end
 
   defp find_origin(game, piece, dest, {ff, fr}) when fr in @rank_ints do
     Chex.Board.find_pieces(game, piece)
-    |> Enum.filter(fn sq -> dest in Chex.Piece.possible_moves(game, sq) end)
-    |> Enum.filter(fn
-      {^ff, ^fr} -> true
-      _ -> false
+    |> Enum.filter(fn sq ->
+      dest in Chex.Piece.possible_moves(game, sq) and sq == {ff, fr}
     end)
     |> List.first()
   end

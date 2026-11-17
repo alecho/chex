@@ -9,7 +9,7 @@ defmodule Chex.MixProject do
     [
       app: :chex,
       version: @version,
-      elixir: "~> 1.9",
+      elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -62,7 +62,7 @@ defmodule Chex.MixProject do
     [
       source_ref: "v#{@version}",
       main: "readme",
-      assets: "assets",
+      assets: %{"assets" => "assets"},
       extras: [
         "README.md",
         "CHANGELOG.md"
@@ -74,9 +74,9 @@ defmodule Chex.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:assert_value, "~> 0.9.3", only: [:dev, :test]},
-      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.1.0", only: [:dev], runtime: false},
+      {:assert_value, "~> 0.10.0", only: [:dev, :test]},
+      {:credo, "~> 1.7.19", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.4.9", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:nimble_parsec, "~> 1.0"}
